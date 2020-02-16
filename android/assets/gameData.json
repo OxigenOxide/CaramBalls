@@ -1,0 +1,138 @@
+{
+highscore: 262144
+unlocks: [
+	true
+	true
+	false
+	false
+	true
+	false
+	true
+	false
+	false
+]
+selectedBall: 4
+orbs: 4891
+testerID: 2
+isMusicMuted: true
+farmBalls: [
+	{
+		x: 46.807255
+		y: 130.92656
+		size: 2
+	}
+	{
+		x: 95.426895
+		y: 157.80002
+		level: 3
+	}
+	{
+		x: 13.704838
+		y: 95.349815
+		size: 2
+		level: 3
+	}
+	{
+		x: 94.30001
+		y: 127.515785
+		size: 2
+		level: 5
+	}
+	{
+		x: 58.774208
+		y: 124.69604
+		level: 5
+	}
+	{
+		x: 26.132238
+		y: 84.58022
+		level: 2
+	}
+	{
+		x: 72.9366
+		y: 66.20002
+		level: 2
+	}
+	{
+		x: 99.80002
+		y: 66.2
+		level: 3
+	}
+	{
+		x: 30.163548
+		y: 132.32596
+		size: 1
+		level: 2
+	}
+	{
+		x: 13.699998
+		y: 137.68805
+		size: 2
+		level: 1
+	}
+	{
+		x: 37.752205
+		y: 74.22799
+		size: 2
+		level: 2
+	}
+	{
+		x: 96.622765
+		y: 86.03489
+		size: 1
+		level: 3
+	}
+	{
+		x: 8.341569
+		y: 82.12173
+		level: 4
+	}
+	{
+		x: 84.599266
+		y: 144.34111
+		size: 1
+		level: 1
+	}
+	{
+		x: 62.57257
+		y: 151.28195
+		level: 4
+	}
+	{
+		x: 60.834194
+		y: 69.33631
+		size: 1
+		level: 4
+	}
+	{
+		x: 75.15191
+		y: 98.52192
+		size: 2
+		level: 4
+	}
+	{
+		x: 83.74977
+		y: 75.79032
+		size: 2
+		level: 1
+	}
+	{
+		x: 94.225914
+		y: 102.37007
+		size: 2
+		level: 2
+	}
+	{
+		x: 19.122952
+		y: 71.69999
+		size: 2
+		level: 1
+	}
+	{
+		x: 72.571365
+		y: 133.00195
+		size: 2
+		level: 2
+	}
+]
+}

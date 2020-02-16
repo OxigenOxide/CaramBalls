@@ -1,0 +1,72 @@
+package com.oxigenoxide.caramballs.utils;
+
+import com.badlogic.gdx.math.Vector2;
+
+public class MathFuncs {
+    public static boolean intersectCircleLine(float xBegin, float yBegin, float xEnd, float yEnd, float x, float y, float r) {
+        Vector2 d = new Vector2(xEnd - xBegin, yEnd - yBegin);
+        Vector2 f = new Vector2(xBegin - x, yBegin - y);
+
+        float a = d.dot(d);
+        float b = 2 * f.dot(d);
+        float c = f.dot(f) - r * r;
+
+        float discriminant = b * b - 4 * a * c;
+
+        if (discriminant < 0) {
+            return false;
+        } else {
+            discriminant = (float) Math.sqrt(discriminant);
+
+            float t1 = (-b - discriminant) / (2 * a);
+            float t2 = (-b + discriminant) / (2 * a);
+
+            if (t1 >= 0 && t1 <= 1) {
+                return true;
+            }
+
+            if (t2 >= 0 && t2 <= 1) {
+                return true;
+            }
+            return false;
+        }
+    }
+
+    public static float getHypothenuse(float x, float y) {
+        return (float) Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+    }
+
+    public static float distanceBetweenPoints(Vector2 v0, Vector2 v1) {
+        return (float) Math.sqrt(Math.pow(v0.x - v1.x, 2) + Math.pow(v0.y - v1.y, 2));
+    }
+
+    public static float getSum(float[] floats) {
+        float sum = 0;
+        for (float f : floats) {
+            sum += f;
+        }
+
+        return sum;
+    }
+
+    public static float angleBetweenPoints(Vector2 v0, Vector2 v1) {
+        return correctAtan2Output((float) Math.atan2(v1.y - v0.y, v1.x - v0.x));
+    }
+
+    public static float correctAtan2Output(float atan2Output) {
+        if (atan2Output >= 0) {
+            return atan2Output;
+        } else {
+            return (float) (Math.PI - Math.abs(atan2Output) + Math.PI);
+        }
+    }
+
+    public static boolean pointInRectangle(float x, float y, float bx, float by, float bw, float bh) {
+        return (x > bx && x < bx + bw && y > by && y < by + bh);
+    }
+
+    public static float interpolateAngle(float from, float to, float amount) {
+        float shortest_angle = (float) (((((to - from) % (Math.PI * 2)) + (Math.PI * 1.5f)) % (Math.PI * 2)) - (Math.PI));
+        return (float) (from + (shortest_angle * amount) % (Math.PI * 2));
+    }
+}

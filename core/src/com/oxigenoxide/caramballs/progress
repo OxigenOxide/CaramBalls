@@ -1,0 +1,149 @@
+-made ball freeze for one frame when it hits something from a set speed
+-fixed screen shake: the angular shake works now
+-centered ball shadow
+-lowered position of ball shadow so the field looks more 3-dimensional
+-fixed picking up shield collectible
+-created Particle_Ball. It replaces ballShard for balls.
+-made Particle_Ball bouncy
+-added boolean hasMinVelY to Particle, which now only is true for confetti
+-ball shadow becomes white and opaque when selected
+-ball shadow positioning correct
+-All pulse particles now all exist for the same time
+-Made soundrequest system compatible for SOUNDCAP > 2
+-set SOUNDCAP from 2 to 4
+-created class OrbContainer
+-Egg is now OC_Egg and is a subclass of OrbContainer
+-reduced code in Egg and transferred to OrbContainer
+-added OC_Fruit
+-added sound splat.mp3
+-OC_Fruit uses splat sound
+-Added CircularBumper
+-Cannons and circular bumpers can spawn depending on doCannons and doCircularBumpers
+-Cannons now have hitboxes
+-Circular bumpers now have a spawn animation
+-SoundRequests now have a max volume of 1
+-added createSpikeLine()
+-added function isPosFree()
+-added bounce sound
+-body of spikes is created when animation finished
+-added class Entity
+-all classes that meet the condition that it renders an object in the playing field are now a subclass of Entity
+-added arraylist entities and entities_sorted
+-added sorting algorithm for sorting entities based on y coordinate
+-all objects in the playing field are overlapping each other correctly according to their y-position.
+-fixed pause button
+-added class Meter
+-added Entity class JumpingPad
+-added jumping pad sound
+-added jumping pad bouncy animation
+-chagned jumpingpad's texture
+-added shader floorFade
+-fixed: table color was generated slightly transparent
+-new level fading style: the background color changes with a growing stain
+-score numbers color is adjusted to the background color
+-added class Eye
+-added class Projection: this class was previously an inner class of Ball_Main
+-balls now make a bounce sound when hitting the floor
+-pulse particles now drop at the correct height of the ball
+-added the properties worldType and worldTier to class Game
+-added 3 new backgrounds
+-moved math functions from Main to new class MathFuncs
+-projections now get passed on to split balls and combined balls
+-eyes now get disposed when off-screen
+-eyes have a spawn animation
+-projection grows when new level is arrived
+-new spike texture with longer spike
+-changed all package name references com.oxigenoxide.balls to com.oxigenoxide.caramballs
+-changed back some references to com.oxigenoxide.caramballs to com.oxigenoxide.balls
+-added class EventListener and EventManager to make chains of events more managable and for cleaner code
+-Hole_Ball uses EventManager
+-Hole_Reward uses EventManager
+-fixed: balls could not be hit in the farm screen after pressing replay
+-Hole_Reward compatible for multiple balls
+-balls spawned by Hole_Reward are now put at index 0 of arraylist balls
+-made the fades between screens to and from farm seamless
+-play button slides into the screen after the balls are spawned
+-fixed: collisions between balls would create sounds with a volume not scaled with the impact
+-balls in the farm are now saved in the game data
+-set ball wiggle intensity lower and declared variable WIGGLEFACTOR
+-balls of size 0 dont wiggle anymore (looks much better)
+-removed HL text on menu and moved the tutorial button down
+-fixed farm balls would be duplicated when saving
+-farm balls are now saved every 5 seconds
+-hole reward is spitting the balls collected throughout the game
+-fixed: ball capsules spawning on farm when coming from game screen
+-all entities will now be cleared on clearEntities()
+-new system for clearing entities
+-requesting to go to another scene while the screen is still fading will result in a delayed response instead of no response
+-shop uses Button_Return now
+-now it is possible to return to the previous screen. This is used by the return button.
+-now cant use the shop button while rewards are spawning
+[2-feb.-20]
+-added class Dragable
+-added subclass Tire of Dragable
+-added class DragSelecter
+-added class Counter
+-now it is not possible to drag and hit at the same time
+-fixed typo dragable to draggable in every variable
+-fixed typo selecter to selector
+-added class Plank
+-added black outline to plank
+[4-feb.-20]
+-fixed: ghost draggables, draggables would not get removed on dispose
+-fixed: meter particles would have an initial position of (0,0)
+-added class Place with subclass Place_Space and Place_Default
+-added stars in the space place
+-set the new oxigen oxide logo to splash screen
+-change ball shadow positioning to dispose the y position with the actual shadow height
+-added class Particle_Cross for indication when a ball that can't be hit tried to be selected
+-fixed score: it would count balls that were getting disposed already, counting some balls double
+-fixed: eye can go through the wall again
+[5-feb.-20]
+-balls fall down the first time you enter the farm
+-changed ball shadow position so that the lowest point of the ellipse is 1 pixel under the ball
+-added class sun
+[10-feb.-20]
+-added class ProgressBar
+-Counters will now only count after calling start()
+-RepeatCounters will now terminate after receiving value -1 from onEvent()
+-with the help of setPermaPassthrough() balls in the farm screen will only pass through the cage when they are thrown out of the hole
+-added text 'your balls' at the top of scene Farm
+[11-feb.-20]
+-added buttons Button_Sound and Button_Music
+-added functions to mute and unmute sound and music
+-sound and music preferences will now be saved
+-collisions wont spawn two times when two balls collide
+-collision impact between balls is now calculated by adding up the impacts of both balls
+-fixed: when a ball would split, the two children would collide with the parent and create particle effects
+-new smaller texture for Button_Options
+-added Particle_Hit to replace the pulse particle that drops when hitting a ball
+[12-feb.-20]
+-fixed: button and orb collection sounds would play when sound muted
+-created shader shader_bend
+-created class ComboBar
+[13-feb.-20]
+-ball shadow now grows around the center instead of the lowest point and does not take the wiggle effect into account anymore
+-farm screen will now draw all entities in the sorted order
+-selection rings are now drawn under the balls
+[14-feb.-20]
+-made B2DContactListener an individual class
+-jumping pad now bumps all types of balls
+-fixed all references to font IDs
+-now can only interact with balls and some other things with the first pointer only
+-fixed position of tire relative to its body
+-buttons in Game scene no longer shake
+-added loading mini-game to spash screen
+-loading screen now uses pixelisation
+-shaders are now preloaded
+-music is now loaded by the assetmanager
+
+deadline: 20 march 2020
+(set at 11 februari)
+
+TODO: split sound
+TODO: new package name and seperate app
+TODO: fix multiple pulse particles when combining
+TODO: duplication glitch
+TODO: when returning from shop to game dont remove the gameover overlay or remove the shop button from the gameover overlay
+TODO: target circle at finger?
+TODO: loading animation

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- app_id -->
+    <string name="app_id" translatable="false">1059170856086</string>
+    <!-- package_name -->
+    <string name="package_name" translatable="false">com.oxigenoxide.caramballs</string>
+    <!-- leaderboard Highscores -->
+    <string name="leaderboard_scores" translatable="false">CgkIltmC3OkeEAIQBA</string>
+</resources>
