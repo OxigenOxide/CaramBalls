@@ -24,4 +24,15 @@ public class Button_Pause extends Button {
             tex_pressed = Res.tex_buttonPressed_resume;
         }
     }
+
+    public void setTexture(){
+        if(Game.isPaused){
+            tex = Res.tex_button_resume;
+            tex_pressed = Res.tex_buttonPressed_resume;
+        }
+        else{
+            tex = Res.tex_button_pause;
+            tex_pressed = Res.tex_buttonPressed_pause;
+        }
+    }
 }

@@ -112,6 +112,8 @@ public class Res {
     public static Texture tex_buttonPressed_music;
     public static Texture tex_button_musicMuted;
     public static Texture tex_buttonPressed_musicMuted;
+    public static Texture tex_button_exit;
+    public static Texture tex_buttonPressed_exit;
     public static Texture tex_text_paused;
     public static Texture tex_lockedBall;
     public static Texture tex_ballCapsule;
@@ -312,6 +314,8 @@ public class Res {
         tex_buttonPressed_sound = Main.assets.get("images/buttonPressed_sound.png");
         tex_button_soundMuted = Main.assets.get("images/button_soundMuted.png");
         tex_buttonPressed_soundMuted = Main.assets.get("images/buttonPressed_soundMuted.png");
+        tex_button_exit = Main.assets.get("images/button_exit.png");
+        tex_buttonPressed_exit = Main.assets.get("images/buttonPressed_exit.png");
 
         tex_text_welcome = Main.assets.get("images/text_welcome.png");
         tex_symbolPlus = Main.assets.get("images/symbol_plus.png");
@@ -889,6 +893,8 @@ public class Res {
         Main.assets.load("images/buttonPressed_sound.png", Texture.class);
         Main.assets.load("images/button_soundMuted.png", Texture.class);
         Main.assets.load("images/buttonPressed_soundMuted.png", Texture.class);
+        Main.assets.load("images/button_exit.png", Texture.class);
+        Main.assets.load("images/buttonPressed_exit.png", Texture.class);
         Main.assets.load("images/title_o.png", Texture.class);
         Main.assets.load("images/title_r.png", Texture.class);
         Main.assets.load("images/title_b.png", Texture.class);

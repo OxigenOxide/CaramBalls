@@ -31,6 +31,7 @@ import com.oxigenoxide.caramballs.object.ComboBar;
 import com.oxigenoxide.caramballs.object.Meter;
 import com.oxigenoxide.caramballs.object.ProgressBar;
 import com.oxigenoxide.caramballs.object.Projection;
+import com.oxigenoxide.caramballs.object.button.Button_Exit;
 import com.oxigenoxide.caramballs.object.button.Button_Music;
 import com.oxigenoxide.caramballs.object.button.Button_Sound;
 import com.oxigenoxide.caramballs.object.entity.BallCapsule;
@@ -138,9 +139,10 @@ public class Game extends Scene {
     public static Sprite sprite_buffer_trail;
 
     public static Point point;
-    public static Button button_pause;
+    public static Button_Pause button_pause;
     public static Button button_sound;
     public static Button button_music;
+    public static Button button_exit;
 
     public static boolean doPixelate = true;
     public static final float HITSPEEDTHRESHOLD = 5;
@@ -289,8 +291,10 @@ public class Game extends Scene {
         button_pause = new Button_Pause(new Vector2(Main.width - 2 - Res.tex_button_pause.getWidth(), Main.height - 2 - Res.tex_button_pause.getHeight()));
         button_sound = new Button_Sound(new Vector2(Main.width - 2 - Res.tex_button_pause.getWidth(), Main.height - 2 - 16 - Res.tex_button_pause.getHeight()));
         button_music = new Button_Music(new Vector2(Main.width - 2 - Res.tex_button_pause.getWidth(), Main.height - 2 - 32 - Res.tex_button_pause.getHeight()));
+        button_exit = new Button_Exit(new Vector2(Main.width - 2 - Res.tex_button_pause.getWidth(), Main.height - 2 - 48 - Res.tex_button_pause.getHeight()));
         button_sound.setVisibility(false);
         button_music.setVisibility(false);
+        button_exit.setVisibility(false);
 
         ballType = Main.gameData.selectedBall;
 
@@ -306,9 +310,7 @@ public class Game extends Scene {
             setTutorialMode();
         }
         if (!isGameOver)
-            setup();
-        if (isGameOver)
-            replay();
+            start();
     }
 
     @Override
@@ -438,6 +440,9 @@ public class Game extends Scene {
             }
             if (button_music.isTouching()) {
                 button_music.update();
+            }
+            if (button_exit.isTouching()) {
+                button_exit.update();
             }
         }
 
@@ -964,6 +969,7 @@ public class Game extends Scene {
             button_pause.render(batch);
             button_sound.render(batch);
             button_music.render(batch);
+            button_exit.render(batch);
         }
         if (isPaused) {
             batch.draw(Res.tex_text_paused, Main.width / 2 - Res.tex_text_paused.getWidth() / 2, Main.height / 2);
@@ -1028,6 +1034,7 @@ public class Game extends Scene {
         isPaused = true;
         button_sound.setVisibility(true);
         button_music.setVisibility(true);
+        button_exit.setVisibility(true);
         setDarkOverlay();
     }
 
@@ -1036,6 +1043,7 @@ public class Game extends Scene {
         isPaused = false;
         button_sound.setVisibility(false);
         button_music.setVisibility(false);
+        button_exit.setVisibility(false);
         setNoDarkOverlay();
     }
 
@@ -1406,20 +1414,25 @@ public class Game extends Scene {
 
     public static void replay() {
         reset();
-        gameOver.hide();
-        isGameOver = false;
-        count_hole = 0;
     }
 
     public static void reset() {
+        setPlace(0);
         clear();
         resetLevel();
         ball_king = null;
+        gameOver.hide();
+        isGameOver = false;
+        count_hole = 0;
+        unpause();
+        button_pause.setTexture();
+    }
+
+    public static void start(){
         setup();
     }
 
     public static void setPlace(int place) {
-        //place = places[place];
         Game.place = places[place];
         Game.place.onEnter();
     }

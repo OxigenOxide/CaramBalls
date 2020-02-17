@@ -30,6 +30,7 @@ public class Shop extends Scene {
             shopSpots[i].isUnlocked = Main.gameData.unlocks[i];
         }
         selectedBall = Main.gameData.selectedBall;
+
         shopSpots[selectedBall].isSelected = true;
         shopSpots[1].setPrice(25);
         shopSpots[2].setPrice(50);

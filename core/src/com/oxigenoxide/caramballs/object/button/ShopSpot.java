@@ -25,12 +25,10 @@ public class ShopSpot extends Button {
     @Override
     public void update() {
         super.update();
-
     }
 
     @Override
     public void action() {
-
         if (isUnlocked) {
             Shop.select(type);
             isSelected = true;
@@ -41,10 +39,8 @@ public class ShopSpot extends Button {
                 isUnlocked = true;
                 Main.gameData.orbs-=price;
                 Main.shop.onPurchase();
-
             }
         }
-
     }
 
     public void setPrice(int price) {

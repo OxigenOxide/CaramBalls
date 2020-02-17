@@ -20,9 +20,9 @@ public class EventManager {
             start();
     }
 
-    public void update() {
+    public void update(float dt) {
         if (doCount) {
-            count -= Main.dt_one;
+            count -= dt;
             if (count <= 0) {
                 int resp = eventListener.onEvent(event);
                 if (resp == -1) {
@@ -36,6 +36,10 @@ public class EventManager {
             }
             progress = (countMax - count) / countMax;
         }
+    }
+
+    public void update() {
+        update(Main.dt_one);
     }
 
     public EventManager start() {

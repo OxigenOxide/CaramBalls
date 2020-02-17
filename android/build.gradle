@@ -29,8 +29,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 28
         multiDexEnabled true
-        versionCode 18
-        versionName "0.18"
+        versionCode 19
+        versionName "0.19"
         signingConfig signingConfigs.release
     }
     buildTypes {

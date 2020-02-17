@@ -136,14 +136,24 @@
 -loading screen now uses pixelisation
 -shaders are now preloaded
 -music is now loaded by the assetmanager
+[15-feb.-20]
+-disconnected the project from firebase, admob, and google play services
+-gave app a new identity
+-added vcs
+[17-feb.-20]
+-fixed: resetting level
+-fixed: return too far back in the sceneStack
+-fixed: gameOver scene overlay now stays when returning from the shop to game
+-fixed: cannot create duplicate fade actions, will only create delayed fade actions when fading out, instead of also when fading in
+-added exit game button
+-holes use dt_one_slowed
+-tutorial button is now hidden
 
 deadline: 20 march 2020
 (set at 11 februari)
 
 TODO: split sound
-TODO: new package name and seperate app
 TODO: fix multiple pulse particles when combining
 TODO: duplication glitch
 TODO: when returning from shop to game dont remove the gameover overlay or remove the shop button from the gameover overlay
 TODO: target circle at finger?
-TODO: loading animation

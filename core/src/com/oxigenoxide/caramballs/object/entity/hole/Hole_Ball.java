@@ -11,10 +11,11 @@ import com.oxigenoxide.caramballs.utils.EventManager;
 public class Hole_Ball extends Hole {
 
     EventManager eventManager;
-    public Hole_Ball(){
+
+    public Hole_Ball() {
         super();
         //radiusMax = Res.tex_ball[0][Ball_Main.getSize(getBallNum())].getWidth() / 2 + 1;
-        radiusMax = (int)Res.ballRadius[0] + .75f;
+        radiusMax = (int) Res.ballRadius[0] + .75f;
         radius_spawn = radiusMax;
         setPosition();
         eventManager = new EventManager(new EventListener() {
@@ -34,16 +35,17 @@ public class Hole_Ball extends Hole {
             }
         }).start();
     }
-    public void update(){
+
+    public void update() {
         super.update();
 
-        eventManager.update();
+        eventManager.update(Main.dt_one_slowed);
 
         if (eventManager.getEvent() == 1)
             radius = eventManager.getProgress() * radiusMax;
 
         if (eventManager.getEvent() == 3)
-            radius = (1-eventManager.getProgress()) * radiusMax;
+            radius = (1 - eventManager.getProgress()) * radiusMax;
     }
 
     void spew() {

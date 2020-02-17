@@ -52,6 +52,7 @@ import com.oxigenoxide.caramballs.scene.Scene;
 import com.oxigenoxide.caramballs.scene.Shop;
 import com.oxigenoxide.caramballs.scene.Splash;
 import com.oxigenoxide.caramballs.scene.Welcome;
+import com.oxigenoxide.caramballs.utils.ActionListener;
 import com.oxigenoxide.caramballs.utils.DataManager;
 import com.oxigenoxide.caramballs.utils.Funcs;
 import com.oxigenoxide.caramballs.utils.GameData;
@@ -65,12 +66,12 @@ import java.util.Date;
 
 public class Main extends ApplicationAdapter {
     static SpriteBatch batch;
-    static Game game;
-    static Scene menu;
-    static Farm farm;
-    static Scene welcome;
-    static Scene splash;
-    static GameOver gameOver;
+    public static Game game;
+    public static Scene menu;
+    public static Farm farm;
+    public static Scene welcome;
+    public static Scene splash;
+    public static GameOver gameOver;
     static Scene currentScene;
     static Scene overlayScene;
     static Scene nextScene_delayed;
@@ -214,6 +215,9 @@ public class Main extends ApplicationAdapter {
     public static float test_float = 1;
     public static boolean isButtonPressed;
 
+    static ActionListener action_peak;
+    static ActionListener action_peak_delayed;
+
     long startTime;
 
  /*
@@ -298,8 +302,8 @@ public class Main extends ApplicationAdapter {
         DataManager.getInstance().initializeGameData();
         gameData = DataManager.getInstance().gameData;
 
-        isMusicMuted=gameData.isMusicMuted;
-        isSoundMuted=gameData.isSoundMuted;
+        isMusicMuted = gameData.isMusicMuted;
+        isSoundMuted = gameData.isSoundMuted;
 
         worldProperties = new WorldProperties();
 
@@ -311,7 +315,6 @@ public class Main extends ApplicationAdapter {
 
         ballSelector = new BallSelector();
         dragSelector = new DragSelector();
-
 
 
         balls = new ArrayList<Ball>();
@@ -634,6 +637,9 @@ public class Main extends ApplicationAdapter {
         if (nextScene_delayed != null && !doFade) {
             startFade(nextScene_delayed);
             nextScene_delayed = null;
+        } else if (action_peak_delayed != null && !doFade) {
+            startFade(action_peak_delayed);
+            action_peak_delayed = null;
         }
 
         // Music
@@ -1116,23 +1122,23 @@ public class Main extends ApplicationAdapter {
     public static void muteMusic() {
         setNoMusic();
         isMusicMuted = true;
-        gameData.isMusicMuted=isMusicMuted;
+        gameData.isMusicMuted = isMusicMuted;
     }
 
     public static void unmuteMusic() {
         isMusicMuted = false;
         Game.setMusicCurrentLevel();
-        gameData.isMusicMuted=isMusicMuted;
+        gameData.isMusicMuted = isMusicMuted;
     }
 
     public static void muteSound() {
         isSoundMuted = true;
-        gameData.isSoundMuted=isMusicMuted;
+        gameData.isSoundMuted = isMusicMuted;
     }
 
     public static void unmuteSound() {
         isSoundMuted = false;
-        gameData.isSoundMuted=isMusicMuted;
+        gameData.isSoundMuted = isMusicMuted;
     }
 
 
@@ -1177,8 +1183,17 @@ public class Main extends ApplicationAdapter {
         if (!doFade) {
             Main.nextScene = nextScene;
             startFade();
-        } else if (Main.nextScene != nextScene) {
+        } else if (fadeDir == -1 && Main.nextScene != nextScene) {
             nextScene_delayed = nextScene;
+        }
+    }
+
+    public static void startFade(ActionListener action) {
+        if (!doFade) {
+            action_peak = action;
+            startFade();
+        } else if (fadeDir == -1) {
+            action_peak_delayed = action;
         }
     }
 
@@ -1196,6 +1211,9 @@ public class Main extends ApplicationAdapter {
             nextScene = null;
             return;
         }
+        if (action_peak != null)
+            action_peak.action();
+
         Game.onFadePeak();
     }
 
@@ -1225,10 +1243,8 @@ public class Main extends ApplicationAdapter {
     }
 
     public static void setSceneGame() {
-
-        //gameOver = new GameOver();
         startFade(game);
-        inGame = true;
+        inGame = true; // not really
     }
 
 
@@ -1237,11 +1253,12 @@ public class Main extends ApplicationAdapter {
     }
 
     public static void setScenePrevious() {
-        Scene previousScene = sceneStack.get(sceneStack.size() - 2);
-        startFade(previousScene);
-        sceneStack.remove(sceneStack.size() - 1);
-        sceneStack.remove(sceneStack.size() - 1); // Yes, twice
-
+        if (sceneStack.size() > 2) {
+            Scene previousScene = sceneStack.get(sceneStack.size() - 2);
+            startFade(previousScene);
+            sceneStack.remove(sceneStack.size() - 1);
+            sceneStack.remove(sceneStack.size() - 1); // Yes, twice
+        }
     }
 
     public static void setSceneMenuNow() {
@@ -1260,7 +1277,7 @@ public class Main extends ApplicationAdapter {
         startFade(shop);
     }
 
-    static void setScene(Scene scene) {
+    public static void setScene(Scene scene) {
         sceneStack.add(scene);
         previousScene = currentScene;
         if (currentScene != null)
@@ -1361,7 +1378,7 @@ public class Main extends ApplicationAdapter {
                 Res.sound_buttonClick2.play(volume);
                 break;
             case ID.Sound.COLLECT:
-                Res.sound_collect.play(volume,pitch,1);
+                Res.sound_collect.play(volume, pitch, 1);
                 break;
         }
     }
@@ -1427,7 +1444,7 @@ public class Main extends ApplicationAdapter {
             @Override
             public boolean touchUp(int screenX, int screenY, int pointer, int button) {
                 //point.onRelease();
-                if(!Gdx.input.isTouched(0)) {
+                if (!Gdx.input.isTouched(0)) {
                     ballSelector.onRelease();
                     dragSelector.onRelease();
                 }
@@ -1450,7 +1467,6 @@ public class Main extends ApplicationAdapter {
             }
         };
         Gdx.input.setInputProcessor(inputProcessor);
-
 
 
     }

@@ -4,15 +4,17 @@ import com.badlogic.gdx.math.Vector2;
 import com.oxigenoxide.caramballs.Main;
 import com.oxigenoxide.caramballs.Res;
 import com.oxigenoxide.caramballs.scene.Game;
+import com.oxigenoxide.caramballs.utils.ActionListener;
 
 public class Button_Play extends Button {
     Vector2 pos_original;
     boolean doSlideIntoScreen;
+
     public Button_Play(Vector2 pos) {
         super(pos);
         tex = Res.tex_button_play;
         tex_pressed = Res.tex_buttonPressed_play;
-        pos_original=new Vector2(pos);
+        pos_original = new Vector2(pos);
     }
 
     @Override
@@ -23,19 +25,27 @@ public class Button_Play extends Button {
 
     @Override
     public void action() {
-        Main.setSceneGame();
+        Main.startFade(new ActionListener() {
+            @Override
+            public void action() {
+                Game.reset(); // first reset so gameOver == false
+                Main.setScene(Main.game); // game will setup because gameOver == false
+            }
+        });
+
     }
 
-    public void slide(){
-        if(doSlideIntoScreen){
-            pos.x+=(pos_original.x-pos.x)*.3f;
+    public void slide() {
+        if (doSlideIntoScreen) {
+            pos.x += (pos_original.x - pos.x) * .3f;
         }
     }
 
-    public void slideIntoScreen(){
-        doSlideIntoScreen=true;
+    public void slideIntoScreen() {
+        doSlideIntoScreen = true;
     }
-    public void placeOutOfScreen(){
-        pos.set(-tex.getWidth(),pos_original.y);
+
+    public void placeOutOfScreen() {
+        pos.set(-tex.getWidth(), pos_original.y);
     }
 }
