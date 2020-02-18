@@ -1,18 +1,18 @@
 {
-highscore: 262144
+highscore: 553648672
 unlocks: [
 	true
 	true
-	false
-	false
 	true
-	false
 	true
-	false
-	false
+	true
+	true
+	true
+	true
+	true
 ]
-selectedBall: 4
-orbs: 4921
+selectedBall: 7
+orbs: 4111
 testerID: 2
 isMusicMuted: true
 }

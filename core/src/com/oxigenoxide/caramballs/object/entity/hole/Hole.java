@@ -38,7 +38,7 @@ public class Hole extends Entity {
     }
 
     public void setPosition() {
-        Vector2 pos_rnd = Game.getFreePosOnTable(radius_spawn);
+        Vector2 pos_rnd = Game.getFreePosOnTable(radius_spawn, 10);
         if (pos_rnd == null) {
             dispose();
             pos.set(-100, -100);

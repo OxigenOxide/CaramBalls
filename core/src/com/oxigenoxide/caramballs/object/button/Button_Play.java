@@ -28,11 +28,11 @@ public class Button_Play extends Button {
         Main.startFade(new ActionListener() {
             @Override
             public void action() {
-                Game.reset(); // first reset so gameOver == false
+                //if(Main.game.timesShown>0)
+                    Game.reset(); // first reset so gameOver == false TODO: FIX
                 Main.setScene(Main.game); // game will setup because gameOver == false
             }
         });
-
     }
 
     public void slide() {

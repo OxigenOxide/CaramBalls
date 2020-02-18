@@ -148,12 +148,22 @@
 -added exit game button
 -holes use dt_one_slowed
 -tutorial button is now hidden
+[18-feb.-20]
+-now ball palette array has only 9 elements
+-first ball is colored
+-added /android/assets/bin/ and /android/assets/gameData.json to .gitignore
+-main balls that loop get a colored outline
+-fixed: game would crash after the second ball was spawned. Cause: clear() was broken, now using Main.clearEntities()
+-created class Ball_Obstacle
+-complete freeze when game over
+-created class Ball_Inflate
+-getFreePos() is now compatible with variable tries
 
 deadline: 20 march 2020
 (set at 11 februari)
 
 TODO: split sound
 TODO: fix multiple pulse particles when combining
-TODO: duplication glitch
-TODO: when returning from shop to game dont remove the gameover overlay or remove the shop button from the gameover overlay
+TODO: ball duplication glitch
 TODO: target circle at finger?
+TODO: choose good outline colors

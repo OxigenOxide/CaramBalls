@@ -199,6 +199,7 @@ public class Res {
     public static Color[] palette_ballCapsule;
 
     public static CircleShape[] shape_ball;
+
     public static final Color COLOR_HOT = new Color(1, 130 / 255f, 26 / 255f, 1);
     public static final Color COLOR_RED = new Color(113 / 255f, 9 / 255f, 56 / 255f, 1);
     public static final Color COLOR_BOMB_SHADOW = new Color(62 / 255f, 9 / 255f, 113 / 255f, 1);
@@ -211,6 +212,8 @@ public class Res {
     public static final Color COLOR_SPLASH_BLUE = new Color(88 / 255f, 179 / 255f, 194 / 255f, 1);
 
     public static final Color[] COLOR_PROJECTION = new Color[]{COLOR_PROJECTION_RED, COLOR_PROJECTION_GREEN, COLOR_PROJECTION_YELLOW, COLOR_PROJECTION_PURPLE};
+    public static final Color[] COLOR_OUTLINE = new Color[]{Color.BLACK, COLOR_PROJECTION_GREEN, COLOR_PROJECTION_YELLOW, COLOR_PROJECTION_PURPLE}; // test colors currently
+    public static final Color[] PALETTE_BASICBALL = new Color[]{new Color(0, 0, 0, 1), new Color(62 / 255f, 180 / 255f, 227 / 255f, 1), new Color(1, 1, 1, 1), new Color(1, 1, 1, 1)};
 
     public static Sound sound_ballHit;
     public static Sound sound_speedup;
@@ -261,7 +264,6 @@ public class Res {
         };
 
 
-
         shader_floorFade.setUniformf("screenSize", Main.width, Main.height);
         /*
         tex_ball = new Texture[]{new Texture("images/ball_small.png"), new Texture("images/ball_medium.png"), new Texture("images/ball_large.png")};
@@ -272,8 +274,7 @@ public class Res {
         tex_ballShard = new Texture[]{new Texture("images/ballShard_0.png"), new Texture("images/ballShard_1.png"), new Texture("images/ballShard_2.png")};
         */
 
-        tex_badSmile = new Texture[]{Main.assets.get("images/badSmile_1.png"), Main.assets.get("images/badSmile_2.png"), Main.assets.get("images/badSmile_3.png"), Main.assets.get("images/badSmile_4.png"), Main.assets.get("images/badSmile_5.png"),};
-        tex_ball = new Texture[9][];
+        tex_ball = new Texture[21][];
         tex_ball[0] = new Texture[]{Main.assets.get("images/ball_small.png"), Main.assets.get("images/ball_medium.png"), Main.assets.get("images/ball_large.png")};
         tex_ball[1] = new Texture[]{Main.assets.get("images/ball_face_small.png"), Main.assets.get("images/ball_face_medium.png"), Main.assets.get("images/ball_face_large.png")};
         tex_ball[2] = new Texture[]{Main.assets.get("images/ball_square_small.png"), Main.assets.get("images/ball_square_medium.png"), Main.assets.get("images/ball_square_large.png")};
@@ -283,7 +284,10 @@ public class Res {
         tex_ball[6] = new Texture[]{Main.assets.get("images/ball_rasp_small.png"), Main.assets.get("images/ball_rasp_medium.png"), Main.assets.get("images/ball_rasp_large.png")};
         tex_ball[7] = new Texture[]{Main.assets.get("images/ball_hl_small.png"), Main.assets.get("images/ball_hl_medium.png"), Main.assets.get("images/ball_hl_large.png")};
         tex_ball[8] = new Texture[]{Main.assets.get("images/ball_moon_small.png"), Main.assets.get("images/ball_moon_medium.png"), Main.assets.get("images/ball_moon_large.png")};
+        tex_ball[20] = new Texture[]{Main.assets.get("images/ball_inflate_small.png"), Main.assets.get("images/ball_inflate_medium.png"), Main.assets.get("images/ball_inflate_large.png")};
+
         tex_ball_bad = Main.assets.get("images/ball_bad.png");
+        tex_badSmile = new Texture[]{Main.assets.get("images/badSmile_1.png"), Main.assets.get("images/badSmile_2.png"), Main.assets.get("images/badSmile_3.png"), Main.assets.get("images/badSmile_4.png"), Main.assets.get("images/badSmile_5.png"),};
         tex_bomb = Main.assets.get("images/bomb.png");
         tex_bomb_white = Main.assets.get("images/bomb_white.png");
         tex_crown = Main.assets.get("images/crown.png");
@@ -672,58 +676,63 @@ public class Res {
         };
 
         ballPalette = new Color[][]{
-                new Color[4], new Color[4], new Color[4], new Color[4], new Color[4], new Color[4], new Color[4], new Color[4], new Color[4], new Color[4]
+                new Color[4], new Color[4], new Color[4], new Color[4], new Color[4], new Color[4], new Color[4], new Color[4], new Color[4]
         };
 
+        /*
         ballPalette[0][0] = new Color(0, 0, 0, 1);
         ballPalette[0][1] = new Color(62 / 255f, 180 / 255f, 227 / 255f, 1);
         ballPalette[0][2] = new Color(1, 1, 1, 1);
         ballPalette[0][3] = new Color(1, 1, 1, 1);
+        */
+
+
+        ballPalette[0][0] = new Color(0, 0, 0, 1);
+        ballPalette[0][1] = new Color(191 / 255f, 0, 0, 1);
+        ballPalette[0][2] = new Color(255 / 255f, 108 / 255f, 0, 1);
+        ballPalette[0][3] = new Color(255 / 255f, 108 / 255f, 0, 1);
 
         ballPalette[1][0] = new Color(0, 0, 0, 1);
-        ballPalette[1][1] = new Color(191 / 255f, 0, 0, 1);
-        ballPalette[1][2] = new Color(255 / 255f, 108 / 255f, 0, 1);
-        ballPalette[1][3] = new Color(255 / 255f, 108 / 255f, 0, 1);
+        ballPalette[1][1] = new Color(16 / 255f, 148 / 255f, 63 / 255f, 1);
+        ballPalette[1][2] = new Color(173 / 255f, 247 / 255f, 41 / 255f, 1);
+        ballPalette[1][3] = new Color(173 / 255f, 247 / 255f, 41 / 255f, 1);
 
         ballPalette[2][0] = new Color(0, 0, 0, 1);
-        ballPalette[2][1] = new Color(16 / 255f, 148 / 255f, 63 / 255f, 1);
-        ballPalette[2][2] = new Color(173 / 255f, 247 / 255f, 41 / 255f, 1);
-        ballPalette[2][3] = new Color(173 / 255f, 247 / 255f, 41 / 255f, 1);
+        ballPalette[2][1] = new Color(24 / 255f, 13 / 255f, 157 / 255f, 1);
+        ballPalette[2][2] = new Color(146 / 255f, 71 / 255f, 221 / 255f, 1);
+        ballPalette[2][3] = new Color(146 / 255f, 71 / 255f, 221 / 255f, 1);
 
         ballPalette[3][0] = new Color(0, 0, 0, 1);
-        ballPalette[3][1] = new Color(24 / 255f, 13 / 255f, 157 / 255f, 1);
-        ballPalette[3][2] = new Color(146 / 255f, 71 / 255f, 221 / 255f, 1);
-        ballPalette[3][3] = new Color(146 / 255f, 71 / 255f, 221 / 255f, 1);
+        ballPalette[3][1] = new Color(19 / 255f, 123 / 255f, 202 / 255f, 1);
+        ballPalette[3][2] = new Color(52 / 255f, 187 / 255f, 209 / 255f, 1);
+        ballPalette[3][3] = new Color(1, 1, 1, 1);
 
         ballPalette[4][0] = new Color(0, 0, 0, 1);
-        ballPalette[4][1] = new Color(19 / 255f, 123 / 255f, 202 / 255f, 1);
-        ballPalette[4][2] = new Color(52 / 255f, 187 / 255f, 209 / 255f, 1);
+        ballPalette[4][1] = new Color(221 / 255f, 93 / 255f, 4 / 255f, 1);
+        ballPalette[4][2] = new Color(227 / 255f, 218 / 255f, 30 / 255f, 1);
         ballPalette[4][3] = new Color(1, 1, 1, 1);
 
         ballPalette[5][0] = new Color(0, 0, 0, 1);
-        ballPalette[5][1] = new Color(221 / 255f, 93 / 255f, 4 / 255f, 1);
-        ballPalette[5][2] = new Color(227 / 255f, 218 / 255f, 30 / 255f, 1);
+        ballPalette[5][1] = new Color(53 / 255f, 59 / 255f, 72 / 255f, 1);
+        ballPalette[5][2] = new Color(130 / 255f, 167 / 255f, 157 / 255f, 1);
         ballPalette[5][3] = new Color(1, 1, 1, 1);
 
         ballPalette[6][0] = new Color(0, 0, 0, 1);
-        ballPalette[6][1] = new Color(53 / 255f, 59 / 255f, 72 / 255f, 1);
-        ballPalette[6][2] = new Color(130 / 255f, 167 / 255f, 157 / 255f, 1);
+        ballPalette[6][1] = new Color(29 / 255f, 177 / 255f, 82 / 255f, 1);
+        ballPalette[6][2] = new Color(71 / 255f, 221 / 255f, 189 / 255f, 1);
         ballPalette[6][3] = new Color(1, 1, 1, 1);
 
         ballPalette[7][0] = new Color(0, 0, 0, 1);
-        ballPalette[7][1] = new Color(29 / 255f, 177 / 255f, 82 / 255f, 1);
-        ballPalette[7][2] = new Color(71 / 255f, 221 / 255f, 189 / 255f, 1);
+        ballPalette[7][1] = new Color(139 / 255f, 8 / 255f, 60 / 255f, 1);
+        ballPalette[7][2] = new Color(204 / 255f, 49 / 255f, 255 / 255f, 1);
         ballPalette[7][3] = new Color(1, 1, 1, 1);
 
         ballPalette[8][0] = new Color(0, 0, 0, 1);
-        ballPalette[8][1] = new Color(139 / 255f, 8 / 255f, 60 / 255f, 1);
-        ballPalette[8][2] = new Color(204 / 255f, 49 / 255f, 255 / 255f, 1);
+        ballPalette[8][1] = new Color(14 / 255f, 108 / 255f, 44 / 255f, 1);
+        ballPalette[8][2] = new Color(0 / 255f, 221 / 255f, 32 / 255f, 1);
         ballPalette[8][3] = new Color(1, 1, 1, 1);
 
-        ballPalette[9][0] = new Color(0, 0, 0, 1);
-        ballPalette[9][1] = new Color(14 / 255f, 108 / 255f, 44 / 255f, 1);
-        ballPalette[9][2] = new Color(0 / 255f, 221 / 255f, 32 / 255f, 1);
-        ballPalette[9][3] = new Color(1, 1, 1, 1);
+
         /*
         ballPalette[1][0] = new Color(0, 0, 0, 1);
         ballPalette[1][1] = new Color(221 / 255f, 93 / 255f, 4 / 255f, 1);
@@ -780,6 +789,9 @@ public class Res {
         Main.assets.load("images/ball_moon_small.png", Texture.class);
         Main.assets.load("images/ball_moon_medium.png", Texture.class);
         Main.assets.load("images/ball_moon_large.png", Texture.class);
+        Main.assets.load("images/ball_inflate_small.png", Texture.class);
+        Main.assets.load("images/ball_inflate_medium.png", Texture.class);
+        Main.assets.load("images/ball_inflate_large.png", Texture.class);
         Main.assets.load("images/crown.png", Texture.class);
         Main.assets.load("images/bumper.png", Texture.class);
         Main.assets.load("images/tabletop.png", Texture.class);
@@ -1031,13 +1043,13 @@ public class Res {
         Main.assets.load("sounds/bounce.mp3", Sound.class);
     }
 
-    public static void preload(){
-        tex_numbers=new Texture[5][];
+    public static void preload() {
+        tex_numbers = new Texture[5][];
         tex_numbers[ID.Font.SMALL] = new Texture[]{new Texture("images/numbers/number_m_0.png"), new Texture("images/numbers/number_m_1.png"), new Texture("images/numbers/number_m_2.png"), new Texture("images/numbers/number_m_3.png"), new Texture("images/numbers/number_m_4.png"), new Texture("images/numbers/number_m_5.png"), new Texture("images/numbers/number_m_6.png"), new Texture("images/numbers/number_m_7.png"), new Texture("images/numbers/number_m_8.png"), new Texture("images/numbers/number_m_9.png")};
-        tex_number_small_percent=new Texture("images/numbers/number_m_percent.png");
+        tex_number_small_percent = new Texture("images/numbers/number_m_percent.png");
         shader_c = new ShaderProgram(Gdx.files.internal("shaders/shader_c.vert"), Gdx.files.internal("shaders/shader_c.frag"));
-        sound_bounce=Gdx.audio.newSound(Gdx.files.internal("sounds/bounce.mp3"));
-        sound_ballHit=Gdx.audio.newSound(Gdx.files.internal("sounds/ballHit.wav"));
+        sound_bounce = Gdx.audio.newSound(Gdx.files.internal("sounds/bounce.mp3"));
+        sound_ballHit = Gdx.audio.newSound(Gdx.files.internal("sounds/ballHit.wav"));
         shader_palette = new ShaderProgram(Gdx.files.internal("shaders/shader_palette.vert"), Gdx.files.internal("shaders/shader_palette.frag"));
         shader_slow = new ShaderProgram(Gdx.files.internal("shaders/shader_slow.vert"), Gdx.files.internal("shaders/shader_slow.frag"));
         shader_trailFade = new ShaderProgram(Gdx.files.internal("shaders/shader_trailFade.vert"), Gdx.files.internal("shaders/shader_trailFade.frag"));

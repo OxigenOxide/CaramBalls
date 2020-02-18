@@ -38,8 +38,6 @@ public class BallSelector {
             ball_selected = null;
             //Game.slowdown = Math.max(Game.slowdown - Main.dt_one * .05f, 0);
             Game.slowdown_effect = Math.max(Game.slowdown_effect - Main.dt_one * .05f, 0);
-            if (!Game.isPaused)
-                Main.slowdown = 0;
         }
         if (active) {
             if (Main.noFlow)

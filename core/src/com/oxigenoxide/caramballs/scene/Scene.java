@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class Scene {
+    public int timesShown;
     public void update(){
 
     }
@@ -14,7 +15,7 @@ public class Scene {
 
     }
     public void show(){
-
+        timesShown++;
     }
     public void hide(){
 

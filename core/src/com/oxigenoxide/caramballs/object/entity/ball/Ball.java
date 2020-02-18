@@ -36,6 +36,7 @@ public class Ball extends Entity {
     public boolean isUnderGround;
     public boolean doDispose;
     Ball_Main ballmain_hit;
+    Ball ball_hit;
     float angleToMid;
     float distToMid;
     float time_off;
@@ -69,13 +70,22 @@ public class Ball extends Entity {
     public Ball(float x, float y, float height, int size) {
         this.height = height;
         this.size = size;
-
         pos = new Vector2(x, y);
-        pos_last = new Vector2(x, y);
-        sprite = new Sprite(Res.tex_ball[0][0]);
+        construct();
+    }
 
+    public Ball(float height, int size) {
+        this.height = height;
+        this.size = size;
+        pos=Game.getFreePosOnTable(radius+1);
+        construct();
+    }
+
+    private void construct(){
+        pos_last = new Vector2(pos);
+        sprite = new Sprite(Res.tex_ball[0][0]);
         createBody();
-        body.setTransform(x * Main.METERSPERPIXEL, y * Main.METERSPERPIXEL, 0);
+        body.setTransform(pos.x * Main.METERSPERPIXEL, pos.y * Main.METERSPERPIXEL, 0);
         radius = body.getFixtureList().first().getShape().getRadius() * Main.PIXELSPERMETER;
         radius_spawn = radius + 1;
         if (height < 0) {
@@ -84,8 +94,6 @@ public class Ball extends Entity {
         }
         if (height > 10)
             setPassthrough(true);
-
-        //activateShield();
     }
 
     public void update() {
@@ -207,6 +215,9 @@ public class Ball extends Entity {
                 ringSizeFactor = 0;
                 count_circle = -(float) Math.PI * .5f;
             }
+
+            ball_hit=null;
+
             //THIS ALWAYS LAST
             if (doDispose) {
                 dispose();
@@ -418,6 +429,7 @@ public class Ball extends Entity {
     }
 
     public void contactBall(Ball ball) {
+        ball_hit=ball;
         //Main.addSoundRequest(ID.Sound.HIT);
     }
 

@@ -19,6 +19,7 @@ import static com.oxigenoxide.caramballs.scene.Game.ball_king;
 public class Ball_Main extends Ball {
 
     public int level;
+    public int loop;
     float count_noPull;
     Color[] palette;
     Projection projection;
@@ -26,7 +27,8 @@ public class Ball_Main extends Ball {
     public Ball_Main(float x, float y, float height, int size, int level) {
         super(x, y, height, size);
 
-        if(Main.inGame()) {
+
+        if (Main.inGame()) {
             if (Game.level < level) {
                 Game.nextLevel();
                 Game.throwConfetti(pos.x, pos.y);
@@ -37,13 +39,17 @@ public class Ball_Main extends Ball {
         }
 
         this.level = level;
-        palette = Game.getBallPalette(level);
+        loop = (int) (level / 9f);
+
+        palette = getBallPalette(level, loop);
         setSpriteTexture(Res.tex_ball[Game.ballType][size]);
 
         Main.mainBalls.add(this);
 
         isBallKing();
         setSpriteUnderGround();
+
+
     }
 
     @Override
@@ -79,8 +85,8 @@ public class Ball_Main extends Ball {
 
                         Game.setPlace(projectionToPass.getType());
 
-                        projection=null;
-                        ballmain_hit.projection=null;
+                        projection = null;
+                        ballmain_hit.projection = null;
                         Main.projections.add(projectionToPass);
                     }
                 }
@@ -278,8 +284,8 @@ public class Ball_Main extends Ball {
 
             setPassthrough(true);
 
-            if(projection!=null)
-                ball_1.createProjection(projection.getType(),projection.getTier());
+            if (projection != null)
+                ball_1.createProjection(projection.getType(), projection.getTier());
 
             doDispose = true;
         }
@@ -344,17 +350,35 @@ public class Ball_Main extends Ball {
         Main.mainBalls.remove(this);
     }
 
-    static public class Ball_Main_Data{
-        public float x,y;
-        public int size,level;
-        public Ball_Main_Data(){
+    public static Color[] getBallPalette(int level, int loop) {
+
+        Color[] palette_normal = Res.ballPalette[level % (Res.ballPalette.length)];
+
+        if(loop == 0)
+            return palette_normal;
+
+        Color[] palette = new Color[4];
+        palette[0]=Res.COLOR_OUTLINE[loop];
+        palette[1]=palette_normal[1];
+        palette[2]=palette_normal[2];
+        palette[3]=palette_normal[3];
+
+        return palette;
+    }
+
+    static public class Ball_Main_Data {
+        public float x, y;
+        public int size, level;
+
+        public Ball_Main_Data() {
             // this constructor is actually being used for serialisation
         }
-        public Ball_Main_Data(float x, float y, int size, int level){
-            this.x=x;
-            this.y=y;
-            this.size=size;
-            this.level=level;
+
+        public Ball_Main_Data(float x, float y, int size, int level) {
+            this.x = x;
+            this.y = y;
+            this.size = size;
+            this.level = level;
         }
     }
 }

@@ -729,7 +729,6 @@ public class Main extends ApplicationAdapter {
             }
             entities.clear();
         }
-
     }
 
     public static ArrayList<Entity> getEntityArrayList(int id) {
@@ -1349,6 +1348,7 @@ public class Main extends ApplicationAdapter {
 
 
     static void playSound(int soundID, float volume, float pitch) {
+        System.out.println("playsound: "+soundID);
         switch (soundID) {
             case ID.Sound.PLOP:
                 playPlopSound();

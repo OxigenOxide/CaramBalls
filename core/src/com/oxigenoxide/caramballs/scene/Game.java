@@ -17,11 +17,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
-import com.badlogic.gdx.physics.box2d.Manifold;
-import com.badlogic.gdx.utils.Array;
 import com.oxigenoxide.caramballs.FirebaseInterface;
 import com.oxigenoxide.caramballs.ID;
 import com.oxigenoxide.caramballs.Main;
@@ -35,33 +31,29 @@ import com.oxigenoxide.caramballs.object.button.Button_Exit;
 import com.oxigenoxide.caramballs.object.button.Button_Music;
 import com.oxigenoxide.caramballs.object.button.Button_Sound;
 import com.oxigenoxide.caramballs.object.entity.BallCapsule;
-import com.oxigenoxide.caramballs.object.entity.Bullet;
 import com.oxigenoxide.caramballs.object.Bumper;
 import com.oxigenoxide.caramballs.object.entity.Cannon;
-import com.oxigenoxide.caramballs.object.entity.Cat;
 import com.oxigenoxide.caramballs.object.entity.CircularBumper;
 import com.oxigenoxide.caramballs.object.Crown;
 import com.oxigenoxide.caramballs.object.entity.Entity;
 import com.oxigenoxide.caramballs.object.entity.Eye;
 import com.oxigenoxide.caramballs.object.entity.JumpingPad;
+import com.oxigenoxide.caramballs.object.entity.ball.Ball_Inflate;
+import com.oxigenoxide.caramballs.object.entity.ball.Ball_Obstacle;
 import com.oxigenoxide.caramballs.object.entity.ball.Ball_Star;
 import com.oxigenoxide.caramballs.object.entity.draggable.Draggable;
 import com.oxigenoxide.caramballs.object.entity.draggable.Plank;
 import com.oxigenoxide.caramballs.object.entity.draggable.Tire;
 import com.oxigenoxide.caramballs.object.entity.orbContainer.OC_Egg;
 import com.oxigenoxide.caramballs.object.entity.FloorButton;
-import com.oxigenoxide.caramballs.object.entity.Honey;
 import com.oxigenoxide.caramballs.object.Orb;
 import com.oxigenoxide.caramballs.object.OrbCounter;
 import com.oxigenoxide.caramballs.object.Pin;
 import com.oxigenoxide.caramballs.object.entity.Spike;
 import com.oxigenoxide.caramballs.object.TutorialSwipeExample;
 import com.oxigenoxide.caramballs.object.entity.ball.Ball;
-import com.oxigenoxide.caramballs.object.entity.ball.Ball_Bomb;
 import com.oxigenoxide.caramballs.object.button.Button;
 import com.oxigenoxide.caramballs.object.button.Button_Pause;
-import com.oxigenoxide.caramballs.object.entity.collectable.Collectable;
-import com.oxigenoxide.caramballs.object.entity.collectable.Collectable_Shield;
 import com.oxigenoxide.caramballs.object.entity.hole.Hole;
 import com.oxigenoxide.caramballs.object.Point;
 import com.oxigenoxide.caramballs.object.entity.ball.Ball_Bad;
@@ -69,7 +61,6 @@ import com.oxigenoxide.caramballs.object.entity.ball.Ball_Main;
 import com.oxigenoxide.caramballs.object.entity.hole.Hole_Ball;
 import com.oxigenoxide.caramballs.object.entity.hole.Hole_Fall;
 import com.oxigenoxide.caramballs.object.entity.orbContainer.OC_Fruit;
-import com.oxigenoxide.caramballs.object.entity.orbContainer.OrbContainer;
 import com.oxigenoxide.caramballs.object.entity.particle.Particle;
 import com.oxigenoxide.caramballs.object.entity.particle.Particle_Confetti;
 import com.oxigenoxide.caramballs.object.floatingReward.FR_Eye;
@@ -77,6 +68,8 @@ import com.oxigenoxide.caramballs.object.floatingReward.FloatingReward;
 import com.oxigenoxide.caramballs.object.place.Place;
 import com.oxigenoxide.caramballs.object.place.Place_Default;
 import com.oxigenoxide.caramballs.object.place.Place_Space;
+import com.oxigenoxide.caramballs.utils.ActionListener;
+import com.oxigenoxide.caramballs.utils.Counter;
 import com.oxigenoxide.caramballs.utils.Funcs;
 import com.oxigenoxide.caramballs.utils.MathFuncs;
 
@@ -88,12 +81,8 @@ import static com.oxigenoxide.caramballs.Main.ballsToAdd;
 import static com.oxigenoxide.caramballs.Main.ballsToRemove;
 import static com.oxigenoxide.caramballs.Main.bumpers;
 import static com.oxigenoxide.caramballs.Main.cannons;
-import static com.oxigenoxide.caramballs.Main.cats;
 import static com.oxigenoxide.caramballs.Main.circularBumpers;
-import static com.oxigenoxide.caramballs.Main.collectables;
-import static com.oxigenoxide.caramballs.Main.destroyBody;
 import static com.oxigenoxide.caramballs.Main.draggables;
-import static com.oxigenoxide.caramballs.Main.eggs;
 import static com.oxigenoxide.caramballs.Main.entities;
 import static com.oxigenoxide.caramballs.Main.entities_sorted;
 import static com.oxigenoxide.caramballs.Main.eyes;
@@ -101,13 +90,10 @@ import static com.oxigenoxide.caramballs.Main.floatingRewards;
 import static com.oxigenoxide.caramballs.Main.floorButtons;
 import static com.oxigenoxide.caramballs.Main.gameData;
 import static com.oxigenoxide.caramballs.Main.holes;
-import static com.oxigenoxide.caramballs.Main.honey;
 import static com.oxigenoxide.caramballs.Main.jumpingPads;
 import static com.oxigenoxide.caramballs.Main.mainBalls;
-import static com.oxigenoxide.caramballs.Main.orbContainers;
 import static com.oxigenoxide.caramballs.Main.orbs;
 import static com.oxigenoxide.caramballs.Main.particles;
-import static com.oxigenoxide.caramballs.Main.particles_batch;
 import static com.oxigenoxide.caramballs.Main.particles_sr;
 import static com.oxigenoxide.caramballs.Main.pins;
 import static com.oxigenoxide.caramballs.Main.projections;
@@ -143,6 +129,8 @@ public class Game extends Scene {
     public static Button button_sound;
     public static Button button_music;
     public static Button button_exit;
+
+    public static ArrayList<Ball> ballsToDrop = new ArrayList<Ball>();
 
     public static boolean doPixelate = true;
     public static final float HITSPEEDTHRESHOLD = 5;
@@ -193,6 +181,8 @@ public class Game extends Scene {
     static float count_nextCannon = countMax_nextCannon;
     static int countMax_nextEye = 300;
     static float count_nextEye = countMax_nextCannon;
+
+    static Counter counter_dropObstacles;
 
     static float count_changeTableTop;
     static float countMax_changeTableTop = 60;
@@ -298,6 +288,18 @@ public class Game extends Scene {
 
         ballType = Main.gameData.selectedBall;
 
+        counter_dropObstacles = new Counter(new ActionListener() {
+            @Override
+            public void action() {
+                if (ballsToDrop.size() != 0) {
+                    balls.add(ballsToDrop.get(0));
+                    ballsToDrop.remove(0);
+                    if (ballsToDrop.size() > 0)
+                        counter_dropObstacles.start();
+                }
+            }
+        }, .2f);
+
         for (int i = 0; i < 4; i++) {
             palette_table[i].set(palette_target_table[i]);
         }
@@ -305,6 +307,7 @@ public class Game extends Scene {
 
     @Override
     public void show() {
+        super.show();
         if (doSetTutorialMode) {
             doSetTutorialMode = false;
             setTutorialMode();
@@ -322,13 +325,16 @@ public class Game extends Scene {
     @Override
     public void update() {
 
+        counter_dropObstacles.update();
+
+        Main.slowdown = 0;
+
         if (ultraSlow)
             Main.slowdown = .95f;
 
-        if (isPaused) {
+        if (isPaused || isGameOver) {
             Main.slowdown = 1;
         }
-
         count += Main.dt_one;
         count_trailClear += Main.dt_one_slowed;
 
@@ -408,6 +414,9 @@ public class Game extends Scene {
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
                 ballCapsules.add(new BallCapsule());
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
+                balls.add(new Ball_Obstacle(tap[0].x, tap[0].y));
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
@@ -611,10 +620,6 @@ public class Game extends Scene {
         doGameOverCue = false;
         ultraSlow = false;
         pos_zoom = new Vector2(Main.width / 2, Main.height / 2);
-    }
-
-    public static Color[] getBallPalette(int level) {
-        return Res.ballPalette[level % (Res.ballPalette.length)];
     }
 
 
@@ -1086,7 +1091,7 @@ public class Game extends Scene {
     static Body body_gap;
 
     static void setTutorial(int stage) {
-        clear();
+        Main.clearEntities();
         float x, y;
         float ang;
         Ball ball;
@@ -1289,7 +1294,7 @@ public class Game extends Scene {
     }
 
     public static void endTutorial() {
-        clear();
+        Main.clearEntities();
         tutorialStage = 0;
         inTutorialMode = false;
         body_gap = Main.destroyBody(body_gap);
@@ -1354,71 +1359,13 @@ public class Game extends Scene {
         Main.shake();
     }
 
-    public static void clear() {
-        for (Ball ball : balls) {
-            ball.dispose();
-        }
-        balls.clear();
-
-        for (OC_Egg egg : eggs) {
-            egg.dispose();
-        }
-        eggs.clear();
-
-        for (OrbContainer oc : orbContainers)
-            oc.dispose();
-        orbContainers.clear();
-
-        for (Spike spike : spikes) {
-            spike.dispose();
-        }
-        spikes.clear();
-
-        for (Particle p : particles) {
-            p.dispose();
-        }
-        particles.clear();
-
-        for (Cat cat : cats) {
-            cat.dispose();
-        }
-        cats.clear();
-
-        for (Cannon c : cannons) {
-            c.dispose();
-        }
-
-        for (Honey h : honey) {
-            h.dispose();
-        }
-
-        for (CircularBumper c : circularBumpers) {
-            c.dispose();
-        }
-
-        for (JumpingPad jp : jumpingPads) {
-            jp.dispose();
-        }
-
-        Array<Body> bodies = new Array<Body>();
-        world.getBodies(bodies);
-        bodies.removeValue(Main.border, true);
-        for (Body b : bodies)
-            destroyBody(b); // this might not be good since the bodies variables arent set to null
-
-        mainBalls.clear();
-        bumpers.clear();
-        floorButtons.clear();
-        holes.clear();
-    }
-
     public static void replay() {
         reset();
     }
 
     public static void reset() {
         setPlace(0);
-        clear();
+        //entities are already cleared after leaving the scene
         resetLevel();
         ball_king = null;
         gameOver.hide();
@@ -1428,7 +1375,7 @@ public class Game extends Scene {
         button_pause.setTexture();
     }
 
-    public static void start(){
+    public static void start() {
         setup();
     }
 
@@ -1539,6 +1486,7 @@ public class Game extends Scene {
 
     public static void initiateLevel_easy() {
         int random = (int) (Math.random() * 2);
+        random = 2;
         switch (random) {
             case 0:
                 doSpikes = true;
@@ -1549,6 +1497,13 @@ public class Game extends Scene {
                 //doCircularBumpers = true;
                 countMax_nextCircularBumper = 50;
                 countMax_nextBallSpawnPeriod = 0;
+                break;
+            case 2:
+                counter_dropObstacles.start();
+                for (int i = 0; i < 15; i++)
+                    ballsToDrop.add(new Ball_Obstacle());
+                for (int i = 0; i < 5; i++)
+                    ballsToDrop.add(new Ball_Inflate());
                 break;
         }
     }
@@ -1671,9 +1626,13 @@ public class Game extends Scene {
     }
 
     public static Vector2 getFreePosOnTable(float radius) {
+        return getFreePosOnTable(radius,5);
+    }
+
+    public static Vector2 getFreePosOnTable(float radius, int tries_max) {
         int tries = 0;
         Vector2 pos = null;
-        while (tries < 5) {
+        while (tries < tries_max) {
             tries++;
             pos = getRandomPosOnTable(radius);
             if (!isPosFree(pos, radius))
