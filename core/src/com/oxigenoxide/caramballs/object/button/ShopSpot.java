@@ -64,7 +64,7 @@ public class ShopSpot extends Button {
             Res.shader_palette.setUniformf("color1", Res.ballPalette[level][1].r, Res.ballPalette[level][1].g, Res.ballPalette[level][1].b, 1);
             Res.shader_palette.setUniformf("color2", Res.ballPalette[level][2].r, Res.ballPalette[level][2].g, Res.ballPalette[level][2].b, 1);
             Res.shader_palette.setUniformf("color3", Res.ballPalette[level][3].r, Res.ballPalette[level][3].g, Res.ballPalette[level][3].b, 1);
-            batch.draw(Res.tex_ball[type][1], pos.x + 7, pos.y + 24 - Res.tex_ball[type][1].getHeight() / 2 - touchOffset);
+            batch.draw(Res.tex_ball[type][1], pos.x + 7, pos.y + 24 - Res.tex_ball[type][1].getRegionHeight() / 2 - touchOffset);
             batch.setShader(null);
             if (isSelected)
                 batch.draw(Res.tex_symbolSelected, pos.x + 7, pos.y + 4 - touchOffset);

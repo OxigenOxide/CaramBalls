@@ -74,7 +74,7 @@ public class TutorialSwipeExample {
 
         pos_hand.add(v_handOffset);
         sprite_hand.setPosition(pos_hand.x, pos_hand.y);
-        sprite_hand.setTexture(Res.tex_hand[hand_index]);
+        sprite_hand.setRegion(Res.tex_hand[hand_index]);
 
         float cang = MathFuncs.angleBetweenPoints(pos, pos_virtualTap);
         float distanceToPointer = MathFuncs.distanceBetweenPoints(pos, pos_virtualTap);

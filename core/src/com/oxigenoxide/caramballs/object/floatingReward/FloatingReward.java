@@ -3,13 +3,14 @@ package com.oxigenoxide.caramballs.object.floatingReward;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.oxigenoxide.caramballs.Main;
 
 public class FloatingReward {
 
-    Texture tex;
+    TextureRegion tex;
     Vector2 pos;
     Vector2 pos_target;
     Sprite sprite;
@@ -33,8 +34,8 @@ public class FloatingReward {
     public void update(){
         lerpAlpha=Math.min(.001f*(startCount-count),.1f);
         pos.lerp(pos_target,lerpAlpha);
-        sprite.setPosition(pos.x-sprite.getWidth()/2,pos.y-sprite.getHeight()/2);
-        sprite.setSize(sprite.getWidth()+(sprite.getTexture().getWidth() * scaleUp - sprite.getWidth()) *lerpAlpha, sprite.getHeight() +(sprite.getTexture().getHeight() * scaleUp - sprite.getHeight()) *lerpAlpha);
+        sprite.setPosition(pos.x-sprite.getRegionWidth()/2,pos.y-sprite.getHeight()/2);
+        sprite.setSize(sprite.getRegionWidth()+(sprite.getRegionWidth() * scaleUp - sprite.getRegionWidth()) *lerpAlpha, sprite.getHeight() +(sprite.getRegionHeight() * scaleUp - sprite.getHeight()) *lerpAlpha);
         ang_shine+=Main.dt_one;
         count_shineRadius= (float)((count_shineRadius+.1f*Main.dt_one)%(2*Math.PI));
         radiusOffset_shine=(float)Math.sin(count_shineRadius)*2;

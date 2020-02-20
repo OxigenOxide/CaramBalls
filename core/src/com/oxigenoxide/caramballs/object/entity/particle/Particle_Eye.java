@@ -25,7 +25,7 @@ public class Particle_Eye extends Particle {
         super.update();
         float progress = (lifeTime-count_life)/lifeTime;
         float sizeFactor = Math.min(1,progress*2);
-        sprite.setSize(sprite.getTexture().getWidth()*sizeFactor,sprite.getTexture().getHeight()*sizeFactor);
+        sprite.setSize(sprite.getRegionWidth()*sizeFactor,sprite.getRegionHeight()*sizeFactor);
     }
 
     public void render(SpriteBatch batch) {

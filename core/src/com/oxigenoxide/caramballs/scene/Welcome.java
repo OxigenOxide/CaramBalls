@@ -51,7 +51,7 @@ public class Welcome extends Scene {
 
         sr.begin(ShapeRenderer.ShapeType.Filled);
         sr.setColor(Color.WHITE);
-        sr.rect(0, y, Main.width, Res.tex_statisticsBackground.getHeight()); // White background behind results;
+        sr.rect(0, y, Main.width, Res.tex_statisticsBackground.getRegionHeight()); // White background behind results;
         sr.end();
         batch.begin();
         rw.render(batch, sr);
@@ -59,14 +59,14 @@ public class Welcome extends Scene {
         sr.begin(ShapeRenderer.ShapeType.Filled);
         sr.setColor(Color.BLACK);
         sr.rect(0, 0, Main.width, y); // Covers the bottom for longer displays;
-        sr.rect(0, y + Res.tex_statisticsBackground.getHeight(), Main.width, Main.height); // Covers the top;
+        sr.rect(0, y + Res.tex_statisticsBackground.getRegionHeight(), Main.width, Main.height); // Covers the top;
         sr.end();
         batch.begin();
         batch.draw(Res.tex_statisticsBackground, 0, y);
         button_info.render(batch);
         //batch.draw(Res.tex_text_comingsoon,Main.width/2-Res.tex_text_comingsoon.getWidth()/2,y+42);
         button_toGame.render(batch);
-        batch.draw(Res.tex_text_welcome, 0, Main.height - Res.tex_text_welcome.getHeight() - 5 - y);
+        batch.draw(Res.tex_text_welcome, 0, Main.height - Res.tex_text_welcome.getRegionHeight() - 5 - y);
         Main.drawNumberSign(batch, Main.testerID, new Vector2(Main.width / 2, Main.height - 35 - y), ID.Font.NORMAL, Res.tex_numberSign, 0);
         batch.end();
 
@@ -165,7 +165,7 @@ public class Welcome extends Scene {
             //Bars shade and name
             batch.begin();
             for (int i = 0; i < versions; i++) {
-                batch.draw(Res.tex_text_v[i], 11 + 39 - Res.tex_text_v[i].getWidth() / 2, y + 66 - i * 16 - scrolled + 3);
+                batch.draw(Res.tex_text_v[i], 11 + 39 - Res.tex_text_v[i].getRegionWidth() / 2, y + 66 - i * 16 - scrolled + 3);
                 if (selectedVersion == i)
                     batch.draw(Res.tex_versionBarOutline, 9, y + 64 - i * 16 - scrolled);
                 else

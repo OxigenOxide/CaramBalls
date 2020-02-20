@@ -66,7 +66,7 @@ public class Particle extends Entity {
 
     }
     public void setSpritePosition(){
-        sprite.setPosition(pos.x - sprite.getWidth() / 2, pos.y + height - sprite.getHeight() / 2);
+        sprite.setPosition(pos.x - sprite.getRegionWidth() / 2, pos.y + height - sprite.getHeight() / 2);
     }
 
     public void dispose() {

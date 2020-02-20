@@ -1,6 +1,7 @@
 package com.oxigenoxide.caramballs.utils;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Animation {
     public int count;
@@ -8,11 +9,11 @@ public class Animation {
     int indices;
     public boolean isContinuous;
     boolean doLoop;
-    Texture[] textures;
+    TextureRegion[] textures;
     float[] durations;
     public boolean ended;
 
-    public Animation(int countMax, Texture[] textures, float[] durations, boolean isContinuous) {
+    public Animation(int countMax, TextureRegion[] textures, float[] durations, boolean isContinuous) {
         this.countMax = countMax;
         this.textures = textures;
         this.isContinuous = isContinuous;
@@ -50,7 +51,7 @@ public class Animation {
     float duration;
     float countPart;
 
-    public Texture getTexture() {
+    public TextureRegion getTexture() {
         if (ended) {
             return textures[0];
         }

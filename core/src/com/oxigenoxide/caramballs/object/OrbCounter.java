@@ -2,6 +2,7 @@ package com.oxigenoxide.caramballs.object;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.oxigenoxide.caramballs.ID;
@@ -11,7 +12,7 @@ import com.oxigenoxide.caramballs.Res;
 public class OrbCounter {
     Vector2 pos, pos_num;
     float slide;
-    Texture tex;
+    TextureRegion tex;
     boolean open = true, close;
     float count_show;
     float countMax_show = 180;
@@ -43,7 +44,7 @@ public class OrbCounter {
             slide -= .05f;
         }
         slide = MathUtils.clamp(slide, 0, 1);
-        pos.set(Main.width - tex.getWidth() * slide, Main.height - 30 + (int) (shakeIntensity * 3 * Math.sin(shakeIntensity*20)));
+        pos.set(Main.width - tex.getRegionWidth() * slide, Main.height - 30 + (int) (shakeIntensity * 3 * Math.sin(shakeIntensity*20)));
         pos_num.set(pos.x + 22, pos.y + 5);
 
         shakeIntensity = Math.max(0, shakeIntensity - .05f);

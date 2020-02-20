@@ -34,7 +34,7 @@ public class Cat extends Entity {
     }
 
     public void render(SpriteBatch batch) {
-        batch.draw(Res.tex_cat, pos.x - Res.tex_cat.getWidth() / 2, pos.y-5);
+        batch.draw(Res.tex_cat, pos.x - Res.tex_cat.getRegionWidth() / 2, pos.y-5);
     }
     public void dispose(){
         Main.catsToRemove.add(this);

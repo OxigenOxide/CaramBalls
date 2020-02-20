@@ -159,7 +159,7 @@ manager
 -complete freeze when game over
 -created class Ball_Inflate
 -getFreePos() is now compatible with variable tries
-[19-feb.-20] s: 79h25m e:82h53m t:3h28m
+[19-feb.-20] s: 79h25m e: 82h53m t: 3h28m
 -new orb texture
 -combo bar is animated and will grow and shrink
 -fixed: glow of bad balls would not be a filled circle
@@ -167,7 +167,15 @@ manager
 -obstacle balls and inflatable balls are supported for huge appearance
 -reduced the time in which balls will spawn
 -bad balls will now spawn on the playing field
-[19-feb.-20] s: 82h38m e: t:
+[19-feb.-20] s: 82h38m e: 86h12m t: 3h34m
+-max deltaTime is now 5 frames long
+-fixed shader_bend for android
+-contactBall() is now called on both balls that collide
+-fixed: red ball wouldn't always break balls
+-game uses TextureAtlas now
+-most textures changed to textureRegions
+-loading time dramatically reduced
+-fixed: could get infinite hits by using multiple fingers simultaneously
 
 
 deadline: 20 march 2020
@@ -179,10 +187,9 @@ TODO: ball duplication glitch
 TODO: target circle at finger?
 TODO: choose good outline colors
 TODO: choose good ball colors
-
 TODO: optimize all entities
-TODO: create levels (so people can test the gameplay)
 TODO: add capsules to levels
-TODO: combo system
-TODO: green ball at second stage?
-TODO: max dt?
+TODO: background colors
+TODO: infinite hits with two fingers
+TODO: force update
+TODO: glow in the dark?

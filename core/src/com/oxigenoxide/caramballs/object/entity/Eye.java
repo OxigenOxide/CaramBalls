@@ -3,6 +3,7 @@ package com.oxigenoxide.caramballs.object.entity;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -16,7 +17,7 @@ import com.oxigenoxide.caramballs.scene.Game;
 import com.oxigenoxide.caramballs.utils.MathFuncs;
 
 public class Eye extends Entity {
-    Texture tex;
+    TextureRegion tex;
     Sprite sprite;
     Projection projection;
     Vector2 pos_eye;
@@ -68,9 +69,9 @@ public class Eye extends Entity {
 
         count_float = (float) ((count_float + Main.dt_one * .05) % (2 * Math.PI));
         pos_eye.set(pos.x, pos.y + (int) (3 * Math.sin(count_float)));
-        sprite.setPosition((int) (pos_eye.x - (float) Math.floor(sprite.getWidth() / 2)), (int) (pos_eye.y - (float) Math.floor(sprite.getHeight() / 2)));
-        sprite.setSize(sprite.getWidth()+(sprite.getTexture().getWidth() - sprite.getWidth())*.1f,
-                sprite.getHeight()+(sprite.getTexture().getHeight() - sprite.getHeight())*.1f);
+        sprite.setPosition((int) (pos_eye.x - (float) Math.floor(sprite.getRegionWidth() / 2)), (int) (pos_eye.y - (float) Math.floor(sprite.getHeight() / 2)));
+        sprite.setSize(sprite.getRegionWidth()+(sprite.getRegionWidth() - sprite.getRegionWidth())*.1f,
+                sprite.getHeight()+(sprite.getRegionHeight() - sprite.getHeight())*.1f);
         projection.setPosition(pos_eye.x, pos_eye.y);
         projection.update();
 

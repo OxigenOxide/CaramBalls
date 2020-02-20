@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -214,11 +215,15 @@ public class Main extends ApplicationAdapter {
 
     public static float test_float = 1;
     public static boolean isButtonPressed;
+    public static int fingersOnScreen;
 
     static ActionListener action_peak;
     static ActionListener action_peak_delayed;
 
     long startTime;
+
+    static float frameRate = 60;
+    static float frameDuration = 1 / frameRate;
 
  /*
     Every time you release check this:
@@ -259,6 +264,7 @@ public class Main extends ApplicationAdapter {
     public void create() {
         fbm.signIn();
         assets = new AssetManager();
+        Res.createAtlas();
         Res.preload();
         width = 108;
         height = Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth() * 108;
@@ -369,10 +375,10 @@ public class Main extends ApplicationAdapter {
     }
 
     public void update() {
-        dt = Gdx.graphics.getDeltaTime();
+        dt = Math.min(Gdx.graphics.getDeltaTime(), frameDuration * 5);
         dt_one = dt * 60;
 
-        dt_slowed = Main.dt * (1 - slowdown);
+        dt_slowed = dt * (1 - slowdown);
         dt_one_slowed = dt_slowed * 60;
 
         if (doReportFPS)
@@ -409,6 +415,11 @@ public class Main extends ApplicationAdapter {
 
         tap_speed = MathFuncs.getSum(speedDistanceLastFrames) / MathFuncs.getSum(speedTimeLastFrames);
 
+        fingersOnScreen = 0;
+        for (int i = 0; i < 20; i++) {
+            if (Gdx.input.isTouched(i)) fingersOnScreen++;
+        }
+
         isButtonPressed = false;
 
         currentScene.update();
@@ -419,6 +430,7 @@ public class Main extends ApplicationAdapter {
             signedIn = true;
             onSignIn();
         }
+
 
         if (signedIn && !fbm.isSignedIn()) {
             signedIn = false;
@@ -883,7 +895,7 @@ public class Main extends ApplicationAdapter {
         sr.setProjectionMatrix(cam.combined);
     }
 
-    public static int drawNumberSign(SpriteBatch batch, int number, Vector2 pos, int font, Texture tex_sign, int yDisposition) {
+    public static int drawNumberSign(SpriteBatch batch, int number, Vector2 pos, int font, TextureRegion tex_sign, int yDisposition) {
         int digitAmount = 0;
         ArrayList<Integer> digits = new ArrayList<Integer>();
         int power = 0;
@@ -901,22 +913,22 @@ public class Main extends ApplicationAdapter {
         }
         int width = 0;
         for (int i : digits) {
-            width += Res.tex_numbers[font][i].getWidth() + 1;
+            width += Res.tex_numbers[font][i].getRegionWidth() + 1;
         }
-        width += tex_sign.getWidth() + 2;
+        width += tex_sign.getRegionWidth() + 2;
         int textWidth = width;
         width--;
         int iWidth = 0;
         batch.draw(tex_sign, pos.x - width / 2 + iWidth, pos.y + yDisposition);
-        iWidth += tex_sign.getWidth() + 2;
+        iWidth += tex_sign.getRegionWidth() + 2;
         for (int i : digits) {
             batch.draw(Res.tex_numbers[font][i], pos.x - width / 2 + iWidth, pos.y);
-            iWidth += Res.tex_numbers[font][i].getWidth() + 1;
+            iWidth += Res.tex_numbers[font][i].getRegionWidth() + 1;
         }
         return textWidth;
     }
 
-    public static int drawNumberSignWhiteText(SpriteBatch batch, int number, Vector2 pos, int font, Texture tex_sign, int yDisposition) {
+    public static int drawNumberSignWhiteText(SpriteBatch batch, int number, Vector2 pos, int font, TextureRegion tex_sign, int yDisposition) {
         int digitAmount = 0;
         ArrayList<Integer> digits = new ArrayList<Integer>();
         int power = 0;
@@ -934,27 +946,27 @@ public class Main extends ApplicationAdapter {
         }
         int width = 0;
         for (int i : digits) {
-            width += Res.tex_numbers[font][i].getWidth() + 1;
+            width += Res.tex_numbers[font][i].getRegionWidth() + 1;
         }
-        width += tex_sign.getWidth() + 2;
+        width += tex_sign.getRegionWidth() + 2;
         int textWidth = width;
         width--;
         int iWidth = 0;
         batch.draw(tex_sign, pos.x - width / 2 + iWidth, pos.y + yDisposition);
-        iWidth += tex_sign.getWidth() + 2;
+        iWidth += tex_sign.getRegionWidth() + 2;
         batch.setShader(Res.shader_c);
-        Res.shader_c.setUniformf("c",1,1,1,1);
+        Res.shader_c.setUniformf("c", 1, 1, 1, 1);
 
         for (int i : digits) {
             batch.draw(Res.tex_numbers[font][i], pos.x - width / 2 + iWidth, pos.y);
-            iWidth += Res.tex_numbers[font][i].getWidth() + 1;
+            iWidth += Res.tex_numbers[font][i].getRegionWidth() + 1;
         }
         batch.setShader(null);
         return textWidth;
     }
 
 
-    public static int drawNumberSignAfter(SpriteBatch batch, int number, Vector2 pos, int font, Texture tex_sign, int yDisposition) {
+    public static int drawNumberSignAfter(SpriteBatch batch, int number, Vector2 pos, int font, TextureRegion tex_sign, int yDisposition) {
         int digitAmount = 0;
         ArrayList<Integer> digits = new ArrayList<Integer>();
         int power = 0;
@@ -972,16 +984,16 @@ public class Main extends ApplicationAdapter {
         }
         int width = 0;
         for (int i : digits) {
-            width += Res.tex_numbers[font][i].getWidth() + 1;
+            width += Res.tex_numbers[font][i].getRegionWidth() + 1;
         }
-        width += tex_sign.getWidth() + 2;
+        width += tex_sign.getRegionWidth() + 2;
         int textWidth = width;
         width--;
         int iWidth = 0;
 
         for (int i : digits) {
             batch.draw(Res.tex_numbers[font][i], pos.x - width / 2 + iWidth, pos.y);
-            iWidth += Res.tex_numbers[font][i].getWidth() + 1;
+            iWidth += Res.tex_numbers[font][i].getRegionWidth() + 1;
         }
 
         iWidth += 2;
@@ -1012,7 +1024,7 @@ public class Main extends ApplicationAdapter {
     public static int getTextWidth(ArrayList<Integer> digits, int font) {
         int width = 0;
         for (int i : digits) {
-            width += Res.tex_numbers[font][i].getWidth() + 1;
+            width += Res.tex_numbers[font][i].getRegionWidth() + 1;
         }
         width--;
         return width;
@@ -1024,7 +1036,7 @@ public class Main extends ApplicationAdapter {
         iWidth += tex_sign.getWidth() + 2;
         for (int i : digits) {
             batch.draw(Res.tex_numbers[font][i], pos.x + iWidth, pos.y);
-            iWidth += Res.tex_numbers[font][i].getWidth() + 1;
+            iWidth += Res.tex_numbers[font][i].getRegionWidth() + 1;
         }
     }
 
@@ -1032,7 +1044,7 @@ public class Main extends ApplicationAdapter {
         int iWidth = 0;
         for (int i : digits) {
             batch.draw(Res.tex_numbers[font][i], pos.x + iWidth, pos.y);
-            iWidth += Res.tex_numbers[font][i].getWidth() + 1;
+            iWidth += Res.tex_numbers[font][i].getRegionWidth() + 1;
         }
     }
 
@@ -1054,13 +1066,13 @@ public class Main extends ApplicationAdapter {
         }
         int width = 0;
         for (int i : digits) {
-            width += Res.tex_numbers[font][i].getWidth() + 1;
+            width += Res.tex_numbers[font][i].getRegionWidth() + 1;
         }
         width--;
         int iWidth = 0;
         for (int i : digits) {
             batch.draw(Res.tex_numbers[font][i], pos.x - width / 2 + iWidth, pos.y);
-            iWidth += Res.tex_numbers[font][i].getWidth() + 1;
+            iWidth += Res.tex_numbers[font][i].getRegionWidth() + 1;
         }
     }
 
@@ -1386,7 +1398,6 @@ public class Main extends ApplicationAdapter {
 
 
     static void playSound(int soundID, float volume, float pitch) {
-        System.out.println("playsound: "+soundID);
         switch (soundID) {
             case ID.Sound.PLOP:
                 playPlopSound();

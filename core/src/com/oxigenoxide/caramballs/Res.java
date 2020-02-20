@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -19,147 +21,153 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class Res {
 
-    public static Texture[][] tex_ball;
-    public static Texture[][] tex_numbers;
-    public static Texture[] tex_ballShard;
-    public static Texture[] tex_title;
-    public static Texture[] tex_text_v;
-    public static Texture[] tex_badSmile;
-    public static Texture[] tex_explosion;
-    public static Texture[] tex_particle_ball;
-    public static Texture[] tex_confetti;
-    public static Texture[] tex_spike;
-    public static Texture[] tex_hand;
-    public static Texture[] tex_eye;
-    public static Texture[] tex_meter_dot;
-    public static Texture[] tex_tabletop;
-    public static Texture[] tex_text_level;
-    public static Texture[] tex_particle_hit;
+    public static TextureRegion[][] tex_ball;
+    public static TextureRegion[][] tex_numbers;
+    public static TextureRegion[] tex_ballShard;
+    public static TextureRegion[] tex_title;
+    public static TextureRegion[] tex_text_v;
+    public static TextureRegion[] tex_badSmile;
+    public static TextureRegion[] tex_explosion;
+    public static TextureRegion[] tex_particle_ball;
+    public static TextureRegion[] tex_confetti;
+    public static TextureRegion[] tex_spike;
+    public static TextureRegion[] tex_hand;
+    public static TextureRegion[] tex_eye;
+    public static TextureRegion[] tex_meter_dot;
+    public static TextureRegion[] tex_tabletop;
+    public static TextureRegion[] tex_text_level;
+    public static TextureRegion[] tex_particle_hit;
 
-    public static Texture tex_meter_case;
-    public static Texture tex_number_small_percent;
-    public static Texture tex_progressBar;
-    public static Texture tex_progressBar_ball;
-    public static Texture tex_ball_bad;
-    public static Texture tex_crown;
-    public static Texture tex_meter_ball;
+    public static TextureRegion tex_meter_case;
+    public static TextureRegion tex_number_small_percent;
+    public static TextureRegion tex_progressBar;
+    public static TextureRegion tex_progressBar_ball;
+    public static TextureRegion tex_ball_bad;
+    public static TextureRegion tex_crown;
+    public static TextureRegion tex_meter_ball;
     public static Texture tex_fade;
-    public static Texture tex_ttptext;
-    public static Texture tex_hleditie;
-    public static Texture tex_text_slowdown;
-    public static Texture tex_bumper;
+    public static TextureRegion tex_ttptext;
+    public static TextureRegion tex_hleditie;
+    public static TextureRegion tex_text_slowdown;
+    public static TextureRegion tex_bumper;
     public static Texture tex_tilt;
-    public static Texture tex_bomb_white;
-    public static Texture tex_text_player;
-    public static Texture tex_tutorialMode;
+    public static TextureRegion tex_bomb_white;
+    public static TextureRegion tex_text_player;
+    public static TextureRegion tex_tutorialMode;
     public static Texture tex_random;
-    public static Texture tex_gap;
-    public static Texture tex_buttonPressed_balls;
-    public static Texture tex_buttonPressed_leaderBoards;
-    public static Texture tex_button_balls;
-    public static Texture tex_meterDot;
-    public Texture tex_watermark;
-    public static Texture tex_text_welcome;
-    public static Texture tex_text_highscore;
-    public static Texture tex_buttonPressed_toGame;
-    public static Texture tex_shield;
-    public static Texture tex_shield_shine;
-    public static Texture tex_button_toGame;
-    public static Texture tex_buttonPressed_options;
-    public static Texture tex_button_options;
-    public static Texture tex_button_tutorial;
-    public static Texture tex_buttonPressed_tutorial;
-    public static Texture tex_buttonPressed_replay;
-    public static Texture tex_button_replay;
-    public static Texture tex_button_leaderBoards;
-    public static Texture tex_button_cross;
-    public static Texture tex_button_play;
-    public static Texture tex_buttonPressed_play;
-    public static Texture tex_button_return;
-    public static Texture tex_buttonPressed_return;
-    public static Texture tex_apple;
-    public static Texture tex_lemon;
-    public static Texture tex_strawberry;
-    public static Texture tex_bomb;
-    public static Texture tex_buttonPressed_cross;
-    public static Texture tex_youlost;
-    public static Texture tex_cannon_shine;
-    public static Texture tex_darkLayer;
-    public static Texture tex_orbCountBackground;
-    public static Texture tex_floorButton_danger;
-    public static Texture tex_floorButtonPressed_danger;
-    public static Texture tex_statisticsBackground;
-    public static Texture tex_numberSign;
-    public static Texture tex_shopSpot;
-    public static Texture tex_shopSpotPressed;
-    public static Texture tex_underTitle;
-    public static Texture tex_cannon_gun;
-    public static Texture tex_cannon_base;
-    public static Texture tex_orbCounter;
-    public static Texture tex_button_pause;
-    public static Texture tex_buttonPressed_pause;
-    public static Texture tex_button_resume;
-    public static Texture tex_buttonPressed_resume;
-    public static Texture tex_button_balls_new;
-    public static Texture tex_buttonPressed_balls_new;
-    public static Texture tex_button_info;
-    public static Texture tex_buttonPressed_info;
-    public static Texture tex_button_sound;
-    public static Texture tex_buttonPressed_sound;
-    public static Texture tex_button_soundMuted;
-    public static Texture tex_buttonPressed_soundMuted;
-    public static Texture tex_button_music;
-    public static Texture tex_buttonPressed_music;
-    public static Texture tex_button_musicMuted;
-    public static Texture tex_buttonPressed_musicMuted;
-    public static Texture tex_button_exit;
-    public static Texture tex_buttonPressed_exit;
-    public static Texture tex_text_paused;
-    public static Texture tex_lockedBall;
-    public static Texture tex_ballCapsule;
-    public static Texture tex_ballCapsule_shine;
-    public static Texture tex_blueEgg;
+    public static TextureRegion tex_gap;
+    public static TextureRegion tex_buttonPressed_balls;
+    public static TextureRegion tex_buttonPressed_leaderBoards;
+    public static TextureRegion tex_button_balls;
+    public static TextureRegion tex_meterDot;
+    public TextureRegion tex_watermark;
+    public static TextureRegion tex_text_welcome;
+    public static TextureRegion tex_text_highscore;
+    public static TextureRegion tex_buttonPressed_toGame;
+    public static TextureRegion tex_shield;
+    public static TextureRegion tex_shield_shine;
+    public static TextureRegion tex_button_toGame;
+    public static TextureRegion tex_buttonPressed_options;
+    public static TextureRegion tex_button_options;
+    public static TextureRegion tex_button_tutorial;
+    public static TextureRegion tex_buttonPressed_tutorial;
+    public static TextureRegion tex_buttonPressed_replay;
+    public static TextureRegion tex_button_replay;
+    public static TextureRegion tex_button_leaderBoards;
+    public static TextureRegion tex_button_cross;
+    public static TextureRegion tex_button_play;
+    public static TextureRegion tex_buttonPressed_play;
+    public static TextureRegion tex_button_return;
+    public static TextureRegion tex_buttonPressed_return;
+    public static TextureRegion tex_apple;
+    public static TextureRegion tex_lemon;
+    public static TextureRegion tex_strawberry;
+    public static TextureRegion tex_bomb;
+    public static TextureRegion tex_buttonPressed_cross;
+    public static TextureRegion tex_youlost;
+    public static TextureRegion tex_cannon_shine;
+    public static TextureRegion tex_darkLayer;
+    public static TextureRegion tex_orbCountBackground;
+    public static TextureRegion tex_floorButton_danger;
+    public static TextureRegion tex_floorButtonPressed_danger;
+    public static TextureRegion tex_statisticsBackground;
+    public static TextureRegion tex_numberSign;
+    public static TextureRegion tex_shopSpot;
+    public static TextureRegion tex_shopSpotPressed;
+    public static TextureRegion tex_underTitle;
+    public static TextureRegion tex_cannon_gun;
+    public static TextureRegion tex_cannon_base;
+    public static TextureRegion tex_orbCounter;
+    public static TextureRegion tex_button_pause;
+    public static TextureRegion tex_buttonPressed_pause;
+    public static TextureRegion tex_button_resume;
+    public static TextureRegion tex_buttonPressed_resume;
+    public static TextureRegion tex_button_balls_new;
+    public static TextureRegion tex_buttonPressed_balls_new;
+    public static TextureRegion tex_button_info;
+    public static TextureRegion tex_buttonPressed_info;
+    public static TextureRegion tex_button_sound;
+    public static TextureRegion tex_buttonPressed_sound;
+    public static TextureRegion tex_button_soundMuted;
+    public static TextureRegion tex_buttonPressed_soundMuted;
+    public static TextureRegion tex_button_music;
+    public static TextureRegion tex_buttonPressed_music;
+    public static TextureRegion tex_button_musicMuted;
+    public static TextureRegion tex_buttonPressed_musicMuted;
+    public static TextureRegion tex_button_exit;
+    public static TextureRegion tex_buttonPressed_exit;
+    public static TextureRegion tex_text_paused;
+    public static TextureRegion tex_lockedBall;
+    public static TextureRegion tex_ballCapsule;
+    public static TextureRegion tex_ballCapsule_shine;
+    public static TextureRegion tex_blueEgg;
     public static Texture tex_fullscreen;
-    public static Texture tex_symbolOrb;
-    public static Texture tex_oxigenoxide;
-    public static Texture tex_symbolSelected;
-    public static Texture tex_text_comingsoon;
-    public static Texture tex_collectable_shield;
-    public static Texture tex_goldenEgg;
-    public static Texture tex_bullet;
-    public static Texture tex_cat;
-    public static Texture tex_honey;
-    public static Texture tex_tutorialHole;
-    public static Texture tex_pin;
+    public static TextureRegion tex_symbolOrb;
+    public static TextureRegion tex_oxigenoxide;
+    public static TextureRegion tex_symbolSelected;
+    public static TextureRegion tex_text_comingsoon;
+    public static TextureRegion tex_collectable_shield;
+    public static TextureRegion tex_goldenEgg;
+    public static TextureRegion tex_bullet;
+    public static TextureRegion tex_cat;
+    public static TextureRegion tex_honey;
+    public static TextureRegion tex_tutorialHole;
+    public static TextureRegion tex_pin;
     public static float[] ballRadius;
-    public static Texture tex_orb;
-    public static Texture tex_text_orbs;
-    public static Texture tex_text_youare;
-    public static Texture tex_symbolPlus;
-    public static Texture tex_symbol_checkmark;
-    public static Texture tex_symbol_cross;
-    public static Texture tex_text_score;
-    public static Texture tex_sign_number_small;
-    public static Texture tex_versionBarOutline;
-    public static Texture tex_versionBarShade;
-    public static Texture tex_scrollGroove;
-    public static Texture tex_circularBumper;
-    public static Texture tex_scrollNotch;
-    public static Texture tex_farmField;
-    public static Texture tex_jumpingPad;
-    public static Texture tex_ballRing;
-    public static Texture tex_tire_top;
-    public static Texture tex_tire_base;
-    public static Texture tex_draggable_pivot;
-    public static Texture tex_woodPlank;
-    public static Texture tex_stars;
-    public static Texture tex_stars_back;
-    public static Texture tex_indication_cross;
-    public static Texture tex_ball_sun;
-    public static Texture tex_ball_blueDwarf;
-    public static Texture tex_text_yourBalls;
+    public static TextureRegion tex_orb;
+    public static TextureRegion tex_text_orbs;
+    public static TextureRegion tex_text_youare;
+    public static TextureRegion tex_symbolPlus;
+    public static TextureRegion tex_symbol_checkmark;
+    public static TextureRegion tex_symbol_cross;
+    public static TextureRegion tex_text_score;
+    public static TextureRegion tex_sign_number_small;
+    public static TextureRegion tex_versionBarOutline;
+    public static TextureRegion tex_versionBarShade;
+    public static TextureRegion tex_scrollGroove;
+    public static TextureRegion tex_circularBumper;
+    public static TextureRegion tex_scrollNotch;
+    public static TextureRegion tex_farmField;
+    public static TextureRegion tex_jumpingPad;
+    public static TextureRegion tex_ballRing;
+    public static TextureRegion tex_tire_top;
+    public static TextureRegion tex_tire_base;
+    public static TextureRegion tex_draggable_pivot;
+    public static TextureRegion tex_woodPlank;
+    public static TextureRegion tex_stars;
+    public static TextureRegion tex_stars_back;
+    public static TextureRegion tex_indication_cross;
+    public static TextureRegion tex_ball_sun;
+    public static TextureRegion tex_ball_blueDwarf;
+    public static TextureRegion tex_text_yourBalls;
+    public static TextureRegion tex_comboBar_end;
+    public static TextureRegion tex_wifiSymbol;
+    public static TextureRegion tex_text_noInternet;
+    public static TextureRegion tex_loadingBall;
+    public static TextureRegion tex_loadingBall_shadow;
+    public static TextureRegion tex_loadingBall_filled;
+
     public static Texture tex_comboBar;
-    public static Texture tex_comboBar_end;
 
     public Sprite sprite_watermark;
     public static BodyDef bodyDef_dynamic;
@@ -233,6 +241,8 @@ public class Res {
     public static Shape shape_pin;
     public static Shape shape_bullet;
 
+    public static TextureAtlas atlas;
+
     public static long soundID_music;
     public static final short MASK_PASSTHROUGH = 0x0002;
     public static final short MASK_BORDER = 0x0004;
@@ -243,8 +253,13 @@ public class Res {
     public static final short MASK_GAP = 0x0032;
     public static final short MASK_WALL = 0x0128;
 
-    public Res() {
 
+    public static void createAtlas() {
+        atlas = new TextureAtlas(Gdx.files.internal("images.atlas"));
+        //new TextureRegion(atlas.findRegion())
+    }
+
+    public Res() {
         sound_ballHit = Main.assets.get("sounds/ballHit.wav");
         sound_speedup = Main.assets.get("sounds/speedup.wav");
         sound_slowdown = Main.assets.get("sounds/slowdown.wav");
@@ -264,233 +279,235 @@ public class Res {
                 Main.assets.get("music/5.mp3"),
         };
 
+        tex_comboBar = Main.assets.get("images/comboBar.png");
+
 
         shader_floorFade.setUniformf("screenSize", Main.width, Main.height);
         /*
-        tex_ball = new Texture[]{new Texture("images/ball_small.png"), new Texture("images/ball_medium.png"), new Texture("images/ball_large.png")};
-        tex_ball_bad = new Texture("images/ball_bad.png");
-        tex_crown = new Texture("images/crown.png");
-        tex_bumper = new Texture("images/bumper.png");
-        tex_tabletop = new Texture("images/tabletop.png");
-        tex_ballShard = new Texture[]{new Texture("images/ballShard_0.png"), new Texture("images/ballShard_1.png"), new Texture("images/ballShard_2.png")};
+        tex_ball = new TextureRegion[]{new TextureRegion("images/ball_small"), new TextureRegion("images/ball_medium"), new TextureRegion("images/ball_large")};
+        tex_ball_bad = new TextureRegion("images/ball_bad");
+        tex_crown = new TextureRegion("images/crown");
+        tex_bumper = new TextureRegion("images/bumper");
+        tex_tabletop = new TextureRegion("images/tabletop");
+        tex_ballShard = new TextureRegion[]{new TextureRegion("images/ballShard", 0), new TextureRegion("images/ballShard", 1), new TextureRegion("images/ballShard", 2)};
         */
 
-        tex_ball = new Texture[21][];
-        tex_ball[0] = new Texture[]{Main.assets.get("images/ball_small.png"), Main.assets.get("images/ball_medium.png"), Main.assets.get("images/ball_large.png"), Main.assets.get("images/ball_huge.png")};
-        tex_ball[1] = new Texture[]{Main.assets.get("images/ball_face_small.png"), Main.assets.get("images/ball_face_medium.png"), Main.assets.get("images/ball_face_large.png")};
-        tex_ball[2] = new Texture[]{Main.assets.get("images/ball_square_small.png"), Main.assets.get("images/ball_square_medium.png"), Main.assets.get("images/ball_square_large.png")};
-        tex_ball[3] = new Texture[]{Main.assets.get("images/ball_brain_small.png"), Main.assets.get("images/ball_brain_medium.png"), Main.assets.get("images/ball_brain_large.png")};
-        tex_ball[4] = new Texture[]{Main.assets.get("images/ball_egg_small.png"), Main.assets.get("images/ball_egg_medium.png"), Main.assets.get("images/ball_egg_large.png")};
-        tex_ball[5] = new Texture[]{Main.assets.get("images/ball_apple_small.png"), Main.assets.get("images/ball_apple_medium.png"), Main.assets.get("images/ball_apple_large.png")};
-        tex_ball[6] = new Texture[]{Main.assets.get("images/ball_rasp_small.png"), Main.assets.get("images/ball_rasp_medium.png"), Main.assets.get("images/ball_rasp_large.png")};
-        tex_ball[7] = new Texture[]{Main.assets.get("images/ball_hl_small.png"), Main.assets.get("images/ball_hl_medium.png"), Main.assets.get("images/ball_hl_large.png")};
-        tex_ball[8] = new Texture[]{Main.assets.get("images/ball_moon_small.png"), Main.assets.get("images/ball_moon_medium.png"), Main.assets.get("images/ball_moon_large.png")};
-        tex_ball[20] = new Texture[]{Main.assets.get("images/ball_inflate_small.png"), Main.assets.get("images/ball_inflate_medium.png"), Main.assets.get("images/ball_inflate_large.png"), Main.assets.get("images/ball_inflate_huge.png")};
+        tex_ball = new TextureRegion[21][];
+        tex_ball[0] = new TextureRegion[]{atlas.findRegion("ball_small"), atlas.findRegion("ball_medium"), atlas.findRegion("ball_large"), atlas.findRegion("ball_huge")};
+        tex_ball[1] = new TextureRegion[]{atlas.findRegion("ball_face_small"), atlas.findRegion("ball_face_medium"), atlas.findRegion("ball_face_large")};
+        tex_ball[2] = new TextureRegion[]{atlas.findRegion("ball_square_small"), atlas.findRegion("ball_square_medium"), atlas.findRegion("ball_square_large")};
+        tex_ball[3] = new TextureRegion[]{atlas.findRegion("ball_brain_small"), atlas.findRegion("ball_brain_medium"), atlas.findRegion("ball_brain_large")};
+        tex_ball[4] = new TextureRegion[]{atlas.findRegion("ball_egg_small"), atlas.findRegion("ball_egg_medium"), atlas.findRegion("ball_egg_large")};
+        tex_ball[5] = new TextureRegion[]{atlas.findRegion("ball_apple_small"), atlas.findRegion("ball_apple_medium"), atlas.findRegion("ball_apple_large")};
+        tex_ball[6] = new TextureRegion[]{atlas.findRegion("ball_rasp_small"), atlas.findRegion("ball_rasp_medium"), atlas.findRegion("ball_rasp_large")};
+        tex_ball[7] = new TextureRegion[]{atlas.findRegion("ball_hl_small"), atlas.findRegion("ball_hl_medium"), atlas.findRegion("ball_hl_large")};
+        tex_ball[8] = new TextureRegion[]{atlas.findRegion("ball_moon_small"), atlas.findRegion("ball_moon_medium"), atlas.findRegion("ball_moon_large")};
+        tex_ball[20] = new TextureRegion[]{atlas.findRegion("ball_inflate_small"), atlas.findRegion("ball_inflate_medium"), atlas.findRegion("ball_inflate_large"), atlas.findRegion("ball_inflate_huge")};
 
-        tex_ball_bad = Main.assets.get("images/ball_bad.png");
-        tex_badSmile = new Texture[]{Main.assets.get("images/badSmile_1.png"), Main.assets.get("images/badSmile_2.png"), Main.assets.get("images/badSmile_3.png"), Main.assets.get("images/badSmile_4.png"), Main.assets.get("images/badSmile_5.png"),};
-        tex_bomb = Main.assets.get("images/bomb.png");
-        tex_bomb_white = Main.assets.get("images/bomb_white.png");
-        tex_crown = Main.assets.get("images/crown.png");
-        tex_bumper = Main.assets.get("images/bumper.png");
-        tex_tabletop = new Texture[]{Main.assets.get("images/tabletop.png"), Main.assets.get("images/tabletop_1.png"), Main.assets.get("images/tabletop_2.png"), Main.assets.get("images/tabletop_3.png")};
-        tex_watermark = Main.assets.get("images/watermark.png");
+        tex_ball_bad = atlas.findRegion("ball_bad");
+        tex_badSmile = new TextureRegion[]{atlas.findRegion("badSmile", 1), atlas.findRegion("badSmile", 2), atlas.findRegion("badSmile", 3), atlas.findRegion("badSmile", 4), atlas.findRegion("badSmile", 5),};
+        tex_bomb = atlas.findRegion("bomb");
+        tex_bomb_white = atlas.findRegion("bomb_white");
+        tex_crown = atlas.findRegion("crown");
+        tex_bumper = atlas.findRegion("bumper");
+        tex_tabletop = new TextureRegion[]{atlas.findRegion("tabletop",0), atlas.findRegion("tabletop", 1), atlas.findRegion("tabletop", 2), atlas.findRegion("tabletop", 3)};
+        tex_watermark = atlas.findRegion("watermark");
 
-        tex_buttonPressed_toGame = Main.assets.get("images/buttonPressed_toGame.png");
-        tex_button_toGame = Main.assets.get("images/button_toGame.png");
-        tex_buttonPressed_replay = Main.assets.get("images/buttonPressed_replay.png");
-        tex_button_replay = Main.assets.get("images/button_replay.png");
-        tex_button_options = Main.assets.get("images/button_options.png");
-        tex_buttonPressed_options = Main.assets.get("images/buttonPressed_options.png");
-        tex_buttonPressed_balls = Main.assets.get("images/buttonPressed_shop.png");
-        tex_buttonPressed_cross = Main.assets.get("images/buttonPressed_cross.png");
-        tex_button_cross = Main.assets.get("images/button_cross.png");
-        tex_button_balls = Main.assets.get("images/button_shop.png");
-        tex_button_play = Main.assets.get("images/button_play.png");
-        tex_buttonPressed_play = Main.assets.get("images/buttonPressed_play.png");
-        tex_buttonPressed_return = Main.assets.get("images/buttonPressed_return.png");
-        tex_button_return = Main.assets.get("images/button_return.png");
+        tex_buttonPressed_toGame = atlas.findRegion("buttonPressed_toGame");
+        tex_button_toGame = atlas.findRegion("button_toGame");
+        tex_buttonPressed_replay = atlas.findRegion("buttonPressed_replay");
+        tex_button_replay = atlas.findRegion("button_replay");
+        tex_button_options = atlas.findRegion("button_options");
+        tex_buttonPressed_options = atlas.findRegion("buttonPressed_options");
+        tex_buttonPressed_balls = atlas.findRegion("buttonPressed_shop");
+        tex_buttonPressed_cross = atlas.findRegion("buttonPressed_cross");
+        tex_button_cross = atlas.findRegion("button_cross");
+        tex_button_balls = atlas.findRegion("button_shop");
+        tex_button_play = atlas.findRegion("button_play");
+        tex_buttonPressed_play = atlas.findRegion("buttonPressed_play");
+        tex_buttonPressed_return = atlas.findRegion("buttonPressed_return");
+        tex_button_return = atlas.findRegion("button_return");
 
-        tex_button_music = Main.assets.get("images/button_music.png");
-        tex_buttonPressed_music = Main.assets.get("images/buttonPressed_music.png");
-        tex_button_musicMuted = Main.assets.get("images/button_musicMuted.png");
-        tex_buttonPressed_musicMuted = Main.assets.get("images/buttonPressed_musicMuted.png");
-        tex_button_sound = Main.assets.get("images/button_sound.png");
-        tex_buttonPressed_sound = Main.assets.get("images/buttonPressed_sound.png");
-        tex_button_soundMuted = Main.assets.get("images/button_soundMuted.png");
-        tex_buttonPressed_soundMuted = Main.assets.get("images/buttonPressed_soundMuted.png");
-        tex_button_exit = Main.assets.get("images/button_exit.png");
-        tex_buttonPressed_exit = Main.assets.get("images/buttonPressed_exit.png");
+        tex_button_music = atlas.findRegion("button_music");
+        tex_buttonPressed_music = atlas.findRegion("buttonPressed_music");
+        tex_button_musicMuted = atlas.findRegion("button_musicMuted");
+        tex_buttonPressed_musicMuted = atlas.findRegion("buttonPressed_musicMuted");
+        tex_button_sound = atlas.findRegion("button_sound");
+        tex_buttonPressed_sound = atlas.findRegion("buttonPressed_sound");
+        tex_button_soundMuted = atlas.findRegion("button_soundMuted");
+        tex_buttonPressed_soundMuted = atlas.findRegion("buttonPressed_soundMuted");
+        tex_button_exit = atlas.findRegion("button_exit");
+        tex_buttonPressed_exit = atlas.findRegion("buttonPressed_exit");
 
-        tex_text_welcome = Main.assets.get("images/text_welcome.png");
-        tex_symbolPlus = Main.assets.get("images/symbol_plus.png");
-        tex_text_player = Main.assets.get("images/text_player.png");
-        tex_cannon_gun = Main.assets.get("images/cannon_gun.png");
-        tex_cannon_base = Main.assets.get("images/cannon_base.png");
-        tex_ttptext = Main.assets.get("images/ttptext.png");
-        tex_text_highscore = Main.assets.get("images/text_highscore.png");
-        tex_button_tutorial = Main.assets.get("images/button_tutorial.png");
-        tex_text_youare = Main.assets.get("images/text_youare.png");
-        tex_circularBumper = Main.assets.get("images/circularBumper.png");
-        tex_cannon_shine = Main.assets.get("images/cannon_shine.png");
-        tex_farmField = Main.assets.get("images/farmField.png");
-        tex_buttonPressed_tutorial = Main.assets.get("images/buttonPressed_tutorial.png");
-        tex_lockedBall = Main.assets.get("images/lockedBall.png");
-        tex_statisticsBackground = Main.assets.get("images/statisticsBackground.png");
-        tex_ballShard = new Texture[]{Main.assets.get("images/ballShard_0.png"), Main.assets.get("images/ballShard_1.png"), Main.assets.get("images/ballShard_2.png")};
-        tex_numbers = new Texture[5][];
-        tex_numbers[ID.Font.NORMAL] = new Texture[]{Main.assets.get("images/numbers/number_0.png"), Main.assets.get("images/numbers/number_1.png"), Main.assets.get("images/numbers/number_2.png"), Main.assets.get("images/numbers/number_3.png"), Main.assets.get("images/numbers/number_4.png"), Main.assets.get("images/numbers/number_5.png"), Main.assets.get("images/numbers/number_6.png"), Main.assets.get("images/numbers/number_7.png"), Main.assets.get("images/numbers/number_8.png"), Main.assets.get("images/numbers/number_9.png")};
-        tex_numbers[ID.Font.FIELD] = new Texture[]{Main.assets.get("images/numbers/number_s_0.png"), Main.assets.get("images/numbers/number_s_1.png"), Main.assets.get("images/numbers/number_s_2.png"), Main.assets.get("images/numbers/number_s_3.png"), Main.assets.get("images/numbers/number_s_4.png"), Main.assets.get("images/numbers/number_s_5.png"), Main.assets.get("images/numbers/number_s_6.png"), Main.assets.get("images/numbers/number_s_7.png"), Main.assets.get("images/numbers/number_s_8.png"), Main.assets.get("images/numbers/number_s_9.png")};
-        tex_numbers[ID.Font.SMALL] = new Texture[]{Main.assets.get("images/numbers/number_m_0.png"), Main.assets.get("images/numbers/number_m_1.png"), Main.assets.get("images/numbers/number_m_2.png"), Main.assets.get("images/numbers/number_m_3.png"), Main.assets.get("images/numbers/number_m_4.png"), Main.assets.get("images/numbers/number_m_5.png"), Main.assets.get("images/numbers/number_m_6.png"), Main.assets.get("images/numbers/number_m_7.png"), Main.assets.get("images/numbers/number_m_8.png"), Main.assets.get("images/numbers/number_m_9.png")};
-        tex_numbers[ID.Font.POP_LARGE] = new Texture[]{Main.assets.get("images/numbers/number_h_0.png"), Main.assets.get("images/numbers/number_h_1.png"), Main.assets.get("images/numbers/number_h_2.png"), Main.assets.get("images/numbers/number_h_3.png"), Main.assets.get("images/numbers/number_h_4.png"), Main.assets.get("images/numbers/number_h_5.png"), Main.assets.get("images/numbers/number_h_6.png"), Main.assets.get("images/numbers/number_h_7.png"), Main.assets.get("images/numbers/number_h_8.png"), Main.assets.get("images/numbers/number_h_9.png")};
-        tex_numbers[ID.Font.POP] = new Texture[]{Main.assets.get("images/numbers/number_b_0.png"), Main.assets.get("images/numbers/number_b_1.png"), Main.assets.get("images/numbers/number_b_2.png"), Main.assets.get("images/numbers/number_b_3.png"), Main.assets.get("images/numbers/number_b_4.png"), Main.assets.get("images/numbers/number_b_5.png"), Main.assets.get("images/numbers/number_b_6.png"), Main.assets.get("images/numbers/number_b_7.png"), Main.assets.get("images/numbers/number_b_8.png"), Main.assets.get("images/numbers/number_b_9.png")};
-        tex_numberSign = Main.assets.get("images/number_sign.png");
-        tex_floorButton_danger = Main.assets.get("images/button_danger.png");
-        tex_floorButtonPressed_danger = Main.assets.get("images/buttonPressed_danger.png");
-        tex_title = new Texture[]{
-                Main.assets.get("images/title_c.png"),
-                Main.assets.get("images/title_a.png"),
-                Main.assets.get("images/title_r.png"),
-                Main.assets.get("images/title_a.png"),
-                Main.assets.get("images/title_m.png"),
-        };
-        tex_shield = Main.assets.get("images/shield.png");
-        tex_shield_shine = Main.assets.get("images/shield_shine.png");
-        tex_underTitle = Main.assets.get("images/title_balls.png");
-        tex_ttptext = Main.assets.get("images/ttptext.png");
-        tex_collectable_shield = Main.assets.get("images/collectable_shield.png");
-        tex_tutorialHole = Main.assets.get("images/tutorialHole.png");
-        tex_hleditie = Main.assets.get("images/HLeditie.png");
-        tex_button_leaderBoards = Main.assets.get("images/button_leaderBoards.png");
-        tex_buttonPressed_leaderBoards = Main.assets.get("images/buttonPressed_leaderBoards.png");
-        tex_youlost = Main.assets.get("images/youlost.png");
-        tex_symbolOrb = Main.assets.get("images/symbol_orb.png");
-        tex_shopSpot = Main.assets.get("images/shopSpot.png");
-        tex_shopSpotPressed = Main.assets.get("images/shopSpotPressed.png");
-        tex_symbolSelected = Main.assets.get("images/symbol_selected.png");
-        tex_pin = Main.assets.get("images/pin.png");
-        tex_jumpingPad = Main.assets.get("images/jumpingPad.png");
-        tex_text_slowdown = Main.assets.get("images/text_slowdown.png");
-        tex_meterDot = Main.assets.get("images/meterDot.png");
-        tex_meter_case = Main.assets.get("images/meter_case.png");
-        tex_meter_ball = Main.assets.get("images/meter_ball.png");
-        tex_meter_dot = new Texture[]{Main.assets.get("images/meter_dot_0.png"), Main.assets.get("images/meter_dot_1.png"), Main.assets.get("images/meter_dot_2.png")};
-        tex_oxigenoxide = Main.assets.get("images/oxigenoxide.png");
-        tex_orbCountBackground = Main.assets.get("images/orbCountBackground.png");
-        tex_goldenEgg = Main.assets.get("images/goldenEgg.png");
-        tex_blueEgg = Main.assets.get("images/blueEgg.png");
-        tex_ballCapsule = Main.assets.get("images/ballCapsule.png");
-        tex_ballCapsule_shine = Main.assets.get("images/ballCapsule_shine.png");
-        tex_orb = Main.assets.get("images/orb.png");
-        tex_text_comingsoon = Main.assets.get("images/text_comingsoon.png");
-        tex_orbCounter = Main.assets.get("images/orbCounter.png");
-        tex_text_orbs = Main.assets.get("images/text_orbs.png");
-        tex_bullet = Main.assets.get("images/bullet.png");
-        tex_symbol_checkmark = Main.assets.get("images/symbol_checkmark.png");
-        tex_symbol_cross = Main.assets.get("images/symbol_cross.png");
-        tex_tutorialMode = Main.assets.get("images/tutorialMode.png");
-        tex_sign_number_small = Main.assets.get("images/sign_number_small.png");
-        tex_text_score = Main.assets.get("images/text_score.png");
-        tex_ballRing = Main.assets.get("images/ballRing.png");
-        tex_honey = Main.assets.get("images/honey.png");
-        tex_button_pause = Main.assets.get("images/button_pause.png");
-        tex_buttonPressed_pause = Main.assets.get("images/buttonPressed_pause.png");
-        tex_button_resume = Main.assets.get("images/button_resume.png");
-        tex_buttonPressed_resume = Main.assets.get("images/buttonPressed_resume.png");
-        tex_button_balls_new = Main.assets.get("images/button_shop_new.png");
-        tex_buttonPressed_balls_new = Main.assets.get("images/buttonPressed_shop_new.png");
-        tex_text_paused = Main.assets.get("images/text_paused.png");
-        tex_gap = Main.assets.get("images/gap.png");
-        tex_cat = Main.assets.get("images/cat.png");
-        tex_versionBarOutline = Main.assets.get("images/versionBarOutline.png");
-        tex_versionBarShade = Main.assets.get("images/versionBarShade.png");
-        tex_scrollGroove = Main.assets.get("images/scrollGroove.png");
-        tex_scrollNotch = Main.assets.get("images/scrollNotch.png");
-        tex_button_info = Main.assets.get("images/button_info.png");
-        tex_buttonPressed_info = Main.assets.get("images/buttonPressed_info.png");
-        tex_apple = Main.assets.get("images/apple.png");
-        tex_lemon = Main.assets.get("images/lemon.png");
-        tex_strawberry = Main.assets.get("images/strawberry.png");
-        tex_tire_top = Main.assets.get("images/tire_top.png");
-        tex_tire_base = Main.assets.get("images/tire_base.png");
-        tex_draggable_pivot = Main.assets.get("images/draggable_pivot.png");
-        tex_woodPlank = Main.assets.get("images/woodPlank.png");
-        tex_stars = Main.assets.get("images/stars.png");
-        tex_stars_back = Main.assets.get("images/stars_back.png");
-        tex_indication_cross = Main.assets.get("images/indication_cross.png");
-        tex_ball_sun = Main.assets.get("images/ball_sun.png");
-        tex_ball_blueDwarf = Main.assets.get("images/ball_blueDwarf.png");
-        tex_progressBar = Main.assets.get("images/progressBar.png");
-        tex_progressBar_ball = Main.assets.get("images/progressBar_ball.png");
-        tex_text_yourBalls = Main.assets.get("images/text_yourBalls.png");
-        tex_comboBar = Main.assets.get("images/comboBar.png");
-        tex_comboBar_end = Main.assets.get("images/comboBar_end.png");
+        tex_text_welcome = atlas.findRegion("text_welcome");
+        tex_symbolPlus = atlas.findRegion("symbol_plus");
 
-        tex_text_level = new Texture[]{
-                Main.assets.get("images/text_level_home.png"),
-                Main.assets.get("images/text_level_space.png"),
+        tex_text_player = atlas.findRegion("text_player");
+        tex_cannon_gun = atlas.findRegion("cannon_gun");
+        tex_cannon_base = atlas.findRegion("cannon_base");
+        tex_ttptext = atlas.findRegion("ttptext");
+        tex_text_highscore = atlas.findRegion("text_highscore");
+        tex_button_tutorial = atlas.findRegion("button_tutorial");
+        tex_text_youare = atlas.findRegion("text_youare");
+        tex_circularBumper = atlas.findRegion("circularBumper");
+        tex_cannon_shine = atlas.findRegion("cannon_shine");
+        tex_farmField = atlas.findRegion("farmField");
+        tex_buttonPressed_tutorial = atlas.findRegion("buttonPressed_tutorial");
+        tex_lockedBall = atlas.findRegion("lockedBall");
+        tex_statisticsBackground = atlas.findRegion("statisticsBackground");
+        tex_ballShard = new TextureRegion[]{atlas.findRegion("ballShard", 0), atlas.findRegion("ballShard", 1), atlas.findRegion("ballShard", 2)};
+        tex_numbers = new TextureRegion[5][];
+        tex_numbers[ID.Font.NORMAL] = new TextureRegion[]{atlas.findRegion("numbers/number", 0), atlas.findRegion("numbers/number", 1), atlas.findRegion("numbers/number", 2), atlas.findRegion("numbers/number", 3), atlas.findRegion("numbers/number", 4), atlas.findRegion("numbers/number", 5), atlas.findRegion("numbers/number", 6), atlas.findRegion("numbers/number", 7), atlas.findRegion("numbers/number", 8), atlas.findRegion("numbers/number", 9)};
+        tex_numbers[ID.Font.FIELD] = new TextureRegion[]{atlas.findRegion("numbers/number_s", 0), atlas.findRegion("numbers/number_s", 1), atlas.findRegion("numbers/number_s", 2), atlas.findRegion("numbers/number_s", 3), atlas.findRegion("numbers/number_s", 4), atlas.findRegion("numbers/number_s", 5), atlas.findRegion("numbers/number_s", 6), atlas.findRegion("numbers/number_s", 7), atlas.findRegion("numbers/number_s", 8), atlas.findRegion("numbers/number_s", 9)};
+        tex_numbers[ID.Font.SMALL] = new TextureRegion[]{atlas.findRegion("numbers/number_m", 0), atlas.findRegion("numbers/number_m", 1), atlas.findRegion("numbers/number_m", 2), atlas.findRegion("numbers/number_m", 3), atlas.findRegion("numbers/number_m", 4), atlas.findRegion("numbers/number_m", 5), atlas.findRegion("numbers/number_m", 6), atlas.findRegion("numbers/number_m", 7), atlas.findRegion("numbers/number_m", 8), atlas.findRegion("numbers/number_m", 9)};
+        tex_numbers[ID.Font.POP_LARGE] = new TextureRegion[]{atlas.findRegion("numbers/number_h", 0), atlas.findRegion("numbers/number_h", 1), atlas.findRegion("numbers/number_h", 2), atlas.findRegion("numbers/number_h", 3), atlas.findRegion("numbers/number_h", 4), atlas.findRegion("numbers/number_h", 5), atlas.findRegion("numbers/number_h", 6), atlas.findRegion("numbers/number_h", 7), atlas.findRegion("numbers/number_h", 8), atlas.findRegion("numbers/number_h", 9)};
+        tex_numbers[ID.Font.POP] = new TextureRegion[]{atlas.findRegion("numbers/number_b", 0), atlas.findRegion("numbers/number_b", 1), atlas.findRegion("numbers/number_b", 2), atlas.findRegion("numbers/number_b", 3), atlas.findRegion("numbers/number_b", 4), atlas.findRegion("numbers/number_b", 5), atlas.findRegion("numbers/number_b", 6), atlas.findRegion("numbers/number_b", 7), atlas.findRegion("numbers/number_b", 8), atlas.findRegion("numbers/number_b", 9)};
+        tex_numberSign = atlas.findRegion("number_sign");
+        tex_floorButton_danger = atlas.findRegion("button_danger");
+        tex_floorButtonPressed_danger = atlas.findRegion("buttonPressed_danger");
+        tex_title = new TextureRegion[]{
+                atlas.findRegion("title_c"),
+                atlas.findRegion("title_a"),
+                atlas.findRegion("title_r"),
+                atlas.findRegion("title_a"),
+                atlas.findRegion("title_m"),
         };
-        tex_hand = new Texture[]{
-                Main.assets.get("images/hand_0.png"),
-                Main.assets.get("images/hand_1.png"),
-        };
-        tex_confetti = new Texture[]{
-                Main.assets.get("images/confetti_red.png"),
-                Main.assets.get("images/confetti_blue.png"),
-                Main.assets.get("images/confetti_green.png"),
-        };
-        tex_eye = new Texture[]{
-                Main.assets.get("images/eye_0.png"),
-                Main.assets.get("images/eye_space.png"),
-                Main.assets.get("images/eye_2.png"),
-                Main.assets.get("images/eye_3.png"),
-        };
+        tex_shield = atlas.findRegion("shield");
+        tex_shield_shine = atlas.findRegion("shield_shine");
+        tex_underTitle = atlas.findRegion("title_balls");
+        tex_ttptext = atlas.findRegion("ttptext");
+        tex_collectable_shield = atlas.findRegion("collectable_shield");
+        tex_tutorialHole = atlas.findRegion("tutorialHole");
+        tex_hleditie = atlas.findRegion("HLeditie");
+        tex_button_leaderBoards = atlas.findRegion("button_leaderBoards");
+        tex_buttonPressed_leaderBoards = atlas.findRegion("buttonPressed_leaderBoards");
+        tex_youlost = atlas.findRegion("youlost");
+        tex_symbolOrb = atlas.findRegion("symbol_orb");
+        tex_shopSpot = atlas.findRegion("shopSpot");
+        tex_shopSpotPressed = atlas.findRegion("shopSpotPressed");
+        tex_symbolSelected = atlas.findRegion("symbol_selected");
+        tex_pin = atlas.findRegion("pin");
+        tex_jumpingPad = atlas.findRegion("jumpingPad");
+        tex_text_slowdown = atlas.findRegion("text_slowdown");
+        tex_meterDot = atlas.findRegion("meterDot");
+        tex_meter_case = atlas.findRegion("meter_case");
+        tex_meter_ball = atlas.findRegion("meter_ball");
+        tex_meter_dot = new TextureRegion[]{atlas.findRegion("meter_dot", 0), atlas.findRegion("meter_dot", 1), atlas.findRegion("meter_dot", 2)};
+        tex_oxigenoxide = atlas.findRegion("oxigenoxide");
+        tex_orbCountBackground = atlas.findRegion("orbCountBackground");
+        tex_goldenEgg = atlas.findRegion("goldenEgg");
+        tex_blueEgg = atlas.findRegion("blueEgg");
+        tex_ballCapsule = atlas.findRegion("ballCapsule");
+        tex_ballCapsule_shine = atlas.findRegion("ballCapsule_shine");
+        tex_orb = atlas.findRegion("orb");
+        tex_text_comingsoon = atlas.findRegion("text_comingsoon");
+        tex_orbCounter = atlas.findRegion("orbCounter");
+        tex_text_orbs = atlas.findRegion("text_orbs");
+        tex_bullet = atlas.findRegion("bullet");
+        tex_symbol_checkmark = atlas.findRegion("symbol_checkmark");
+        tex_symbol_cross = atlas.findRegion("symbol_cross");
+        tex_tutorialMode = atlas.findRegion("tutorialMode");
+        tex_sign_number_small = atlas.findRegion("sign_number_small");
+        tex_text_score = atlas.findRegion("text_score");
+        tex_ballRing = atlas.findRegion("ballRing");
+        tex_honey = atlas.findRegion("honey");
+        tex_button_pause = atlas.findRegion("button_pause");
+        tex_buttonPressed_pause = atlas.findRegion("buttonPressed_pause");
+        tex_button_resume = atlas.findRegion("button_resume");
+        tex_buttonPressed_resume = atlas.findRegion("buttonPressed_resume");
+        tex_button_balls_new = atlas.findRegion("button_shop_new");
+        tex_buttonPressed_balls_new = atlas.findRegion("buttonPressed_shop_new");
+        tex_text_paused = atlas.findRegion("text_paused");
+        tex_gap = atlas.findRegion("gap");
+        tex_cat = atlas.findRegion("cat");
+        tex_versionBarOutline = atlas.findRegion("versionBarOutline");
+        tex_versionBarShade = atlas.findRegion("versionBarShade");
+        tex_scrollGroove = atlas.findRegion("scrollGroove");
+        tex_scrollNotch = atlas.findRegion("scrollNotch");
+        tex_button_info = atlas.findRegion("button_info");
+        tex_buttonPressed_info = atlas.findRegion("buttonPressed_info");
+        tex_apple = atlas.findRegion("apple");
+        tex_lemon = atlas.findRegion("lemon");
+        tex_strawberry = atlas.findRegion("strawberry");
+        tex_tire_top = atlas.findRegion("tire_top");
+        tex_tire_base = atlas.findRegion("tire_base");
+        tex_draggable_pivot = atlas.findRegion("draggable_pivot");
+        tex_woodPlank = atlas.findRegion("woodPlank");
+        tex_stars = atlas.findRegion("stars");
+        tex_stars_back = atlas.findRegion("stars_back");
+        tex_indication_cross = atlas.findRegion("indication_cross");
+        tex_ball_sun = atlas.findRegion("ball_sun");
+        tex_ball_blueDwarf = atlas.findRegion("ball_blueDwarf");
+        tex_progressBar = atlas.findRegion("progressBar");
+        tex_progressBar_ball = atlas.findRegion("progressBar_ball");
+        tex_text_yourBalls = atlas.findRegion("text_yourBalls");
+        tex_comboBar_end = atlas.findRegion("comboBar_end");
 
-        tex_spike = new Texture[]{
-                Main.assets.get("images/spike_1.png"),
-                Main.assets.get("images/spike_2.png"),
-                Main.assets.get("images/spike_3.png"),
-                Main.assets.get("images/spike_4.png"),
-                Main.assets.get("images/spike_4.png"),
+        tex_text_level = new TextureRegion[]{
+                atlas.findRegion("text_level_home"),
+                atlas.findRegion("text_level_space"),
         };
-        tex_particle_ball = new Texture[]{
-                Main.assets.get("images/particle_ball_0.png"),
-                Main.assets.get("images/particle_ball_1.png"),
-                Main.assets.get("images/particle_ball_2.png"),
+        tex_hand = new TextureRegion[]{
+                atlas.findRegion("hand", 0),
+                atlas.findRegion("hand", 1),
         };
-        tex_explosion = new Texture[]{
-                Main.assets.get("images/explosion_0.png"),
-                Main.assets.get("images/explosion_1.png"),
-                Main.assets.get("images/explosion_2.png"),
-                Main.assets.get("images/explosion_3.png"),
-                Main.assets.get("images/explosion_4.png"),
-                Main.assets.get("images/explosion_5.png"),
-                Main.assets.get("images/explosion_6.png"),
-                Main.assets.get("images/explosion_7.png"),
-                Main.assets.get("images/explosion_8.png"),
-                Main.assets.get("images/explosion_9.png"),
-                Main.assets.get("images/explosion_10.png"),
-                Main.assets.get("images/explosion_11.png"),
-                Main.assets.get("images/explosion_12.png"),
+        tex_confetti = new TextureRegion[]{
+                atlas.findRegion("confetti_red"),
+                atlas.findRegion("confetti_blue"),
+                atlas.findRegion("confetti_green"),
         };
-        tex_text_v = new Texture[]{
-                Main.assets.get("images/text_v_standard.png"),
-                Main.assets.get("images/text_v_noAds.png"),
-                Main.assets.get("images/text_v_noLevels.png"),
-                Main.assets.get("images/text_v_noShop.png"),
-                Main.assets.get("images/text_v_noMusic.png"),
-                Main.assets.get("images/text_v_noScore.png"),
-                Main.assets.get("images/text_v_noEffects.png"),
-                Main.assets.get("images/text_v_hard.png"),
+        tex_eye = new TextureRegion[]{
+                atlas.findRegion("eye", 0),
+                atlas.findRegion("eye_space"),
+                atlas.findRegion("eye", 2),
+                atlas.findRegion("eye", 3),
         };
 
-        tex_particle_hit = new Texture[]{
-                Main.assets.get("images/particle_hit_1.png"),
-                Main.assets.get("images/particle_hit_2.png"),
-                Main.assets.get("images/particle_hit_3.png"),
-                Main.assets.get("images/particle_hit_4.png"),
-                Main.assets.get("images/particle_hit_5.png"),
-                Main.assets.get("images/particle_hit_6.png"),
+        tex_spike = new TextureRegion[]{
+                atlas.findRegion("spike", 1),
+                atlas.findRegion("spike", 2),
+                atlas.findRegion("spike", 3),
+                atlas.findRegion("spike", 4),
+                atlas.findRegion("spike", 4),
+        };
+        tex_particle_ball = new TextureRegion[]{
+                atlas.findRegion("particle_ball", 0),
+                atlas.findRegion("particle_ball", 1),
+                atlas.findRegion("particle_ball", 2),
+        };
+        tex_explosion = new TextureRegion[]{
+                atlas.findRegion("explosion", 0),
+                atlas.findRegion("explosion", 1),
+                atlas.findRegion("explosion", 2),
+                atlas.findRegion("explosion", 3),
+                atlas.findRegion("explosion", 4),
+                atlas.findRegion("explosion", 5),
+                atlas.findRegion("explosion", 6),
+                atlas.findRegion("explosion", 7),
+                atlas.findRegion("explosion", 8),
+                atlas.findRegion("explosion", 9),
+                atlas.findRegion("explosion_10"),
+                atlas.findRegion("explosion_11"),
+                atlas.findRegion("explosion_12"),
+        };
+        tex_text_v = new TextureRegion[]{
+                atlas.findRegion("text_v_standard"),
+                atlas.findRegion("text_v_noAds"),
+                atlas.findRegion("text_v_noLevels"),
+                atlas.findRegion("text_v_noShop"),
+                atlas.findRegion("text_v_noMusic"),
+                atlas.findRegion("text_v_noScore"),
+                atlas.findRegion("text_v_noEffects"),
+                atlas.findRegion("text_v_hard"),
+        };
+
+        tex_particle_hit = new TextureRegion[]{
+                atlas.findRegion("particle_hit", 1),
+                atlas.findRegion("particle_hit", 2),
+                atlas.findRegion("particle_hit", 3),
+                atlas.findRegion("particle_hit", 4),
+                atlas.findRegion("particle_hit", 5),
+                atlas.findRegion("particle_hit", 6),
         };
 
 
@@ -764,295 +781,38 @@ public class Res {
     }
 
     public static void queueAssets() {
-        Main.assets.load("images/ball_small.png", Texture.class);
-        Main.assets.load("images/ball_medium.png", Texture.class);
-        Main.assets.load("images/ball_large.png", Texture.class);
-        Main.assets.load("images/ball_huge.png", Texture.class);
-        Main.assets.load("images/ball_square_small.png", Texture.class);
-        Main.assets.load("images/ball_square_medium.png", Texture.class);
-        Main.assets.load("images/ball_square_large.png", Texture.class);
-        Main.assets.load("images/ball_face_small.png", Texture.class);
-        Main.assets.load("images/ball_face_medium.png", Texture.class);
-        Main.assets.load("images/ball_face_large.png", Texture.class);
-        Main.assets.load("images/ball_bad.png", Texture.class);
-        Main.assets.load("images/ball_egg_small.png", Texture.class);
-        Main.assets.load("images/ball_egg_medium.png", Texture.class);
-        Main.assets.load("images/ball_egg_large.png", Texture.class);
-        Main.assets.load("images/ball_brain_small.png", Texture.class);
-        Main.assets.load("images/ball_brain_medium.png", Texture.class);
-        Main.assets.load("images/ball_brain_large.png", Texture.class);
-        Main.assets.load("images/ball_rasp_small.png", Texture.class);
-        Main.assets.load("images/ball_rasp_medium.png", Texture.class);
-        Main.assets.load("images/ball_rasp_large.png", Texture.class);
-        Main.assets.load("images/ball_hl_small.png", Texture.class);
-        Main.assets.load("images/ball_hl_medium.png", Texture.class);
-        Main.assets.load("images/ball_hl_large.png", Texture.class);
-        Main.assets.load("images/ball_apple_small.png", Texture.class);
-        Main.assets.load("images/ball_apple_medium.png", Texture.class);
-        Main.assets.load("images/ball_apple_large.png", Texture.class);
-        Main.assets.load("images/ball_moon_small.png", Texture.class);
-        Main.assets.load("images/ball_moon_medium.png", Texture.class);
-        Main.assets.load("images/ball_moon_large.png", Texture.class);
-        Main.assets.load("images/ball_inflate_small.png", Texture.class);
-        Main.assets.load("images/ball_inflate_medium.png", Texture.class);
-        Main.assets.load("images/ball_inflate_large.png", Texture.class);
-        Main.assets.load("images/ball_inflate_huge.png", Texture.class);
-        Main.assets.load("images/crown.png", Texture.class);
-        Main.assets.load("images/bumper.png", Texture.class);
-        Main.assets.load("images/tabletop.png", Texture.class);
-        Main.assets.load("images/tabletop_1.png", Texture.class);
-        Main.assets.load("images/tabletop_2.png", Texture.class);
-        Main.assets.load("images/tabletop_3.png", Texture.class);
-        Main.assets.load("images/explosion_0.png", Texture.class);
-        Main.assets.load("images/explosion_1.png", Texture.class);
-        Main.assets.load("images/explosion_2.png", Texture.class);
-        Main.assets.load("images/explosion_3.png", Texture.class);
-        Main.assets.load("images/explosion_4.png", Texture.class);
-        Main.assets.load("images/explosion_5.png", Texture.class);
-        Main.assets.load("images/explosion_6.png", Texture.class);
-        Main.assets.load("images/explosion_7.png", Texture.class);
-        Main.assets.load("images/explosion_8.png", Texture.class);
-        Main.assets.load("images/explosion_9.png", Texture.class);
-        Main.assets.load("images/explosion_10.png", Texture.class);
-        Main.assets.load("images/explosion_11.png", Texture.class);
-        Main.assets.load("images/explosion_12.png", Texture.class);
-        Main.assets.load("images/ballShard_0.png", Texture.class);
-        Main.assets.load("images/ballShard_1.png", Texture.class);
-        Main.assets.load("images/ballShard_2.png", Texture.class);
-        Main.assets.load("images/sign_number_small.png", Texture.class);
-        Main.assets.load("images/watermark.png", Texture.class);
-        Main.assets.load("images/text_youare.png", Texture.class);
-        Main.assets.load("images/bullet.png", Texture.class);
-        Main.assets.load("images/text_welcome.png", Texture.class);
-        Main.assets.load("images/buttonPressed_toGame.png", Texture.class);
-        Main.assets.load("images/text_comingsoon.png", Texture.class);
-        Main.assets.load("images/button_toGame.png", Texture.class);
-        Main.assets.load("images/button_leaderBoards.png", Texture.class);
-        Main.assets.load("images/buttonPressed_leaderBoards.png", Texture.class);
-        Main.assets.load("images/buttonPressed_shop.png", Texture.class);
-        Main.assets.load("images/button_pause.png", Texture.class);
-        Main.assets.load("images/buttonPressed_pause.png", Texture.class);
-        Main.assets.load("images/button_resume.png", Texture.class);
-        Main.assets.load("images/buttonPressed_resume.png", Texture.class);
-        Main.assets.load("images/button_shop_new.png", Texture.class);
-        Main.assets.load("images/buttonPressed_shop_new.png", Texture.class);
-        Main.assets.load("images/button_play.png", Texture.class);
-        Main.assets.load("images/buttonPressed_play.png", Texture.class);
-        Main.assets.load("images/text_paused.png", Texture.class);
-        Main.assets.load("images/statisticsBackground.png", Texture.class);
-        Main.assets.load("images/text_slowdown.png", Texture.class);
-        Main.assets.load("images/symbol_cross.png", Texture.class);
-        Main.assets.load("images/symbol_checkmark.png", Texture.class);
-        Main.assets.load("images/honey.png", Texture.class);
-        Main.assets.load("images/numbers/number_0.png", Texture.class);
-        Main.assets.load("images/numbers/number_1.png", Texture.class);
-        Main.assets.load("images/numbers/number_2.png", Texture.class);
-        Main.assets.load("images/numbers/number_3.png", Texture.class);
-        Main.assets.load("images/numbers/number_4.png", Texture.class);
-        Main.assets.load("images/numbers/number_5.png", Texture.class);
-        Main.assets.load("images/numbers/number_6.png", Texture.class);
-        Main.assets.load("images/numbers/number_7.png", Texture.class);
-        Main.assets.load("images/numbers/number_8.png", Texture.class);
-        Main.assets.load("images/numbers/number_9.png", Texture.class);
-        Main.assets.load("images/numbers/number_s_0.png", Texture.class);
-        Main.assets.load("images/numbers/number_s_1.png", Texture.class);
-        Main.assets.load("images/numbers/number_s_2.png", Texture.class);
-        Main.assets.load("images/numbers/number_s_3.png", Texture.class);
-        Main.assets.load("images/numbers/number_s_4.png", Texture.class);
-        Main.assets.load("images/numbers/number_s_5.png", Texture.class);
-        Main.assets.load("images/numbers/number_s_6.png", Texture.class);
-        Main.assets.load("images/numbers/number_s_7.png", Texture.class);
-        Main.assets.load("images/numbers/number_s_8.png", Texture.class);
-        Main.assets.load("images/numbers/number_s_9.png", Texture.class);
-        Main.assets.load("images/numbers/number_m_0.png", Texture.class);
-        Main.assets.load("images/numbers/number_m_1.png", Texture.class);
-        Main.assets.load("images/numbers/number_m_2.png", Texture.class);
-        Main.assets.load("images/numbers/number_m_3.png", Texture.class);
-        Main.assets.load("images/numbers/number_m_4.png", Texture.class);
-        Main.assets.load("images/numbers/number_m_5.png", Texture.class);
-        Main.assets.load("images/numbers/number_m_6.png", Texture.class);
-        Main.assets.load("images/numbers/number_m_7.png", Texture.class);
-        Main.assets.load("images/numbers/number_m_8.png", Texture.class);
-        Main.assets.load("images/numbers/number_m_9.png", Texture.class);
-        Main.assets.load("images/numbers/number_h_0.png", Texture.class);
-        Main.assets.load("images/numbers/number_h_1.png", Texture.class);
-        Main.assets.load("images/numbers/number_h_2.png", Texture.class);
-        Main.assets.load("images/numbers/number_h_3.png", Texture.class);
-        Main.assets.load("images/numbers/number_h_4.png", Texture.class);
-        Main.assets.load("images/numbers/number_h_5.png", Texture.class);
-        Main.assets.load("images/numbers/number_h_6.png", Texture.class);
-        Main.assets.load("images/numbers/number_h_7.png", Texture.class);
-        Main.assets.load("images/numbers/number_h_8.png", Texture.class);
-        Main.assets.load("images/numbers/number_h_9.png", Texture.class);
-        Main.assets.load("images/numbers/number_b_0.png", Texture.class);
-        Main.assets.load("images/numbers/number_b_1.png", Texture.class);
-        Main.assets.load("images/numbers/number_b_2.png", Texture.class);
-        Main.assets.load("images/numbers/number_b_3.png", Texture.class);
-        Main.assets.load("images/numbers/number_b_4.png", Texture.class);
-        Main.assets.load("images/numbers/number_b_5.png", Texture.class);
-        Main.assets.load("images/numbers/number_b_6.png", Texture.class);
-        Main.assets.load("images/numbers/number_b_7.png", Texture.class);
-        Main.assets.load("images/numbers/number_b_8.png", Texture.class);
-        Main.assets.load("images/numbers/number_b_9.png", Texture.class);
-        Main.assets.load("images/number_sign.png", Texture.class);
-        Main.assets.load("images/bomb_white.png", Texture.class);
-        Main.assets.load("images/button_danger.png", Texture.class);
-        Main.assets.load("images/buttonPressed_danger.png", Texture.class);
-        Main.assets.load("images/button_replay.png", Texture.class);
-        Main.assets.load("images/buttonPressed_replay.png", Texture.class);
-        Main.assets.load("images/button_return.png", Texture.class);
-        Main.assets.load("images/buttonPressed_return.png", Texture.class);
-        Main.assets.load("images/button_music.png", Texture.class);
-        Main.assets.load("images/buttonPressed_music.png", Texture.class);
-        Main.assets.load("images/button_musicMuted.png", Texture.class);
-        Main.assets.load("images/buttonPressed_musicMuted.png", Texture.class);
-        Main.assets.load("images/button_sound.png", Texture.class);
-        Main.assets.load("images/buttonPressed_sound.png", Texture.class);
-        Main.assets.load("images/button_soundMuted.png", Texture.class);
-        Main.assets.load("images/buttonPressed_soundMuted.png", Texture.class);
-        Main.assets.load("images/button_exit.png", Texture.class);
-        Main.assets.load("images/buttonPressed_exit.png", Texture.class);
-        Main.assets.load("images/title_o.png", Texture.class);
-        Main.assets.load("images/title_r.png", Texture.class);
-        Main.assets.load("images/title_b.png", Texture.class);
-        Main.assets.load("images/title_a.png", Texture.class);
-        Main.assets.load("images/title_l.png", Texture.class);
-        Main.assets.load("images/title_s.png", Texture.class);
-        Main.assets.load("images/title_c.png", Texture.class);
-        Main.assets.load("images/title_m.png", Texture.class);
-        Main.assets.load("images/title_balls.png", Texture.class);
-        Main.assets.load("images/ttptext.png", Texture.class);
-        Main.assets.load("images/HLeditie.png", Texture.class);
-        Main.assets.load("images/youlost.png", Texture.class);
-        Main.assets.load("images/button_options.png", Texture.class);
-        Main.assets.load("images/buttonPressed_options.png", Texture.class);
-        Main.assets.load("images/button_shop.png", Texture.class);
-        Main.assets.load("images/blueEgg.png", Texture.class);
-        Main.assets.load("images/shopSpot.png", Texture.class);
-        Main.assets.load("images/shopSpotPressed.png", Texture.class);
-        Main.assets.load("images/buttonPressed_cross.png", Texture.class);
-        Main.assets.load("images/text_highscore.png", Texture.class);
-        Main.assets.load("images/button_cross.png", Texture.class);
-        Main.assets.load("images/lockedBall.png", Texture.class);
-        Main.assets.load("images/symbol_orb.png", Texture.class);
-        Main.assets.load("images/symbol_selected.png", Texture.class);
-        Main.assets.load("images/orbCountBackground.png", Texture.class);
-        Main.assets.load("images/orbCounter.png", Texture.class);
-        Main.assets.load("images/oxigenoxide.png", Texture.class);
-        Main.assets.load("images/goldenEgg.png", Texture.class);
-        Main.assets.load("images/orb.png", Texture.class);
-        Main.assets.load("images/spike_1.png", Texture.class);
-        Main.assets.load("images/spike_2.png", Texture.class);
-        Main.assets.load("images/spike_3.png", Texture.class);
-        Main.assets.load("images/spike_4.png", Texture.class);
-        Main.assets.load("images/text_orbs.png", Texture.class);
-        Main.assets.load("images/symbol_plus.png", Texture.class);
-        Main.assets.load("images/text_score.png", Texture.class);
-        Main.assets.load("images/confetti_red.png", Texture.class);
-        Main.assets.load("images/confetti_blue.png", Texture.class);
-        Main.assets.load("images/confetti_green.png", Texture.class);
-        Main.assets.load("images/tutorialMode.png", Texture.class);
-        Main.assets.load("images/hand_0.png", Texture.class);
-        Main.assets.load("images/hand_1.png", Texture.class);
-        Main.assets.load("images/pin.png", Texture.class);
-        Main.assets.load("images/button_tutorial.png", Texture.class);
-        Main.assets.load("images/text_player.png", Texture.class);
-        Main.assets.load("images/buttonPressed_tutorial.png", Texture.class);
-        Main.assets.load("images/tutorialHole.png", Texture.class);
-        Main.assets.load("images/cat.png", Texture.class);
-        Main.assets.load("images/badSmile_1.png", Texture.class);
-        Main.assets.load("images/badSmile_2.png", Texture.class);
-        Main.assets.load("images/badSmile_3.png", Texture.class);
-        Main.assets.load("images/badSmile_4.png", Texture.class);
-        Main.assets.load("images/badSmile_5.png", Texture.class);
-        Main.assets.load("images/gap.png", Texture.class);
-        Main.assets.load("images/cannon_base.png", Texture.class);
-        Main.assets.load("images/shield.png", Texture.class);
-        Main.assets.load("images/bomb.png", Texture.class);
-        Main.assets.load("images/shield_shine.png", Texture.class);
-        Main.assets.load("images/cannon_gun.png", Texture.class);
-        Main.assets.load("images/cannon_shine.png", Texture.class);
-        Main.assets.load("images/collectable_shield.png", Texture.class);
-        Main.assets.load("images/versionBarShade.png", Texture.class);
-        Main.assets.load("images/versionBarOutline.png", Texture.class);
-        Main.assets.load("images/scrollGroove.png", Texture.class);
-        Main.assets.load("images/scrollNotch.png", Texture.class);
-        Main.assets.load("images/text_v_standard.png", Texture.class);
-        Main.assets.load("images/text_v_noAds.png", Texture.class);
-        Main.assets.load("images/text_v_noEffects.png", Texture.class);
-        Main.assets.load("images/text_v_noShop.png", Texture.class);
-        Main.assets.load("images/text_v_noMusic.png", Texture.class);
-        Main.assets.load("images/text_v_hard.png", Texture.class);
-        Main.assets.load("images/text_v_noLevels.png", Texture.class);
-        Main.assets.load("images/text_v_noScore.png", Texture.class);
-        Main.assets.load("images/farmField.png", Texture.class);
-        Main.assets.load("images/buttonPressed_info.png", Texture.class);
-        Main.assets.load("images/button_info.png", Texture.class);
-        Main.assets.load("images/particle_ball_0.png", Texture.class);
-        Main.assets.load("images/particle_ball_1.png", Texture.class);
-        Main.assets.load("images/particle_ball_2.png", Texture.class);
-        Main.assets.load("images/apple.png", Texture.class);
-        Main.assets.load("images/lemon.png", Texture.class);
-        Main.assets.load("images/strawberry.png", Texture.class);
-        Main.assets.load("images/circularBumper.png", Texture.class);
-        Main.assets.load("images/meter_case.png", Texture.class);
-        Main.assets.load("images/meter_dot_1.png", Texture.class);
-        Main.assets.load("images/meter_dot_2.png", Texture.class);
-        Main.assets.load("images/meter_dot_0.png", Texture.class);
-        Main.assets.load("images/meter_ball.png", Texture.class);
-        Main.assets.load("images/meterDot.png", Texture.class);
-        Main.assets.load("images/jumpingPad.png", Texture.class);
-        Main.assets.load("images/eye_0.png", Texture.class);
-        Main.assets.load("images/eye_1.png", Texture.class);
-        Main.assets.load("images/eye_2.png", Texture.class);
-        Main.assets.load("images/eye_3.png", Texture.class);
-        Main.assets.load("images/eye_space.png", Texture.class);
-        Main.assets.load("images/ballRing.png", Texture.class);
-        Main.assets.load("images/ballCapsule.png", Texture.class);
-        Main.assets.load("images/ballCapsule_shine.png", Texture.class);
-        Main.assets.load("images/tire_top.png", Texture.class);
-        Main.assets.load("images/tire_base.png", Texture.class);
-        Main.assets.load("images/draggable_pivot.png", Texture.class);
-        Main.assets.load("images/woodPlank.png", Texture.class);
-        Main.assets.load("images/stars.png", Texture.class);
-        Main.assets.load("images/stars_back.png", Texture.class);
-        Main.assets.load("images/indication_cross.png", Texture.class);
-        Main.assets.load("images/ball_sun.png", Texture.class);
-        Main.assets.load("images/ball_blueDwarf.png", Texture.class);
-        Main.assets.load("images/text_level_home.png", Texture.class);
-        Main.assets.load("images/text_level_space.png", Texture.class);
-        Main.assets.load("images/progressBar.png", Texture.class);
-        Main.assets.load("images/progressBar_ball.png", Texture.class);
-        Main.assets.load("images/text_yourBalls.png", Texture.class);
-        Main.assets.load("images/particle_hit_1.png", Texture.class);
-        Main.assets.load("images/particle_hit_2.png", Texture.class);
-        Main.assets.load("images/particle_hit_3.png", Texture.class);
-        Main.assets.load("images/particle_hit_4.png", Texture.class);
-        Main.assets.load("images/particle_hit_5.png", Texture.class);
-        Main.assets.load("images/particle_hit_6.png", Texture.class);
-        Main.assets.load("images/comboBar.png", Texture.class);
-        Main.assets.load("images/comboBar_end.png", Texture.class);
         Main.assets.load("music/1.mp3", Music.class);
         Main.assets.load("music/2.mp3", Music.class);
         Main.assets.load("music/3.mp3", Music.class);
         Main.assets.load("music/4.mp3", Music.class);
         Main.assets.load("music/5.mp3", Music.class);
+
         Main.assets.load("sounds/ballHit.wav", Sound.class);
         Main.assets.load("sounds/speedup.wav", Sound.class);
         Main.assets.load("sounds/slowdown.wav", Sound.class);
         Main.assets.load("sounds/glassBreak.wav", Sound.class);
         Main.assets.load("sounds/buttonClick.wav", Sound.class);
-        Main.assets.load("sounds/plop.mp3", Sound.class);
         Main.assets.load("sounds/buttonClick2.wav", Sound.class);
         Main.assets.load("sounds/collect.wav", Sound.class);
+
+        Main.assets.load("sounds/plop.mp3", Sound.class);
         Main.assets.load("sounds/splat.mp3", Sound.class);
         Main.assets.load("sounds/bounce.mp3", Sound.class);
+
+        Main.assets.load("images/comboBar.png", Texture.class);
     }
 
     public static void preload() {
-        tex_numbers = new Texture[5][];
-        tex_numbers[ID.Font.SMALL] = new Texture[]{new Texture("images/numbers/number_m_0.png"), new Texture("images/numbers/number_m_1.png"), new Texture("images/numbers/number_m_2.png"), new Texture("images/numbers/number_m_3.png"), new Texture("images/numbers/number_m_4.png"), new Texture("images/numbers/number_m_5.png"), new Texture("images/numbers/number_m_6.png"), new Texture("images/numbers/number_m_7.png"), new Texture("images/numbers/number_m_8.png"), new Texture("images/numbers/number_m_9.png")};
-        tex_number_small_percent = new Texture("images/numbers/number_m_percent.png");
+        tex_wifiSymbol = atlas.findRegion("wifiSymbol");
+        tex_text_noInternet = atlas.findRegion("nointernet");
+        tex_loadingBall = atlas.findRegion("loadingBall");
+        System.out.println("loadingball: "+tex_loadingBall);
+        tex_loadingBall_shadow = atlas.findRegion("loadingBall_shadow");
+        tex_loadingBall_filled = atlas.findRegion("loadingBallFilled");
+        tex_oxigenoxide = atlas.findRegion("oxigenoxide");
+        tex_numbers = new TextureRegion[5][];
+        tex_numbers[ID.Font.SMALL] = new TextureRegion[]{atlas.findRegion("numbers/number_m",0), atlas.findRegion("numbers/number_m",1), atlas.findRegion("numbers/number_m", 2), atlas.findRegion("numbers/number_m", 3), atlas.findRegion("numbers/number_m", 4), atlas.findRegion("numbers/number_m", 5), atlas.findRegion("numbers/number_m", 6), atlas.findRegion("numbers/number_m", 7), atlas.findRegion("numbers/number_m", 8), atlas.findRegion("numbers/number_m", 9)};
+        tex_number_small_percent = atlas.findRegion("numbers/number_m_percent");
         shader_c = new ShaderProgram(Gdx.files.internal("shaders/shader_c.vert"), Gdx.files.internal("shaders/shader_c.frag"));
         sound_bounce = Gdx.audio.newSound(Gdx.files.internal("sounds/bounce.mp3"));
         sound_ballHit = Gdx.audio.newSound(Gdx.files.internal("sounds/ballHit.wav"));
@@ -1070,7 +830,7 @@ public class Res {
 
     }
 
-    static public Texture getRandomFruitTex() {
+    static public TextureRegion getRandomFruitTex() {
         int fruitType = (int) (Math.random() * 3);
         switch (fruitType) {
             case 0:

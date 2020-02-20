@@ -3,6 +3,7 @@ package com.oxigenoxide.caramballs.object.entity;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.oxigenoxide.caramballs.ID;
@@ -14,7 +15,7 @@ import com.oxigenoxide.caramballs.scene.Game;
 
 public class JumpingPad extends Entity {
     Body body;
-    Texture tex;
+    TextureRegion tex;
     Sprite sprite;
     float wiggle;
 
@@ -32,8 +33,8 @@ public class JumpingPad extends Entity {
 
     public void update() {
         wiggle = Math.max(0, wiggle - .05f * Main.dt_one_slowed);
-        sprite.setSize(tex.getWidth() +  4 * (float) Math.sin(wiggle * Math.PI * 2), tex.getHeight() +  4 * (float) Math.sin(wiggle * Math.PI * 2));
-        sprite.setPosition(pos.x - sprite.getWidth() / 2, pos.y - sprite.getHeight() / 2);
+        sprite.setSize(tex.getRegionWidth() +  4 * (float) Math.sin(wiggle * Math.PI * 2), tex.getRegionHeight() +  4 * (float) Math.sin(wiggle * Math.PI * 2));
+        sprite.setPosition(pos.x - sprite.getRegionWidth() / 2, pos.y - sprite.getHeight() / 2);
     }
 
     void wiggle() {

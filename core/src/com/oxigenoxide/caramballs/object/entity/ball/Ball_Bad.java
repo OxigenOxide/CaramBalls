@@ -2,6 +2,7 @@ package com.oxigenoxide.caramballs.object.entity.ball;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.oxigenoxide.caramballs.scene.Game;
@@ -20,11 +21,11 @@ public class Ball_Bad extends Ball {
     float glowRadiusVariation;
     float count_glow;
     float count_smile;
-    Texture tex_smile;
+    TextureRegion tex_smile;
     public Ball_Bad(float x, float y, float height, int size) {
         super(x, y, height, size);
         setSpriteTexture(Res.tex_ball_bad);
-        radius = Res.tex_ball_bad.getWidth() / 2;
+        radius = Res.tex_ball_bad.getRegionWidth() / 2;
         maxSpeedMinimum = 4;
         if (height > 30)
             giveSpeedAfterFall = true;
@@ -33,7 +34,7 @@ public class Ball_Bad extends Ball {
     public Ball_Bad() {
         super(Main.height,1);
         setSpriteTexture(Res.tex_ball_bad);
-        radius = Res.tex_ball_bad.getWidth() / 2;
+        radius = Res.tex_ball_bad.getRegionWidth() / 2;
         maxSpeedMinimum = 4;
         if (height > 30)
             giveSpeedAfterFall = true;
@@ -166,8 +167,4 @@ public class Ball_Bad extends Ball {
         super.dispose();
     }
 
-    @Override
-    public void setSpriteTexture(Texture texture) {
-        super.setSpriteTexture(texture);
-    }
 }

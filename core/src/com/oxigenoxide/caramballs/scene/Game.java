@@ -267,7 +267,7 @@ public class Game extends Scene {
         point = new Point();
         font = new BitmapFont();
         pos_clearTrail = new Vector2();
-        sprite_buffer_trail = new Sprite(Res.tex_tabletop[0]);
+        sprite_buffer_trail = new Sprite(Res.tex_fullscreen);
         meter = new Meter();
         progressBar = new ProgressBar();
         comboBar = new ComboBar();
@@ -278,10 +278,10 @@ public class Game extends Scene {
         palette_target_table = Res.tableTopPalette[0];
         pos_zoom = new Vector2(Main.width / 2, Main.height / 2);
 
-        button_pause = new Button_Pause(new Vector2(Main.width - 2 - Res.tex_button_pause.getWidth(), Main.height - 2 - Res.tex_button_pause.getHeight()));
-        button_sound = new Button_Sound(new Vector2(Main.width - 2 - Res.tex_button_pause.getWidth(), Main.height - 2 - 16 - Res.tex_button_pause.getHeight()));
-        button_music = new Button_Music(new Vector2(Main.width - 2 - Res.tex_button_pause.getWidth(), Main.height - 2 - 32 - Res.tex_button_pause.getHeight()));
-        button_exit = new Button_Exit(new Vector2(Main.width - 2 - Res.tex_button_pause.getWidth(), Main.height - 2 - 48 - Res.tex_button_pause.getHeight()));
+        button_pause = new Button_Pause(new Vector2(Main.width - 2 - Res.tex_button_pause.getRegionWidth(), Main.height - 2 - Res.tex_button_pause.getRegionHeight()));
+        button_sound = new Button_Sound(new Vector2(Main.width - 2 - Res.tex_button_pause.getRegionWidth(), Main.height - 2 - 16 - Res.tex_button_pause.getRegionHeight()));
+        button_music = new Button_Music(new Vector2(Main.width - 2 - Res.tex_button_pause.getRegionWidth(), Main.height - 2 - 32 - Res.tex_button_pause.getRegionHeight()));
+        button_exit = new Button_Exit(new Vector2(Main.width - 2 - Res.tex_button_pause.getRegionWidth(), Main.height - 2 - 48 - Res.tex_button_pause.getRegionHeight()));
         button_sound.setVisibility(false);
         button_music.setVisibility(false);
         button_exit.setVisibility(false);
@@ -819,7 +819,7 @@ public class Game extends Scene {
         tex_buffer_trail = buffer_trail.getColorBufferTexture();
         tex_buffer_trail.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         sprite_buffer_trail.setTexture(tex_buffer_trail);
-        sprite_buffer_trail.setSize(Main.width, Main.height);
+        sprite_buffer_trail.setSize(Main.width*Main.test_float, Main.height*Main.test_float);
         sprite_buffer_trail.setFlip(false, true);
         //sprite_buffer_trail.setAlpha(.8f);
 
@@ -977,7 +977,7 @@ public class Game extends Scene {
             button_exit.render(batch);
         }
         if (isPaused) {
-            batch.draw(Res.tex_text_paused, Main.width / 2 - Res.tex_text_paused.getWidth() / 2, Main.height / 2);
+            batch.draw(Res.tex_text_paused, Main.width / 2 - Res.tex_text_paused.getRegionWidth() / 2, Main.height / 2);
         }
         setCamEffects();
         font.draw(batch, String.valueOf(Gdx.graphics.getFramesPerSecond()), 0, 0);
@@ -1020,11 +1020,11 @@ public class Game extends Scene {
         if (tutorialStage == ID.TutorialStage.SLOWDOWN) {
             Main.drawNumber(batch, (int) count_catTutorial, new Vector2(Main.width / 2, Main.height / 2 + 37), ID.Font.FIELD);
             batch.draw(Res.tex_gap, 26, 68 + Main.height / 2 - 192 / 2);
-            batch.draw(Res.tex_text_slowdown, Main.width / 2 - Res.tex_text_slowdown.getWidth() / 2, 50);
+            batch.draw(Res.tex_text_slowdown, Main.width / 2 - Res.tex_text_slowdown.getRegionWidth() / 2, 50);
             if (Main.slowdown > 0) {
-                batch.draw(Res.tex_symbol_checkmark, Main.width / 2 - Res.tex_symbol_checkmark.getWidth() / 2, 35);
+                batch.draw(Res.tex_symbol_checkmark, Main.width / 2 - Res.tex_symbol_checkmark.getRegionWidth() / 2, 35);
             } else {
-                batch.draw(Res.tex_symbol_cross, Main.width / 2 - Res.tex_symbol_cross.getWidth() / 2, 35);
+                batch.draw(Res.tex_symbol_cross, Main.width / 2 - Res.tex_symbol_cross.getRegionWidth() / 2, 35);
             }
         }
         if (tutorialStage == ID.TutorialStage.PIN)
@@ -1032,7 +1032,7 @@ public class Game extends Scene {
     }
 
     void drawTabletop(SpriteBatch batch, int type) {
-        batch.draw(Res.tex_tabletop[type], Main.width / 2 - Res.tex_tabletop[type].getWidth() / 2, Main.height / 2 - Res.tex_tabletop[type].getHeight() / 2);
+        batch.draw(Res.tex_tabletop[type], Main.width / 2 - Res.tex_tabletop[type].getRegionWidth() / 2, Main.height / 2 - Res.tex_tabletop[type].getRegionHeight() / 2);
     }
 
     public static void pause() {

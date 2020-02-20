@@ -20,9 +20,9 @@ import com.oxigenoxide.caramballs.utils.MathFuncs;
 import java.util.ArrayList;
 
 public class Splash extends Scene {
-    Texture tex_splash;
-    Texture tex_noInternet;
-    Texture tex_wifiSymbol;
+    TextureRegion tex_splash;
+    TextureRegion tex_noInternet;
+    TextureRegion tex_wifiSymbol;
     Texture tex_buffer;
     Sprite sprite_wifiSymbol;
     Sprite sprite_noInternet;
@@ -43,32 +43,32 @@ public class Splash extends Scene {
 
     public Splash() {
         buffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
-        tex_splash = new Texture("images/oxigenoxide.png");
-        tex_wifiSymbol = new Texture("images/wifiSymbol.png");
-        sprite_wifiSymbol = new Sprite(tex_wifiSymbol);
-        sprite_wifiSymbol.setOrigin(8, 2);
-        sprite_wifiSymbol.setPosition(Main.width / 2 - sprite_wifiSymbol.getWidth() / 2, Main.height / 2 + 20);
-        sprite_wifiSymbol.setAlpha(alpha_noInternet);
-        tex_noInternet = new Texture("images/nointernet.png");
-        sprite_noInternet = new Sprite(tex_noInternet);
-        sprite_noInternet.setPosition(Main.width / 2 - tex_noInternet.getWidth() / 2, Main.height / 2 - 10);
-        sprite_noInternet.setAlpha(alpha_noInternet);
-        loadingBall = new LoadingBall();
-        Res.queueAssets();
-        sprite = new Sprite(tex_splash);
-        sprite.setPosition(Main.width / 2 - tex_splash.getWidth() / 2, Main.height / 2 - tex_splash.getHeight() / 2);
         counter_dropBall = new Counter(new ActionListener() {
             @Override
             public void action() {
                 loadingBall.show();
             }
         }, 3).start();
-
+        Res.queueAssets();
     }
 
     @Override
     public void show() {
         Main.setAdVisibility(false);
+        tex_splash = Res.tex_oxigenoxide;
+        tex_wifiSymbol = Res.tex_wifiSymbol;
+        sprite_wifiSymbol = new Sprite(tex_wifiSymbol);
+        sprite_wifiSymbol.setOrigin(8, 2);
+        sprite_wifiSymbol.setPosition(Main.width / 2 - sprite_wifiSymbol.getWidth() / 2, Main.height / 2 + 20);
+        sprite_wifiSymbol.setAlpha(alpha_noInternet);
+        tex_noInternet = Res.tex_text_noInternet;
+        sprite_noInternet = new Sprite(tex_noInternet);
+        sprite_noInternet.setPosition(Main.width / 2 - tex_noInternet.getRegionWidth() / 2, Main.height / 2 - 10);
+        sprite_noInternet.setAlpha(alpha_noInternet);
+        loadingBall = new LoadingBall();
+        sprite = new Sprite(tex_splash);
+        sprite.setPosition(Main.width / 2 - tex_splash.getRegionWidth() / 2, Main.height / 2 - tex_splash.getRegionWidth() / 2);
+
     }
 
     @Override
@@ -222,11 +222,10 @@ public class Splash extends Scene {
     class LoadingBall {
         Vector2 pos;
         Vector2 vel;
-        Texture tex;
-        Texture tex_shadow;
+        TextureRegion tex;
+        TextureRegion tex_shadow;
         Sprite sprite_shadow;
-        TextureRegion texReg_filling;
-        Texture tex_filling;
+        TextureRegion tex_filling;
         boolean visible;
         int y_floor = 30;
         final int RADIUS = 15;
@@ -239,9 +238,9 @@ public class Splash extends Scene {
             pos = new Vector2(Main.width / 2, Main.height / 2);
             pos_number = new Vector2();
             vel = new Vector2();
-            tex = new Texture("images/loadingBallFilled.png");
-            tex_filling = new Texture("images/loadingBall.png");
-            tex_shadow = new Texture("images/loadingBall_shadow.png");
+            tex = Res.tex_loadingBall_filled;
+            tex_filling = Res.tex_loadingBall;
+            tex_shadow = Res.tex_loadingBall_shadow;
             sprite_shadow = new Sprite(tex_shadow);
         }
 
@@ -279,8 +278,8 @@ public class Splash extends Scene {
                 }
                 radius_filling = (float) (RADIUS * Math.min(1, Math.max(0, Math.pow(Main.assets.getProgress(), 2)) + .05f));
                 float smallFactor = 1 / (1 + (pos.y - y_floor - RADIUS) * .02f);
-                sprite_shadow.setPosition(pos.x - RADIUS * smallFactor, y_floor + RADIUS - 8 - tex_shadow.getHeight() / 2 * smallFactor);
-                sprite_shadow.setSize(tex_shadow.getWidth() * smallFactor, tex_shadow.getHeight() * smallFactor);
+                sprite_shadow.setPosition(pos.x - RADIUS * smallFactor, y_floor + RADIUS - 8 - tex_shadow.getRegionHeight() / 2 * smallFactor);
+                sprite_shadow.setSize(tex_shadow.getRegionWidth() * smallFactor, tex_shadow.getRegionHeight() * smallFactor);
                 sprite_shadow.setAlpha(a_shadow);
 
                 if (loadingProgress > .95f)
@@ -296,13 +295,16 @@ public class Splash extends Scene {
 
 
         public void render(ShapeRenderer sr) {
-            if (loadingProgress > .95f) {
+
+            if (loadingProgress > .95f && visible) {
                 sr.setColor(1, 1, 1, (1 - progress_afterFull));
                 sr.circle((int) pos.x, (int) pos.y, RADIUS + progress_afterFull * 15);
             }
+
         }
 
         public void render(SpriteBatch batch) {
+
             if (visible) {
                 batch.draw(tex, (int) pos.x - RADIUS, (int) pos.y - RADIUS);
                 batch.draw(tex_filling, (int) pos.x - radius_filling, (int) pos.y - radius_filling, radius_filling * 2, radius_filling * 2);
@@ -311,6 +313,7 @@ public class Splash extends Scene {
                 Main.drawNumberSignAfter(batch, (int) (loadingProgress * 100), pos_number, ID.Font.SMALL, Res.tex_number_small_percent, 0);
                 batch.setShader(null);
             }
+
         }
 
         public void drawShadow(SpriteBatch batch) {

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -78,8 +79,10 @@ public class Ball extends Entity {
         this.height = height;
         this.size = size;
         pos = Game.getFreePosOnTable(radius + 1);
-        if(pos==null)
-            doDispose=true;
+        if (pos == null) {
+            doDispose = true;
+            pos = new Vector2(1000, -100);
+        }
         construct();
     }
 
@@ -134,9 +137,8 @@ public class Ball extends Entity {
                 pos_last.set(pos);
                 pos.set(body.getPosition());
                 pos.scl(Main.PIXELSPERMETER);
-
                 if (size > 0)
-                    sprite.setSize((float) (sprite.getTexture().getWidth() * (1 + wiggle * WIGGLEFACTOR * -Math.sin(wiggle * 15))), (float) (sprite.getTexture().getHeight() * (1 + wiggle * WIGGLEFACTOR * -Math.cos(wiggle * 15))));
+                    sprite.setSize((float) (sprite.getRegionWidth() * (1 + wiggle * WIGGLEFACTOR * -Math.sin(wiggle * 15))), (float) (sprite.getRegionHeight() * (1 + wiggle * WIGGLEFACTOR * -Math.cos(wiggle * 15))));
                 sprite.setPosition((int) ((int) pos.x - sprite.getWidth() / 2), (int) ((int) pos.y + height - sprite.getHeight() / 2));
 
                 if (MathFuncs.getHypothenuse(body.getLinearVelocity().x, body.getLinearVelocity().y) > maxSpeed)
@@ -250,11 +252,12 @@ public class Ball extends Entity {
 
     boolean setSpriteUnderGround() {
         if (height < 0 || fall && height == 0) {
-            sprite.setSize((float) (sprite.getTexture().getWidth() / (1 + Math.abs(height))), (float) (sprite.getTexture().getHeight() / (1 + Math.abs(height))));
+            sprite.setSize((float) (sprite.getRegionWidth() / (1 + Math.abs(height))), (float) (sprite.getRegionHeight() / (1 + Math.abs(height))));
             sprite.setPosition(pos.x - sprite.getWidth() / 2, pos.y - sprite.getHeight() / 2);
             return true;
         }
-        sprite.setSize(sprite.getTexture().getWidth(), sprite.getTexture().getHeight());
+
+        sprite.setSize(sprite.getRegionWidth(), sprite.getRegionHeight());
         return false;
     }
 
@@ -314,7 +317,7 @@ public class Ball extends Entity {
         } else
             height -= Main.dt_one * .1f;
 
-        if (sprite.getWidth() < 2 || hole_fall.isDisposed) {
+        if (sprite.getRegionWidth() < 2 || hole_fall.isDisposed) {
             doDispose = true;
         }
     }
@@ -339,7 +342,7 @@ public class Ball extends Entity {
         batch.setShader(Res.shader_a);
         Res.shader_a.setUniformf("a", .75f);
         if (isShielded)
-            batch.draw(Res.tex_shield, (int) (pos.x - 2 - sprite.getWidth() / 2), (int) (pos.y - 2 - sprite.getHeight() / 2 + height), sprite.getWidth() + 4, sprite.getHeight() + 4);
+            batch.draw(Res.tex_shield, (int) (pos.x - 2 - sprite.getRegionWidth() / 2), (int) (pos.y - 2 - sprite.getHeight() / 2 + height), sprite.getRegionWidth() + 4, sprite.getHeight() + 4);
     }
 
     public void drawSelectionRing(SpriteBatch batch) {
@@ -366,8 +369,8 @@ public class Ball extends Entity {
         if (!isUnderGround && !fall) {
             sr.setColor(selectedIntensity, selectedIntensity, selectedIntensity, .8f + .2f * selectedIntensity);
             float smallFactor = 1 / (1 + height * .02f);
-            float shadowWidth = sprite.getTexture().getWidth() + selectedIntensity * 4;
-            float shadowHeight = (int)(shadowWidth * Game.WIDTHTOHEIGHTRATIO);
+            float shadowWidth = sprite.getRegionWidth() + selectedIntensity * 4;
+            float shadowHeight = (int) (shadowWidth * Game.WIDTHTOHEIGHTRATIO);
 
             float shadowWidth_small = shadowWidth * smallFactor;
             float shadowHeight_small = shadowHeight * smallFactor;
@@ -375,16 +378,16 @@ public class Ball extends Entity {
             //sr.ellipse((int) ((int) pos.x - shadowWidth_small / 2), (int) ((int) pos.y - shadowHeight_small / 2 - radius - 1 + shadowHeight / 2), shadowWidth_small, shadowHeight_small);
             //if (radius % 1 == 0)
             //sr.ellipse((sprite.getX() + radius - shadowWidth_small / 2), (int) ((int) pos.y - Main.test_float * radius - shadowHeight_small / 2), shadowWidth_small, shadowHeight_small);
-            sr.ellipse((int) ((int) pos.x - sprite.getTexture().getWidth() / 2f) + radius - shadowWidth_small / 2, (int)((int) ((int) pos.y - sprite.getTexture().getHeight() / 2f) + .6f * radius - shadowHeight_small / 2), shadowWidth_small, shadowHeight_small,20);
+            sr.ellipse((int) ((int) pos.x - sprite.getRegionWidth() / 2f) + radius - shadowWidth_small / 2, (int) ((int) ((int) pos.y - sprite.getRegionHeight() / 2f) + .6f * radius - shadowHeight_small / 2), shadowWidth_small, shadowHeight_small, 20);
             //else
             //    sr.ellipse((int)(pos.x - (shadowWidth_small / 2)), (int) ((int) pos.y - Main.test_float * radius - shadowHeight_small / 2), shadowWidth_small, shadowHeight_small);
-            //sr.ellipse((int) (pos.x - sprite.getWidth() / 2 * smallFactor), (int) (pos.y - sprite.getWidth() / 2 * Game.WIDTHTOHEIGHTRATIO * smallFactor) - 2, sprite.getWidth() / 2 * smallFactor * 2, radius * smallFactor * 2 * Game.WIDTHTOHEIGHTRATIO);
+            //sr.ellipse((int) (pos.x - sprite.getRegionWidth() / 2 * smallFactor), (int) (pos.y - sprite.getRegionWidth() / 2 * Game.WIDTHTOHEIGHTRATIO * smallFactor) - 2, sprite.getRegionWidth() / 2 * smallFactor * 2, radius * smallFactor * 2 * Game.WIDTHTOHEIGHTRATIO);
         }
     }
 
     public void render_shield_shine(SpriteBatch batch) {
         if (isShielded)
-            batch.draw(Res.tex_shield_shine, (int) (pos.x - 2 - sprite.getWidth() / 2), (int) (pos.y - 2 - sprite.getHeight() / 2 + height), sprite.getWidth() + 4, sprite.getHeight() + 4);
+            batch.draw(Res.tex_shield_shine, (int) (pos.x - 2 - sprite.getRegionWidth() / 2), (int) (pos.y - 2 - sprite.getHeight() / 2 + height), sprite.getRegionWidth() + 4, sprite.getHeight() + 4);
     }
 
 
@@ -529,10 +532,10 @@ public class Ball extends Entity {
         //sr.circle(pos.x + radius/2*(float)Math.cos(angle), pos.y + radius/2*(float)Math.sin(angle), 5);
     }
 
-    public void setSpriteTexture(Texture texture) {
-        sprite.setTexture(texture);
-        sprite.setSize(texture.getWidth(), texture.getHeight());
-        sprite.setPosition(pos.x - sprite.getWidth() / 2, pos.y + height - sprite.getHeight() / 2);
+    public void setSpriteTexture(TextureRegion texture) {
+        sprite.setRegion(texture);
+        sprite.setSize(texture.getRegionWidth(), texture.getRegionHeight());
+        sprite.setPosition(pos.x - sprite.getRegionWidth() / 2, pos.y + height - sprite.getHeight() / 2);
     }
 
     public void freeze() {

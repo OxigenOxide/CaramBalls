@@ -22,14 +22,14 @@ public class CircularBumper extends Entity {
 
     public CircularBumper() {
         sprite = new Sprite(Res.tex_circularBumper);
-        radius_spawn = sprite.getWidth() / 2 + 2; // not perfect
+        radius_spawn = sprite.getRegionWidth() / 2 + 2; // not perfect
         pos = Game.getFreePosOnTable(radius_spawn);
         if(pos==null) {
             pos = new Vector2(-100, -200);
             disappear=true;
         }
         pos.add(.5f, .5f);
-        sprite.setPosition(pos.x - (int) sprite.getWidth() / 2, pos.y - (int) sprite.getWidth() / 2); // Correct, twice sprite.getWidth()
+        sprite.setPosition(pos.x - (int) sprite.getRegionWidth() / 2, pos.y - (int) sprite.getRegionWidth() / 2); // Correct, twice sprite.getRegionWidth()
         createBody();
         body.setTransform(pos.x * Main.METERSPERPIXEL, pos.y * Main.METERSPERPIXEL, 0);
     }
@@ -53,8 +53,8 @@ public class CircularBumper extends Entity {
         if(count>200)
             disappear=true;
         wiggle = Math.max(0, wiggle - Main.dt_one_slowed * .02f);
-        sprite.setSize((sprite.getTexture().getWidth() + wiggle * (float) Math.sin(wiggle * 20)) * size, (sprite.getTexture().getHeight() + wiggle * (float) Math.sin(wiggle * 20)) * size);
-        sprite.setPosition(pos.x - sprite.getWidth() / 2, pos.y - sprite.getWidth() / 2);
+        sprite.setSize((sprite.getRegionWidth() + wiggle * (float) Math.sin(wiggle * 20)) * size, (sprite.getRegionHeight() + wiggle * (float) Math.sin(wiggle * 20)) * size);
+        sprite.setPosition(pos.x - sprite.getRegionWidth() / 2, pos.y - sprite.getRegionWidth() / 2);
         if (disappear)
             size = Math.max(0, size - Main.dt_one_slowed * .1f);
         else

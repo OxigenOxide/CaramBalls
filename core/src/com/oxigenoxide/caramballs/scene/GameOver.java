@@ -32,9 +32,9 @@ public class GameOver extends Scene {
 
         height = (Main.height - 192) / 2;
         youLost = new YouLost(height);
-        button_replay = new Button_Replay(new Vector2(Main.width / 2 - Res.tex_button_replay.getWidth() / 2, 45 + height));
-        button_balls = new Button_Balls(new Vector2(Main.width / 2 - Res.tex_button_replay.getWidth() / 2, 1 + height));
-        button_leaderBoards = new Button_LeaderBoards(new Vector2(Main.width / 2 - Res.tex_button_replay.getWidth() / 2, 23 + height));
+        button_replay = new Button_Replay(new Vector2(Main.width / 2 - Res.tex_button_replay.getRegionWidth() / 2, 45 + height));
+        button_balls = new Button_Balls(new Vector2(Main.width / 2 - Res.tex_button_replay.getRegionWidth() / 2, 1 + height));
+        button_leaderBoards = new Button_LeaderBoards(new Vector2(Main.width / 2 - Res.tex_button_replay.getRegionWidth() / 2, 23 + height));
         pos_numScore = new Vector2(Main.width / 2, 92 + height);
         pos_numOrbs = new Vector2(Main.width / 2, 75 + height);
         pos_rank = new Vector2(Main.width * 1 / 3f, Main.height / 2 + 25);
@@ -97,8 +97,8 @@ public class GameOver extends Scene {
 
             if (!Main.noScore) {
                 ArrayList<Integer> rank_digits = Main.getDigits((int) Main.gm.getRank());
-                int rank_width = Main.getTextWidth(rank_digits, 0) + 1 + Res.tex_text_youare.getWidth();
-                Main.drawNumber(batch, rank_digits, new Vector2(Main.width / 2 - rank_width / 2 + Res.tex_text_youare.getWidth() + 1, pos_rank.y), ID.Font.NORMAL);
+                int rank_width = Main.getTextWidth(rank_digits, 0) + 1 + Res.tex_text_youare.getRegionWidth();
+                Main.drawNumber(batch, rank_digits, new Vector2(Main.width / 2 - rank_width / 2 + Res.tex_text_youare.getRegionWidth() + 1, pos_rank.y), ID.Font.NORMAL);
                 batch.draw(Res.tex_text_youare, Main.width / 2 - rank_width / 2, pos_rank.y);
 
                 batch.setShader(Res.shader_overlay);
@@ -106,7 +106,7 @@ public class GameOver extends Scene {
                 Main.drawNumber(batch, Main.gameData.highscore, new Vector2(Main.width / 2, Main.height / 2 + 35), ID.Font.POP_LARGE);
                 batch.setShader(null);
 
-                batch.draw(Res.tex_text_highscore, Main.width / 2 - Res.tex_text_highscore.getWidth() / 2, Main.height / 2 + 56);
+                batch.draw(Res.tex_text_highscore, Main.width / 2 - Res.tex_text_highscore.getRegionWidth() / 2, Main.height / 2 + 56);
 
             }
             batch.setShader(null);

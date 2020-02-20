@@ -30,7 +30,7 @@ public class Pin extends Entity {
     }
 
     public void render(SpriteBatch batch) {
-        batch.draw(Res.tex_pin, pos.x - Res.tex_pin.getWidth() / 2, pos.y-5);
+        batch.draw(Res.tex_pin, pos.x - Res.tex_pin.getRegionWidth() / 2, pos.y-5);
     }
 
     public void destroy(Ball ball) {

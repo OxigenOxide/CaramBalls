@@ -27,7 +27,7 @@ public class Bumper {
             pos.set(0, Main.height/2);
             sprite.setPosition(pos.x, pos.y - sprite.getHeight() / 2);
             sprite.setFlip(true, false);
-            line = new float[]{pos.x + sprite.getWidth(), pos.y - sprite.getHeight() / 2, pos.x + sprite.getWidth(), pos.y + sprite.getHeight() / 2};
+            line = new float[]{pos.x + sprite.getRegionWidth(), pos.y - sprite.getHeight() / 2, pos.x + sprite.getRegionWidth(), pos.y + sprite.getHeight() / 2};
             angle = 0;
         }
         if (wall == 1) {
@@ -37,7 +37,7 @@ public class Bumper {
             sprite.setOrigin(0, sprite.getHeight() / 2);
             sprite.setPosition(pos.x, pos.y - sprite.getHeight() / 2);
             sprite.setRotation(-90);
-            line = new float[]{pos.x - sprite.getHeight() / 2, pos.y - sprite.getWidth(), pos.x + sprite.getHeight() / 2, pos.y - sprite.getWidth()};
+            line = new float[]{pos.x - sprite.getHeight() / 2, pos.y - sprite.getRegionWidth(), pos.x + sprite.getHeight() / 2, pos.y - sprite.getRegionWidth()};
             angle = -(float) Math.PI * .5f;
         }
         if (wall == 2) {
@@ -47,7 +47,7 @@ public class Bumper {
             sprite.setOrigin(0, sprite.getHeight() / 2);
             sprite.setPosition(pos.x, pos.y - sprite.getHeight() / 2);
             sprite.setRotation(-180);
-            line = new float[]{pos.x - sprite.getWidth(), pos.y - sprite.getHeight() / 2, pos.x - sprite.getWidth(), pos.y + sprite.getHeight() / 2};
+            line = new float[]{pos.x - sprite.getRegionWidth(), pos.y - sprite.getHeight() / 2, pos.x - sprite.getRegionWidth(), pos.y + sprite.getHeight() / 2};
             angle = -(float) Math.PI;
         }
         if (wall == 3) {
@@ -57,7 +57,7 @@ public class Bumper {
             sprite.setOrigin(0, sprite.getHeight() / 2);
             sprite.setPosition(pos.x, pos.y - sprite.getHeight() / 2);
             sprite.setRotation(-270);
-            line = new float[]{pos.x - sprite.getHeight() / 2, pos.y + sprite.getWidth(), pos.x + sprite.getHeight() / 2, pos.y + sprite.getWidth()};
+            line = new float[]{pos.x - sprite.getHeight() / 2, pos.y + sprite.getRegionWidth(), pos.x + sprite.getHeight() / 2, pos.y + sprite.getRegionWidth()};
             angle = -(float) Math.PI * 1.5f;
         }
     }
@@ -74,7 +74,7 @@ public class Bumper {
             }
         }
         wiggle = Math.max(0, wiggle -= .05);
-        sprite.setSize(sprite.getTexture().getWidth() - (float) Math.sin(wiggle * 10) * 2, sprite.getTexture().getHeight());
+        sprite.setSize(sprite.getRegionWidth() - (float) Math.sin(wiggle * 10) * 2, sprite.getRegionHeight());
     }
 
     public void render(SpriteBatch batch) {

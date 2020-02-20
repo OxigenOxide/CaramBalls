@@ -86,7 +86,7 @@ public class ProgressBar {
                 dot.render(batch);
             batch.setShader(Res.shader_a);
             Res.shader_a.setUniformf("a", a);
-            batch.draw(Res.tex_text_level[0], pos_text.x - Res.tex_text_level[0].getWidth() / 2, pos_text.y);
+            batch.draw(Res.tex_text_level[0], pos_text.x - Res.tex_text_level[0].getRegionWidth() / 2, pos_text.y);
             batch.setShader(null);
         }
     }

@@ -87,14 +87,14 @@ public class Meter {
 
         Particle(int height) {
             sprite = new Sprite(Res.tex_meterDot);
-            pos = new Vector2(Meter.pos.x + 1 + sprite.getWidth() / 2, Meter.pos.y + 3 + sprite.getHeight() / 2 + 6 * height);
+            pos = new Vector2(Meter.pos.x + 1 + sprite.getRegionWidth() / 2, Meter.pos.y + 3 + sprite.getHeight() / 2 + 6 * height);
             vel = new Vector2(-1, 1.5f + (float)Math.random());
-            sprite.setPosition(pos.x - sprite.getWidth() / 2, pos.y - sprite.getHeight() / 2);
+            sprite.setPosition(pos.x - sprite.getRegionWidth() / 2, pos.y - sprite.getHeight() / 2);
         }
 
         public void update() {
             ang += Main.dt_one*3;
-            sprite.setPosition(pos.x - sprite.getWidth() / 2, pos.y - sprite.getHeight() / 2);
+            sprite.setPosition(pos.x - sprite.getRegionWidth() / 2, pos.y - sprite.getHeight() / 2);
             sprite.setRotation(ang);
             vel.add(0, Game.GRAVITY_PIXELS * Main.dt_one * .3f);
             pos.add(vel);

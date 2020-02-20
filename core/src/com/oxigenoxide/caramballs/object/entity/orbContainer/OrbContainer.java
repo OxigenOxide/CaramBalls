@@ -2,6 +2,7 @@ package com.oxigenoxide.caramballs.object.entity.orbContainer;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Filter;
@@ -14,7 +15,7 @@ import com.oxigenoxide.caramballs.object.entity.Entity;
 
 public class OrbContainer extends Entity {
     float height;
-    Texture tex;
+    TextureRegion tex;
     Body body;
     float velY;
     boolean doDispose;
@@ -22,9 +23,9 @@ public class OrbContainer extends Entity {
 
     int orbAmount=10;
 
-    public OrbContainer(Texture tex) {
+    public OrbContainer(TextureRegion tex) {
         this.tex=tex;
-        pos = Game.getRandomPosOnTable(tex.getWidth(),tex.getHeight());
+        pos = Game.getRandomPosOnTable(tex.getRegionWidth(),tex.getRegionHeight());
         height = Main.height;
         createBody();
         body.setTransform(pos.x * Main.METERSPERPIXEL, (pos.y+3) * Main.METERSPERPIXEL, 0);
@@ -71,7 +72,7 @@ public class OrbContainer extends Entity {
         Main.shake();
     }
     public void render(SpriteBatch batch) {
-        batch.draw(tex, (int)(pos.x - tex.getWidth()/2), (int)(pos.y - 3 + height));
+        batch.draw(tex, (int)(pos.x - tex.getRegionWidth()/2), (int)(pos.y - 3 + height));
     }
     public void dispose(){
         body = Main.destroyBody(body);

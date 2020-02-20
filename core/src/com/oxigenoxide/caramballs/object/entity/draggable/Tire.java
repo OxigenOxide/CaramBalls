@@ -24,7 +24,7 @@ public class Tire extends Draggable {
     public void update() {
         super.update();
         pos.set((int)pos.x,(int)pos.y);
-        sprite.setPosition(pos.x - sprite.getWidth() / 2, pos.y - sprite.getHeight() / 2 + 5);
+        sprite.setPosition(pos.x - sprite.getRegionWidth() / 2, pos.y - sprite.getHeight() / 2 + 5);
 
         float wiggleFactor = (1 - counter_wiggle.getProgress()) * (.04f - .04f * (float) Math.cos(7.5 * Math.PI * (1 - counter_wiggle.getProgress())));
         sprite_base.setSize(sprite_base.getTexture().getWidth() * (1 + wiggleFactor), sprite_base.getTexture().getHeight() * (1 + wiggleFactor));

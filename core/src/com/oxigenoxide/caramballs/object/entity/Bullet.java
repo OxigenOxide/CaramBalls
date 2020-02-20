@@ -22,12 +22,12 @@ public class Bullet extends Entity {
         body.setLinearVelocity(10*(float)Math.cos(ang),10*(float)Math.sin(ang));
         body.setFixedRotation(true);
         body.setUserData(this);
-        sprite.setPosition(body.getPosition().x*Main.PIXELSPERMETER-sprite.getWidth()/2,body.getPosition().y*Main.PIXELSPERMETER-sprite.getHeight()/2);
+        sprite.setPosition(body.getPosition().x*Main.PIXELSPERMETER-sprite.getRegionWidth()/2,body.getPosition().y*Main.PIXELSPERMETER-sprite.getHeight()/2);
         pos=new Vector2();
     }
     public void update(){
         pos.set(sprite.getX(),sprite.getY());
-        sprite.setPosition(body.getPosition().x*Main.PIXELSPERMETER-sprite.getWidth()/2,body.getPosition().y*Main.PIXELSPERMETER-sprite.getHeight()/2);
+        sprite.setPosition(body.getPosition().x*Main.PIXELSPERMETER-sprite.getRegionWidth()/2,body.getPosition().y*Main.PIXELSPERMETER-sprite.getHeight()/2);
         if(doDispose)
             dispose();
     }

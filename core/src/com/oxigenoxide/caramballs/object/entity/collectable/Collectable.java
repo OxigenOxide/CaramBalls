@@ -3,6 +3,7 @@ package com.oxigenoxide.caramballs.object.entity.collectable;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.oxigenoxide.caramballs.scene.Game;
@@ -21,7 +22,7 @@ public class Collectable extends Entity {
     float heightVel;
     float count_nextBob;
 
-    Collectable(Texture texture) {
+    Collectable(TextureRegion texture) {
         sprite = new Sprite(texture);
         pos = Game.getFreePosOnTable(5);
         body = Main.world.createBody(Res.bodyDef_static);
@@ -33,7 +34,7 @@ public class Collectable extends Entity {
             dispose();
         }
         body.setTransform(pos.x * Main.METERSPERPIXEL, pos.y * Main.METERSPERPIXEL, 0);
-        sprite.setPosition((int) (pos.x - sprite.getTexture().getWidth() / 2), (int) (pos.y - sprite.getTexture().getHeight() / 2));
+        sprite.setPosition((int) (pos.x - sprite.getRegionWidth() / 2), (int) (pos.y - sprite.getRegionHeight() / 2));
     }
 
     public void update() {

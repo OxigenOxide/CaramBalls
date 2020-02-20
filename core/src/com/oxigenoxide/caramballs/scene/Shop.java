@@ -94,9 +94,9 @@ public class Shop extends Scene {
         batch.begin();
         batch.setShader(Res.shader_palette);
         Main.setPalette(Res.tableTopPalette[0]);
-        batch.draw(Res.tex_tabletop[0], Main.width / 2 - Res.tex_tabletop[0].getWidth() / 2, Main.height / 2 - Res.tex_tabletop[0].getHeight() / 2);
+        batch.draw(Res.tex_tabletop[0], Main.width / 2 - Res.tex_tabletop[0].getRegionWidth() / 2, Main.height / 2 - Res.tex_tabletop[0].getRegionWidth() / 2);
         batch.setShader(null);
-        batch.draw(Res.tex_orbCountBackground, Main.width / 2 - Res.tex_orbCountBackground.getWidth() / 2, 0);
+        batch.draw(Res.tex_orbCountBackground, Main.width / 2 - Res.tex_orbCountBackground.getRegionWidth() / 2, 0);
         batch.setShader(Res.shader_c);
         Res.shader_c.setUniformf("c", 1, 1, 1, 1);
         Main.drawNumberSign(batch, Main.gameData.orbs, new Vector2(Main.width / 2, 1), ID.Font.SMALL, Res.tex_symbolOrb, 0);

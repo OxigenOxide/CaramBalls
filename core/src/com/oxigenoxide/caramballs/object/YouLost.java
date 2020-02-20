@@ -2,11 +2,12 @@ package com.oxigenoxide.caramballs.object;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.oxigenoxide.caramballs.Main;
 import com.oxigenoxide.caramballs.Res;
 
 public class YouLost {
-    Texture tex;
+    TextureRegion tex;
     float height;
     boolean full;
     float moved;
@@ -25,10 +26,10 @@ public class YouLost {
     }
 
     public void update() {
-        height = Math.min(tex.getHeight(), height + 1);
+        height = Math.min(tex.getRegionHeight(), height + 1);
         progressToEnd=1-(timeToEnd/500);
         alpha=progressToEnd;
-        if (height == tex.getHeight())
+        if (height == tex.getRegionHeight())
             full = true;
         if(full) {
             timeToEnd=Math.max(0,timeToEnd-1);
@@ -51,11 +52,11 @@ public class YouLost {
 
     public void render(SpriteBatch batch) {
         Res.shader_a.setUniformf("a", alpha);
-        batch.draw(tex, Main.width / 2 - tex.getWidth() / 2, (int) (y - height / 2 + extraHeight), tex.getWidth(), (int) height);
+        batch.draw(tex, Main.width / 2 - tex.getRegionWidth() / 2, (int) (y - height / 2 + extraHeight), tex.getRegionWidth(), (int) height);
 
         if(full){
-            batch.draw(tex, Main.width / 2 - tex.getWidth() / 2, (int) (y - height / 2 + moved * 14 + extraHeight));
-            batch.draw(tex, Main.width / 2 - tex.getWidth() / 2, (int) (y - height / 2 - moved * 14 + extraHeight));
+            batch.draw(tex, Main.width / 2 - tex.getRegionWidth() / 2, (int) (y - height / 2 + moved * 14 + extraHeight));
+            batch.draw(tex, Main.width / 2 - tex.getRegionWidth() / 2, (int) (y - height / 2 - moved * 14 + extraHeight));
         }
     }
 }

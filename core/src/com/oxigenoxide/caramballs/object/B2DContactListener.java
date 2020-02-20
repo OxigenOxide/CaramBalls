@@ -56,6 +56,7 @@ public class B2DContactListener implements ContactListener {
                     + MathFuncs.getHypothenuse(ball1.body.getLinearVelocity().x, ball1.body.getLinearVelocity().y);
             ball0.doCollisionEffect(contactPoint, impact);
             ball0.contactBall(ball1);
+            ball1.contactBall(ball0);
         }
 
         for (int i = 0; i < 2; i++) {

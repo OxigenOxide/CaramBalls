@@ -31,7 +31,7 @@ public class Particle_Hit extends Particle {
         animation.update();
         if (animation.ended)
             dispose();
-        sprite.setTexture(animation.getTexture());
+        sprite.setRegion(animation.getTexture());
     }
 
     public void render(SpriteBatch batch) {

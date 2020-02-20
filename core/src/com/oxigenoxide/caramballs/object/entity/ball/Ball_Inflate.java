@@ -68,7 +68,6 @@ public class Ball_Inflate extends Ball {
 
     @Override
     public void onCollision(Vector2 p, float impact, Object object_hit) {
-        System.out.println("collision on: " + this);
         super.onCollision(p, impact);
         if (Funcs.getClass(object_hit) == Ball_Main.class)
             if (counter_inflateCooldown.getProgress() == 1) {

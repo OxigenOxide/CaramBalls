@@ -3,6 +3,7 @@ package com.oxigenoxide.caramballs.object.entity;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.oxigenoxide.caramballs.scene.Game;
 import com.oxigenoxide.caramballs.Main;
@@ -14,7 +15,7 @@ import com.oxigenoxide.caramballs.utils.MathFuncs;
 public class FloorButton extends Entity {
     boolean isPressed;
     static int width = 15, height = 15;
-    Texture texture;
+    TextureRegion texture;
     Sprite sprite;
     boolean doImpactFrames;
     int impactFrames;
@@ -59,8 +60,8 @@ public class FloorButton extends Entity {
     public void press() {
         if (!isPressed) {
             isPressed = true;
-            sprite.setTexture(Res.tex_floorButtonPressed_danger);
-            sprite.setSize(sprite.getTexture().getWidth(),sprite.getTexture().getHeight());
+            sprite.setRegion(Res.tex_floorButtonPressed_danger);
+            sprite.setSize(sprite.getRegionWidth(),sprite.getRegionHeight());
             doImpactFrames = true;
             Main.ballsToAdd.add(new Ball_Bad(pos.x, pos.y + 3, Main.height, 0));
         }

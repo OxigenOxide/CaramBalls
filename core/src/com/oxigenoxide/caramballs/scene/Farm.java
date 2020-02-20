@@ -42,7 +42,7 @@ public class Farm extends Scene {
         button_play = new Button_Play(new Vector2(22, 29));
         button_shop = new Button_Balls(new Vector2(12, 4));
         button_return = new Button_Return(new Vector2(5, Main.height - 19));
-        buffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
+        buffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getHeight(), Gdx.graphics.getHeight(), true);
         counter_save = new RepeatCounter(new ActionListener() {
             @Override
             public void action() {

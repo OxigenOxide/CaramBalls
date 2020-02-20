@@ -27,6 +27,6 @@ public class Title {
         for (int i = amount_letters - 1; i >= 0; i--) {
             batch.draw(Res.tex_title[i], 2 + i * 19, y + letterHeight[i]);
         }
-        batch.draw(Res.tex_underTitle, Main.width / 2 - Res.tex_underTitle.getWidth() / 2, y - 23);
+        batch.draw(Res.tex_underTitle, Main.width / 2 - Res.tex_underTitle.getRegionWidth() / 2, y - 23);
     }
 }

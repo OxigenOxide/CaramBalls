@@ -79,9 +79,9 @@ public class Cannon extends Entity {
     }
 
     public void render(SpriteBatch batch) {
-        batch.draw(Res.tex_cannon_base, pos.x - Res.tex_cannon_base.getWidth() / 2 * size, pos.y, size * Res.tex_cannon_base.getWidth(), size * Res.tex_cannon_base.getHeight());
+        batch.draw(Res.tex_cannon_base, pos.x - Res.tex_cannon_base.getRegionWidth() / 2 * size, pos.y, size * Res.tex_cannon_base.getRegionWidth(), size * Res.tex_cannon_base.getRegionWidth());
         gun.draw(batch);
-        batch.draw(Res.tex_cannon_shine, pos.x - Res.tex_cannon_shine.getWidth() / 2 * size, pos.y + 11 * size, size * Res.tex_cannon_shine.getWidth(), size * Res.tex_cannon_shine.getHeight());
+        batch.draw(Res.tex_cannon_shine, pos.x - Res.tex_cannon_shine.getRegionWidth() / 2 * size, pos.y + 11 * size, size * Res.tex_cannon_shine.getRegionWidth(), size * Res.tex_cannon_shine.getRegionWidth());
     }
 
     public void dispose() {

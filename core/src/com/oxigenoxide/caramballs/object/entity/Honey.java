@@ -16,9 +16,9 @@ public class Honey extends Entity {
 
     public Honey() {
         sprite = new Sprite(Res.tex_honey);
-        pos = Game.getRandomPosOnTable(sprite.getWidth(), sprite.getHeight());
+        pos = Game.getRandomPosOnTable(sprite.getRegionWidth(), sprite.getHeight());
         pos.add(0, .5f);
-        sprite.setPosition(pos.x - sprite.getWidth() / 2, pos.y - sprite.getHeight() / 2);
+        sprite.setPosition(pos.x - sprite.getRegionWidth() / 2, pos.y - sprite.getHeight() / 2);
     }
 
     public void update() {
@@ -31,9 +31,9 @@ public class Honey extends Entity {
             }
         }
         size = Math.min(1, size + Main.dt_one * .1f);
-        sprite.setSize(size * (float) (sprite.getTexture().getWidth() * (1 + wiggle * .5f * -Math.sin(wiggle * 15))), size * (float) (sprite.getTexture().getHeight() * (1 + wiggle * .5f * -Math.cos(wiggle * 15))));
+        sprite.setSize(size * (float) (sprite.getRegionWidth() * (1 + wiggle * .5f * -Math.sin(wiggle * 15))), size * (float) (sprite.getRegionHeight() * (1 + wiggle * .5f * -Math.cos(wiggle * 15))));
         wiggle = Math.max(0, wiggle -= .05 * Main.dt_one_slowed);
-        sprite.setPosition(pos.x - sprite.getWidth() / 2, pos.y - sprite.getHeight() / 2);
+        sprite.setPosition(pos.x - sprite.getRegionWidth() / 2, pos.y - sprite.getHeight() / 2);
     }
 
     public void wiggle() {

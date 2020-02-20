@@ -21,7 +21,7 @@ public class Particle_Explosion extends Particle {
     public void update() {
         super.update();
         animation.update();
-        sprite.setTexture(animation.getTexture());
+        sprite.setRegion(animation.getTexture());
         if(animation.ended)
             dispose();
     }

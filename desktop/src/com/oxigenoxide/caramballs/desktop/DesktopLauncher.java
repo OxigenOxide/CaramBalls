@@ -1,4 +1,5 @@
 package com.oxigenoxide.caramballs.desktop;
+import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
@@ -8,9 +9,14 @@ import com.oxigenoxide.caramballs.GameInterface;
 import com.oxigenoxide.caramballs.Main;
 import com.oxigenoxide.caramballs.utils.UserData;
 
+
 public class DesktopLauncher {
     public static void main(String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+        TexturePacker.Settings settings = new TexturePacker.Settings();
+        settings.maxWidth = 1024;
+        settings.maxHeight = 1024;
+        //TexturePacker.process(settings, "C:\\CaramBalls\\desktop\\images", "../assets", "images");
 
         // Default
         config.width = 108 * 5;

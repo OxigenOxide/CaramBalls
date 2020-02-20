@@ -3,6 +3,7 @@ package com.oxigenoxide.caramballs.object.button;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.oxigenoxide.caramballs.ID;
 import com.oxigenoxide.caramballs.Main;
@@ -16,8 +17,8 @@ public class Button {
     public boolean isTouched;
     int touchOffset;
     boolean hidden;
-    Texture tex;
-    Texture tex_pressed;
+    TextureRegion tex;
+    TextureRegion tex_pressed;
     boolean firstFrame = true;
     public boolean individualRender;
     public boolean act;
@@ -29,7 +30,7 @@ public class Button {
     }
 
     public void update() {
-        if (!(Main.tap[0].x > pos.x && Main.tap[0].x < pos.x + tex.getWidth() && Main.tap[0].y > pos.y && Main.tap[0].y < pos.y + tex.getHeight())) {
+        if (!(Main.tap[0].x > pos.x && Main.tap[0].x < pos.x + tex.getRegionWidth() && Main.tap[0].y > pos.y && Main.tap[0].y < pos.y + tex.getRegionHeight())) {
             touchOffset = 0;
             if (isTouched) {
                 isTouched = false;
@@ -38,7 +39,7 @@ public class Button {
         }
 
         if (isTouched) {
-            touchOffset = tex.getHeight() - tex_pressed.getHeight();
+            touchOffset = tex.getRegionHeight() - tex_pressed.getRegionHeight();
         } else {
             touchOffset = 0;
         }
@@ -57,7 +58,7 @@ public class Button {
     public boolean isTouching() {
 
         if (!hidden) {
-            if (Main.tap[0].x > pos.x && Main.tap[0].x < pos.x + tex.getWidth() && Main.tap[0].y > pos.y && Main.tap[0].y < pos.y + tex.getHeight()) {
+            if (Main.tap[0].x > pos.x && Main.tap[0].x < pos.x + tex.getRegionWidth() && Main.tap[0].y > pos.y && Main.tap[0].y < pos.y + tex.getRegionHeight()) {
                 Main.isButtonPressed=true;
                 if (Gdx.input.justTouched()) {
                     if (!isTouched) {
@@ -98,7 +99,7 @@ public class Button {
     public void render(SpriteBatch batch) {
         if (!hidden) {
             if (isTouched && tex_pressed != null) {
-                batch.draw(tex_pressed, pos.x - tex_pressed.getWidth()/2+tex.getWidth()/2, pos.y);
+                batch.draw(tex_pressed, pos.x - tex_pressed.getRegionWidth()/2+tex.getRegionWidth()/2, pos.y);
             } else if (tex != null) {
                 batch.draw(tex, pos.x, pos.y);
             }
@@ -106,7 +107,7 @@ public class Button {
     }
 
     public void setPosCenterX(float x, float y) {
-        pos.set(x - tex.getWidth() / 2, y);
+        pos.set(x - tex.getRegionWidth() / 2, y);
     }
 
 

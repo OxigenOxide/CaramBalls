@@ -33,7 +33,7 @@ public class BallSelector {
     }
 
     public void update() {
-        active = ball_selected != null && Gdx.input.isTouched() && !ball_selected.isDisposed && !Game.doGameOverCue;
+        active = ball_selected != null && Gdx.input.isTouched(0) && !ball_selected.isDisposed && !Game.doGameOverCue;
         if (!active) {
             ball_selected = null;
             //Game.slowdown = Math.max(Game.slowdown - Main.dt_one * .05f, 0);

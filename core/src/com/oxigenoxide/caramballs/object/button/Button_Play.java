@@ -46,6 +46,6 @@ public class Button_Play extends Button {
     }
 
     public void placeOutOfScreen() {
-        pos.set(-tex.getWidth(), pos_original.y);
+        pos.set(-tex.getRegionWidth(), pos_original.y);
     }
 }

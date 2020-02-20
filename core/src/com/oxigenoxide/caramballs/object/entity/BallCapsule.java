@@ -2,6 +2,7 @@ package com.oxigenoxide.caramballs.object.entity;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -18,9 +19,9 @@ public class BallCapsule extends Entity {
     Vector2 pos_ball;
     float count_capsule;
     float count_ball;
-    Texture tex;
-    Texture tex_ball;
-    Texture tex_shine;
+    TextureRegion tex;
+    TextureRegion tex_ball;
+    TextureRegion tex_shine;
     Body body;
     boolean doDispose;
     int level;
@@ -71,12 +72,12 @@ public class BallCapsule extends Entity {
     }
 
     public void render(SpriteBatch batch) {
-        batch.draw(tex, pos_capsule.x - tex.getWidth() / 2, pos_capsule.y);
+        batch.draw(tex, pos_capsule.x - tex.getRegionWidth() / 2, pos_capsule.y);
         batch.setShader(Res.shader_palette);
         Main.setPalette(Res.ballPalette[level]);
-        batch.draw(tex_ball, pos_ball.x - tex_ball.getWidth() / 2, pos_ball.y - tex_ball.getHeight()/2);
+        batch.draw(tex_ball, pos_ball.x - tex_ball.getRegionWidth() / 2, pos_ball.y - tex_ball.getRegionHeight()/2);
         batch.setShader(null);
-        batch.draw(tex_shine, pos_capsule.x - tex_shine.getWidth() / 2, pos_capsule.y + 10);
+        batch.draw(tex_shine, pos_capsule.x - tex_shine.getRegionWidth() / 2, pos_capsule.y + 10);
     }
     public void dispose(){
         body = Main.destroyBody(body);

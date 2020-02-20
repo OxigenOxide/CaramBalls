@@ -41,7 +41,7 @@ public class Plank extends Draggable {
     public void update() {
         super.update();
         pos.set(pos.x+.5f,pos.y+.5f);
-        sprite.setPosition(pos.x-sprite.getWidth()/2,pos.y-sprite.getHeight()/2+7);
+        sprite.setPosition(pos.x-sprite.getRegionWidth()/2,pos.y-sprite.getHeight()/2+7);
         sprite.setRotation((float)Math.toDegrees(body.getAngle()));
 
         v[0].set(32,9.5f);

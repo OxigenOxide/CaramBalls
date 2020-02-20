@@ -20,6 +20,6 @@ public class TTPText {
 
     public void render(SpriteBatch batch) {
         if (visible)
-            batch.draw(Res.tex_ttptext, Main.width / 2 - Res.tex_ttptext.getWidth() / 2, y- Res.tex_ttptext.getHeight()/2);
+            batch.draw(Res.tex_ttptext, Main.width / 2 - Res.tex_ttptext.getRegionWidth() / 2, y- Res.tex_ttptext.getRegionHeight()/2);
     }
 }

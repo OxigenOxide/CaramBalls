@@ -2,6 +2,7 @@ package com.oxigenoxide.caramballs.object.entity;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -11,7 +12,7 @@ import com.oxigenoxide.caramballs.Res;
 import com.oxigenoxide.caramballs.object.entity.ball.Ball;
 
 public class Spike extends Entity {
-    Texture tex;
+    TextureRegion tex;
     int tex_index;
     float state = 0;
     boolean open;
@@ -46,7 +47,7 @@ public class Spike extends Entity {
     private void construct(){
         open();
         tex = Res.tex_spike[tex_index];
-        radius=tex.getWidth()/2f;
+        radius=tex.getRegionWidth()/2f;
         radius_spawn=radius;
     }
 
@@ -103,7 +104,7 @@ public class Spike extends Entity {
     public void render(SpriteBatch batch) {
         if(delay>0)
             return;
-        batch.draw(tex, (int)(pos.x-tex.getWidth()/2), (int)pos.y);
+        batch.draw(tex, (int)(pos.x-tex.getRegionWidth()/2), (int)pos.y);
     }
 
     public void dispose(){

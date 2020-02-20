@@ -2,6 +2,7 @@ package com.oxigenoxide.caramballs.object;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import com.oxigenoxide.caramballs.scene.Game;
@@ -15,7 +16,7 @@ import static com.oxigenoxide.caramballs.scene.Game.ball_king;
 public class Crown {
     Vector2 pos;
     boolean inTransition;
-    Texture tex;
+    TextureRegion tex;
 
     public Crown() {
         pos = new Vector2();
@@ -30,7 +31,7 @@ public class Crown {
                     inTransition = false;
                 }
             } else {
-                pos.set(ball_king.pos.x - tex.getWidth() / 2, ball_king.pos.y + ball_king.sprite.getHeight() / 2 + 1);
+                pos.set(ball_king.pos.x - tex.getRegionWidth() / 2, ball_king.pos.y + ball_king.sprite.getHeight() / 2 + 1);
             }
         }
     }
