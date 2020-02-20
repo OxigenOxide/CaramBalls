@@ -8,6 +8,7 @@ import com.oxigenoxide.caramballs.scene.Game;
 import com.oxigenoxide.caramballs.Main;
 import com.oxigenoxide.caramballs.Res;
 import com.oxigenoxide.caramballs.object.entity.particle.Particle_Ball;
+import com.oxigenoxide.caramballs.utils.Funcs;
 import com.oxigenoxide.caramballs.utils.MathFuncs;
 
 public class Ball_Bad extends Ball {
@@ -22,6 +23,15 @@ public class Ball_Bad extends Ball {
     Texture tex_smile;
     public Ball_Bad(float x, float y, float height, int size) {
         super(x, y, height, size);
+        setSpriteTexture(Res.tex_ball_bad);
+        radius = Res.tex_ball_bad.getWidth() / 2;
+        maxSpeedMinimum = 4;
+        if (height > 30)
+            giveSpeedAfterFall = true;
+    }
+
+    public Ball_Bad() {
+        super(Main.height,1);
         setSpriteTexture(Res.tex_ball_bad);
         radius = Res.tex_ball_bad.getWidth() / 2;
         maxSpeedMinimum = 4;
@@ -49,8 +59,9 @@ public class Ball_Bad extends Ball {
     @Override
     public void drawShapes(ShapeRenderer sr) {
         if(!Main.noFX) {
+            sr.set(ShapeRenderer.ShapeType.Filled);
             sr.setColor(1, 0, 0, .3f - glowRadiusVariation * .1f);
-            sr.circle(pos.x, pos.y + height, 8 + glowRadiusVariation * 6);
+            sr.circle((int)pos.x, (int)pos.y + height - 3 * radius / 9, 8 + glowRadiusVariation * 6);
         }
     }
 
@@ -86,13 +97,15 @@ public class Ball_Bad extends Ball {
     @Override
     public void contactBall(Ball ball) {
         super.contactBall(ball);
-        Ball_Main ball_main = (Ball_Main) ball;
-        if (!ball_main.isUnderGround) {
-            ballmain_hit = ball_main;
-            Vector2 force = new Vector2(ball.body.getLinearVelocity().x + body.getLinearVelocity().x, ball.body.getLinearVelocity().y + body.getLinearVelocity().y);
-            destroyAngle = (float) Math.atan2(force.y, force.x);
-            destroyImpact = MathFuncs.getHypothenuse(force.x, force.y);
-            // destroyed in update()
+        if(Funcs.getClass(ball)==Ball_Main.class) {
+            Ball_Main ball_main = (Ball_Main) ball;
+            if (!ball_main.isUnderGround) {
+                ballmain_hit = ball_main;
+                Vector2 force = new Vector2(ball.body.getLinearVelocity().x + body.getLinearVelocity().x, ball.body.getLinearVelocity().y + body.getLinearVelocity().y);
+                destroyAngle = (float) Math.atan2(force.y, force.x);
+                destroyImpact = MathFuncs.getHypothenuse(force.x, force.y);
+                // destroyed in update()
+            }
         }
     }
 

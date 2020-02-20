@@ -14,7 +14,7 @@ varying float v_fade;
 void main(){
     v_fade=fade;
     v_dir=dir;
-    v_screenSize=screenSize;
+    v_screenSize = screenSize;
     v_color = a_color;
     v_texCoord0 = a_texCoord0;
     gl_Position = u_projTrans * vec4(a_position, 1.);

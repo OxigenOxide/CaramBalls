@@ -916,6 +916,44 @@ public class Main extends ApplicationAdapter {
         return textWidth;
     }
 
+    public static int drawNumberSignWhiteText(SpriteBatch batch, int number, Vector2 pos, int font, Texture tex_sign, int yDisposition) {
+        int digitAmount = 0;
+        ArrayList<Integer> digits = new ArrayList<Integer>();
+        int power = 0;
+        while (number >= Math.pow(10, power)) {
+            digitAmount++;
+            power++;
+        }
+        if (number == 0) {
+            digitAmount = 1;
+        }
+        int crunchNumber = number;
+        for (int i = digitAmount - 1; i >= 0; i--) {
+            digits.add((int) (crunchNumber / Math.pow(10, i)));
+            crunchNumber %= Math.pow(10, i);
+        }
+        int width = 0;
+        for (int i : digits) {
+            width += Res.tex_numbers[font][i].getWidth() + 1;
+        }
+        width += tex_sign.getWidth() + 2;
+        int textWidth = width;
+        width--;
+        int iWidth = 0;
+        batch.draw(tex_sign, pos.x - width / 2 + iWidth, pos.y + yDisposition);
+        iWidth += tex_sign.getWidth() + 2;
+        batch.setShader(Res.shader_c);
+        Res.shader_c.setUniformf("c",1,1,1,1);
+
+        for (int i : digits) {
+            batch.draw(Res.tex_numbers[font][i], pos.x - width / 2 + iWidth, pos.y);
+            iWidth += Res.tex_numbers[font][i].getWidth() + 1;
+        }
+        batch.setShader(null);
+        return textWidth;
+    }
+
+
     public static int drawNumberSignAfter(SpriteBatch batch, int number, Vector2 pos, int font, Texture tex_sign, int yDisposition) {
         int digitAmount = 0;
         ArrayList<Integer> digits = new ArrayList<Integer>();

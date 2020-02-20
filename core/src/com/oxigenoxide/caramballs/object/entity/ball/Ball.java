@@ -77,11 +77,13 @@ public class Ball extends Entity {
     public Ball(float height, int size) {
         this.height = height;
         this.size = size;
-        pos=Game.getFreePosOnTable(radius+1);
+        pos = Game.getFreePosOnTable(radius + 1);
+        if(pos==null)
+            doDispose=true;
         construct();
     }
 
-    private void construct(){
+    private void construct() {
         pos_last = new Vector2(pos);
         sprite = new Sprite(Res.tex_ball[0][0]);
         createBody();
@@ -216,7 +218,7 @@ public class Ball extends Entity {
                 count_circle = -(float) Math.PI * .5f;
             }
 
-            ball_hit=null;
+            ball_hit = null;
 
             //THIS ALWAYS LAST
             if (doDispose) {
@@ -340,7 +342,7 @@ public class Ball extends Entity {
             batch.draw(Res.tex_shield, (int) (pos.x - 2 - sprite.getWidth() / 2), (int) (pos.y - 2 - sprite.getHeight() / 2 + height), sprite.getWidth() + 4, sprite.getHeight() + 4);
     }
 
-    public void drawSelectionRing(SpriteBatch batch){
+    public void drawSelectionRing(SpriteBatch batch) {
         Res.shader_a.setUniformf("a", .85f);
         if (canBeHit && Main.inGame()) {
             float ringRadius = ringSizeFactor * (radius + 3 + 2 * (float) Math.sin(count_circle));
@@ -351,6 +353,7 @@ public class Ball extends Entity {
         }
         batch.setShader(null);
     }
+
     public void render(ShapeRenderer sr) {
 
     }
@@ -363,13 +366,18 @@ public class Ball extends Entity {
         if (!isUnderGround && !fall) {
             sr.setColor(selectedIntensity, selectedIntensity, selectedIntensity, .8f + .2f * selectedIntensity);
             float smallFactor = 1 / (1 + height * .02f);
-            float shadowWidth = sprite.getTexture().getWidth() / 2 * 2 + selectedIntensity * 4;
-            float shadowHeight = shadowWidth * Game.WIDTHTOHEIGHTRATIO;
+            float shadowWidth = sprite.getTexture().getWidth() + selectedIntensity * 4;
+            float shadowHeight = (int)(shadowWidth * Game.WIDTHTOHEIGHTRATIO);
 
             float shadowWidth_small = shadowWidth * smallFactor;
             float shadowHeight_small = shadowHeight * smallFactor;
 
-            sr.ellipse((int) ((int) pos.x - shadowWidth_small / 2), (int) ((int) pos.y - shadowHeight_small / 2 - radius - 1 + shadowHeight / 2), shadowWidth_small, shadowHeight_small);
+            //sr.ellipse((int) ((int) pos.x - shadowWidth_small / 2), (int) ((int) pos.y - shadowHeight_small / 2 - radius - 1 + shadowHeight / 2), shadowWidth_small, shadowHeight_small);
+            //if (radius % 1 == 0)
+            //sr.ellipse((sprite.getX() + radius - shadowWidth_small / 2), (int) ((int) pos.y - Main.test_float * radius - shadowHeight_small / 2), shadowWidth_small, shadowHeight_small);
+            sr.ellipse((int) ((int) pos.x - sprite.getTexture().getWidth() / 2f) + radius - shadowWidth_small / 2, (int)((int) ((int) pos.y - sprite.getTexture().getHeight() / 2f) + .6f * radius - shadowHeight_small / 2), shadowWidth_small, shadowHeight_small,20);
+            //else
+            //    sr.ellipse((int)(pos.x - (shadowWidth_small / 2)), (int) ((int) pos.y - Main.test_float * radius - shadowHeight_small / 2), shadowWidth_small, shadowHeight_small);
             //sr.ellipse((int) (pos.x - sprite.getWidth() / 2 * smallFactor), (int) (pos.y - sprite.getWidth() / 2 * Game.WIDTHTOHEIGHTRATIO * smallFactor) - 2, sprite.getWidth() / 2 * smallFactor * 2, radius * smallFactor * 2 * Game.WIDTHTOHEIGHTRATIO);
         }
     }
@@ -423,13 +431,21 @@ public class Ball extends Entity {
         }
     }
 
-    public void onCollision(Vector2 p, float impact) { // when its two balls will only execute on one of both
+    public void onCollision(Vector2 p, float impact) {
+
+    }
+
+    public void onCollision(Vector2 p, float impact, Object object_hit) {
+        onCollision(p, impact);
+    }
+
+    public void doCollisionEffect(Vector2 p, float impact) { // when its two balls will only execute on one of both
         dropPulseParticle(p.x, p.y + height, 1.5f * impact);
         Main.addSoundRequest(ID.Sound.HIT, 5, impact * .1f);
     }
 
     public void contactBall(Ball ball) {
-        ball_hit=ball;
+        ball_hit = ball;
         //Main.addSoundRequest(ID.Sound.HIT);
     }
 

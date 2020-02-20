@@ -35,13 +35,13 @@ public class B2DContactListener implements ContactListener {
         Vector2 contactPoint = new Vector2(contact.getWorldManifold().getPoints()[0]);
         contactPoint.scl(Main.PIXELSPERMETER);
 
-
         if (classA == Ball_Main.class && classB == Ball_Main.class) {
             Ball ballA = (Ball) udA;
             Ball ballB = (Ball) udB;
-            ballA.contactBall(ballB);
+
             Game.onBallCollide_delayed();
         }
+
         if (classA == Ball_Bad.class && classB == Ball_Bad.class) {
             Ball_Bad ball_badA = (Ball_Bad) udB;
             Ball_Bad ball_badB = (Ball_Bad) udA;
@@ -50,17 +50,20 @@ public class B2DContactListener implements ContactListener {
         }
 
         if (udB instanceof Ball && udA instanceof Ball) { // collision only called on one ball
-            Ball ball0 = (Ball) udB;
-            Ball ball1 = (Ball) udA;
+            Ball ball0 = (Ball) udA;
+            Ball ball1 = (Ball) udB;
             float impact = MathFuncs.getHypothenuse(ball0.body.getLinearVelocity().x, ball0.body.getLinearVelocity().y)
                     + MathFuncs.getHypothenuse(ball1.body.getLinearVelocity().x, ball1.body.getLinearVelocity().y);
-            ball0.onCollision(contactPoint, impact);
+            ball0.doCollisionEffect(contactPoint, impact);
+            ball0.contactBall(ball1);
         }
 
         for (int i = 0; i < 2; i++) {
             if (udA instanceof Ball) {
                 Ball ball = (Ball) udA;
                 float impact = MathFuncs.getHypothenuse(ball.body.getLinearVelocity().x, ball.body.getLinearVelocity().y);
+
+                ball.onCollision(contactPoint, impact, udB);
 
                 if (udB instanceof Draggable) {
                     ((Draggable) udB).onCollision();
@@ -71,7 +74,7 @@ public class B2DContactListener implements ContactListener {
                 if (classA == Ball_Main.class) {
                     if (classB == Ball_Bad.class) {
                         Ball_Bad ball_bad = (Ball_Bad) udB;
-                        ball_bad.contactBall(ball);
+                        //ball_bad.contactBall(ball);
                         return;
                     } else if (udB instanceof OrbContainer) {
                         OrbContainer oc = (OrbContainer) udB;
@@ -101,7 +104,7 @@ public class B2DContactListener implements ContactListener {
                 ball.contact(udB, contactPoint, impact);
 
                 if (!(udB instanceof Ball) && classB != Spike.class)
-                    ball.onCollision(contactPoint, impact);
+                    ball.doCollisionEffect(contactPoint, impact);
             }
 
             if (classA == Spike.class && (classB == Ball_Main.class || classB == Ball_Bad.class)) {

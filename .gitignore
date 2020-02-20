@@ -127,5 +127,5 @@ Thumbs.db
 /ios-moe/xcode/native/
 
 ## Caram Balls
-/android/assets/bin/
-/android/assets/gameData.json
+android/assets/bin/
+android/assets/gameData.json

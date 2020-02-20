@@ -167,7 +167,7 @@ public class Game extends Scene {
     float count_nextButton = countMax_nextButton;
     static float countMax_nextSpike = 2000;
     static float count_nextSpike = countMax_nextSpike;
-    static int countMax_nextBallSpawnPeriod = 2000;
+    static int countMax_nextBallSpawnPeriod = 300;
     static float count_nextBallSpawnPeriod = countMax_nextBallSpawnPeriod;
     static int ballsToSpawn;
     static int ballsToSpawnMax = 4;
@@ -980,7 +980,7 @@ public class Game extends Scene {
             batch.draw(Res.tex_text_paused, Main.width / 2 - Res.tex_text_paused.getWidth() / 2, Main.height / 2);
         }
         setCamEffects();
-        font.draw(batch, String.valueOf(Gdx.graphics.getFramesPerSecond()), 0, Main.height);
+        font.draw(batch, String.valueOf(Gdx.graphics.getFramesPerSecond()), 0, 0);
         batch.end();
 
         if (gameOver.alpha > 0)
@@ -1284,6 +1284,14 @@ public class Game extends Scene {
         }
     }
 
+    public static void onBallCombined(){
+        comboBar.onBallCombined();
+    }
+
+    public static void onOrbCollected(){
+
+    }
+
     static void setNextTutorial() {
         tutorialStage++;
         if (tutorialStage > 3) {
@@ -1500,10 +1508,12 @@ public class Game extends Scene {
                 break;
             case 2:
                 counter_dropObstacles.start();
-                for (int i = 0; i < 15; i++)
+                for (int i = 0; i < 10; i++)
                     ballsToDrop.add(new Ball_Obstacle());
-                for (int i = 0; i < 5; i++)
+                for (int i = 0; i < 10; i++)
                     ballsToDrop.add(new Ball_Inflate());
+                for (int i = 0; i < 3; i++)
+                    ballsToDrop.add(new Ball_Bad());
                 break;
         }
     }
@@ -1696,4 +1706,6 @@ public class Game extends Scene {
         pos_clearTrail.set(x, y);
         doClearTrail = true;
     }
+
+
 }

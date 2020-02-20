@@ -159,6 +159,7 @@ public class Res {
     public static Texture tex_ball_blueDwarf;
     public static Texture tex_text_yourBalls;
     public static Texture tex_comboBar;
+    public static Texture tex_comboBar_end;
 
     public Sprite sprite_watermark;
     public static BodyDef bodyDef_dynamic;
@@ -275,7 +276,7 @@ public class Res {
         */
 
         tex_ball = new Texture[21][];
-        tex_ball[0] = new Texture[]{Main.assets.get("images/ball_small.png"), Main.assets.get("images/ball_medium.png"), Main.assets.get("images/ball_large.png")};
+        tex_ball[0] = new Texture[]{Main.assets.get("images/ball_small.png"), Main.assets.get("images/ball_medium.png"), Main.assets.get("images/ball_large.png"), Main.assets.get("images/ball_huge.png")};
         tex_ball[1] = new Texture[]{Main.assets.get("images/ball_face_small.png"), Main.assets.get("images/ball_face_medium.png"), Main.assets.get("images/ball_face_large.png")};
         tex_ball[2] = new Texture[]{Main.assets.get("images/ball_square_small.png"), Main.assets.get("images/ball_square_medium.png"), Main.assets.get("images/ball_square_large.png")};
         tex_ball[3] = new Texture[]{Main.assets.get("images/ball_brain_small.png"), Main.assets.get("images/ball_brain_medium.png"), Main.assets.get("images/ball_brain_large.png")};
@@ -284,7 +285,7 @@ public class Res {
         tex_ball[6] = new Texture[]{Main.assets.get("images/ball_rasp_small.png"), Main.assets.get("images/ball_rasp_medium.png"), Main.assets.get("images/ball_rasp_large.png")};
         tex_ball[7] = new Texture[]{Main.assets.get("images/ball_hl_small.png"), Main.assets.get("images/ball_hl_medium.png"), Main.assets.get("images/ball_hl_large.png")};
         tex_ball[8] = new Texture[]{Main.assets.get("images/ball_moon_small.png"), Main.assets.get("images/ball_moon_medium.png"), Main.assets.get("images/ball_moon_large.png")};
-        tex_ball[20] = new Texture[]{Main.assets.get("images/ball_inflate_small.png"), Main.assets.get("images/ball_inflate_medium.png"), Main.assets.get("images/ball_inflate_large.png")};
+        tex_ball[20] = new Texture[]{Main.assets.get("images/ball_inflate_small.png"), Main.assets.get("images/ball_inflate_medium.png"), Main.assets.get("images/ball_inflate_large.png"), Main.assets.get("images/ball_inflate_huge.png")};
 
         tex_ball_bad = Main.assets.get("images/ball_bad.png");
         tex_badSmile = new Texture[]{Main.assets.get("images/badSmile_1.png"), Main.assets.get("images/badSmile_2.png"), Main.assets.get("images/badSmile_3.png"), Main.assets.get("images/badSmile_4.png"), Main.assets.get("images/badSmile_5.png"),};
@@ -423,6 +424,7 @@ public class Res {
         tex_progressBar_ball = Main.assets.get("images/progressBar_ball.png");
         tex_text_yourBalls = Main.assets.get("images/text_yourBalls.png");
         tex_comboBar = Main.assets.get("images/comboBar.png");
+        tex_comboBar_end = Main.assets.get("images/comboBar_end.png");
 
         tex_text_level = new Texture[]{
                 Main.assets.get("images/text_level_home.png"),
@@ -503,14 +505,15 @@ public class Res {
 
         new World(new Vector2(0, 0), false);
 
-        shape_ball = new CircleShape[]{new CircleShape(), new CircleShape(), new CircleShape()};
+        shape_ball = new CircleShape[]{new CircleShape(), new CircleShape(), new CircleShape(), new CircleShape()};
         shape_ball[0].setRadius(4 * Main.METERSPERPIXEL);
         shape_ball[1].setRadius(7 * Main.METERSPERPIXEL);
         shape_ball[2].setRadius(9.5f * Main.METERSPERPIXEL);
+        shape_ball[3].setRadius(13.5f * Main.METERSPERPIXEL);
 
 
-        fixtureDef_ball = new FixtureDef[]{new FixtureDef(), new FixtureDef(), new FixtureDef()};
-        for (int i = 0; i < 3; i++) { // ONLY FOR MAINBALLS
+        fixtureDef_ball = new FixtureDef[]{new FixtureDef(), new FixtureDef(), new FixtureDef(), new FixtureDef()};
+        for (int i = 0; i < 4; i++) { // ONLY FOR MAINBALLS
             fixtureDef_ball[i].density = 1;
             fixtureDef_ball[i].shape = shape_ball[i];
             fixtureDef_ball[i].restitution = 1;
@@ -764,6 +767,7 @@ public class Res {
         Main.assets.load("images/ball_small.png", Texture.class);
         Main.assets.load("images/ball_medium.png", Texture.class);
         Main.assets.load("images/ball_large.png", Texture.class);
+        Main.assets.load("images/ball_huge.png", Texture.class);
         Main.assets.load("images/ball_square_small.png", Texture.class);
         Main.assets.load("images/ball_square_medium.png", Texture.class);
         Main.assets.load("images/ball_square_large.png", Texture.class);
@@ -792,6 +796,7 @@ public class Res {
         Main.assets.load("images/ball_inflate_small.png", Texture.class);
         Main.assets.load("images/ball_inflate_medium.png", Texture.class);
         Main.assets.load("images/ball_inflate_large.png", Texture.class);
+        Main.assets.load("images/ball_inflate_huge.png", Texture.class);
         Main.assets.load("images/crown.png", Texture.class);
         Main.assets.load("images/bumper.png", Texture.class);
         Main.assets.load("images/tabletop.png", Texture.class);
@@ -1026,6 +1031,7 @@ public class Res {
         Main.assets.load("images/particle_hit_5.png", Texture.class);
         Main.assets.load("images/particle_hit_6.png", Texture.class);
         Main.assets.load("images/comboBar.png", Texture.class);
+        Main.assets.load("images/comboBar_end.png", Texture.class);
         Main.assets.load("music/1.mp3", Music.class);
         Main.assets.load("music/2.mp3", Music.class);
         Main.assets.load("music/3.mp3", Music.class);

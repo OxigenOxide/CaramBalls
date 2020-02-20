@@ -9,12 +9,15 @@ import com.oxigenoxide.caramballs.Main;
 import com.oxigenoxide.caramballs.Res;
 import com.oxigenoxide.caramballs.object.entity.particle.Particle_Ball;
 import com.oxigenoxide.caramballs.scene.Game;
+import com.oxigenoxide.caramballs.utils.Counter;
+import com.oxigenoxide.caramballs.utils.Funcs;
 import com.oxigenoxide.caramballs.utils.MathFuncs;
 
 public class Ball_Inflate extends Ball {
 
     Color[] palette;
     boolean doInflate;
+    Counter counter_inflateCooldown;
 
     public Ball_Inflate(float x, float y) {
         super(x, y, Main.height, 0);
@@ -30,14 +33,18 @@ public class Ball_Inflate extends Ball {
         setSpriteTexture(Res.tex_ball[20][size]);
         palette = Res.PALETTE_BASICBALL;
         lock();
+        counter_inflateCooldown = new Counter(1);
+        counter_inflateCooldown.start();
     }
 
     @Override
     public void update() {
         super.update();
+        counter_inflateCooldown.update();
         if (doInflate) {
             doInflate = false;
             inflate();
+
         }
     }
 
@@ -60,16 +67,21 @@ public class Ball_Inflate extends Ball {
     }
 
     @Override
-    public void onCollision(Vector2 p, float impact) {
+    public void onCollision(Vector2 p, float impact, Object object_hit) {
+        System.out.println("collision on: " + this);
         super.onCollision(p, impact);
-        doInflate = true;
+        if (Funcs.getClass(object_hit) == Ball_Main.class)
+            if (counter_inflateCooldown.getProgress() == 1) {
+                doInflate = true;
+                counter_inflateCooldown.start();
+            }
     }
 
     void inflate() {
-        if (size < 2) {
+        if (size < 3) {
             size++;
             body.destroyFixture(body.getFixtureList().first());
-            body.createFixture(Res.fixtureDef_ball[size]); // TODO: FIX CRASH
+            body.createFixture(Res.fixtureDef_ball[size]);
             radius = body.getFixtureList().first().getShape().getRadius() * Main.PIXELSPERMETER;
             setSpriteTexture(Res.tex_ball[20][size]);
         }

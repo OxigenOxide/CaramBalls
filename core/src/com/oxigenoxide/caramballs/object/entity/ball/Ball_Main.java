@@ -93,6 +93,7 @@ public class Ball_Main extends Ball {
 
                 ball_new.body.setLinearVelocity(body.getLinearVelocity().add(ballmain_hit.body.getLinearVelocity()).scl(.5f));
                 Main.ballsToAdd.add(ball_new);
+                Game.onBallCombined();
 
                 ballmain_hit = null;
                 Main.shake();

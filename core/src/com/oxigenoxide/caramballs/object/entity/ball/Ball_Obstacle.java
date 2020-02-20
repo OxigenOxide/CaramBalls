@@ -9,11 +9,24 @@ import com.oxigenoxide.caramballs.Main;
 import com.oxigenoxide.caramballs.Res;
 import com.oxigenoxide.caramballs.object.entity.particle.Particle_Ball;
 import com.oxigenoxide.caramballs.scene.Game;
+import com.oxigenoxide.caramballs.utils.Funcs;
 import com.oxigenoxide.caramballs.utils.MathFuncs;
 
 public class Ball_Obstacle extends Ball {
 
     Color[] palette;
+    Ball obstacleBall_hit;
+
+
+    public Ball_Obstacle(float x, float y, int size) {
+        super(x, y, Main.height, size);
+        construct();
+    }
+
+    public Ball_Obstacle(float x, float y, float height, int size) {
+        super(x, y, height, size);
+        construct();
+    }
 
     public Ball_Obstacle(float x, float y) {
         super(x, y, Main.height, 1 + (int) (Math.random() * 2));
@@ -21,7 +34,7 @@ public class Ball_Obstacle extends Ball {
     }
 
     public Ball_Obstacle() {
-        super(Main.height, 1 + (int) (Math.random() * 2));
+        super(Main.height, 1 + (int) (Math.random() * 3));
         construct();
     }
 
@@ -36,28 +49,22 @@ public class Ball_Obstacle extends Ball {
         super.update();
 
         if (!isDisposed) {
-            if (ballmain_hit != null && !ballmain_hit.isDisposed) {
+            if (obstacleBall_hit != null) {
+                if (!obstacleBall_hit.isDisposed) {
+                    if (size < 3 && size == obstacleBall_hit.size) {
+                        doDispose = true;
+                        obstacleBall_hit.doDispose = true;
+                        Ball_Obstacle ball_new;
+                        ball_new = new Ball_Obstacle((pos.x + obstacleBall_hit.pos.x) / 2, (pos.y + obstacleBall_hit.pos.y) / 2, 0, size + 1);
+                        ball_new.body.setLinearVelocity(body.getLinearVelocity().add(obstacleBall_hit.body.getLinearVelocity()).scl(.5f));
+                        Main.ballsToAdd.add(ball_new);
 
-                doDispose = true;
-                ballmain_hit.doDispose = true;
-
-                Ball_Main ball_new;
-
-                if (size + 1 < 3) { // stay in same level
-                    ball_new = new Ball_Main((pos.x + ballmain_hit.pos.x) / 2, (pos.y + ballmain_hit.pos.y) / 2, 0, (size + 1), 0);
-                } else { // to next level
-                    ball_new = new Ball_Main((pos.x + ballmain_hit.pos.x) / 2, (pos.y + ballmain_hit.pos.y) / 2, 0, 0, 1);
-                    Game.pos_floorFadeStain.set(ball_new.pos);
+                        Main.shake();
+                        Main.addSoundRequest(ID.Sound.PLOP, 6);
+                        Game.onBallMerge();
+                    }
                 }
-
-                ball_new.body.setLinearVelocity(body.getLinearVelocity().add(ballmain_hit.body.getLinearVelocity()).scl(.5f));
-                Main.ballsToAdd.add(ball_new);
-
-                ballmain_hit = null;
-                Main.shake();
-                Main.fbm.writeMerges();
-                Main.addSoundRequest(ID.Sound.PLOP, 6);
-                Game.onBallMerge();
+                obstacleBall_hit = null;
             }
 
             if (doSplit) {
@@ -65,7 +72,6 @@ public class Ball_Obstacle extends Ball {
                 doSplit = false;
             }
         }
-
     }
 
     public void render(SpriteBatch batch) {
@@ -143,6 +149,13 @@ public class Ball_Obstacle extends Ball {
 
             doDispose = true;
         }
+    }
+
+    @Override
+    public void contactBall(Ball ball) {
+        super.contactBall(ball);
+        if (Funcs.getClass(ball) == Ball_Obstacle.class)
+            obstacleBall_hit = ball;
     }
 
     public int getSize() {
