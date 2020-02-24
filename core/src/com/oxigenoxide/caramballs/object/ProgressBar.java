@@ -47,7 +47,6 @@ public class ProgressBar {
 
     public void update() {
         eventManager.update();
-        level = (int) Main.test_float;
         if (show)
             a = Math.min(1, a + Main.dt);
         else
@@ -128,7 +127,7 @@ public class ProgressBar {
             show = true;
         }
 
-        public void scheduleShow(){
+        public void scheduleShow() {
             counter.start();
         }
 

@@ -1,3 +1,5 @@
+started counting: 12 sept 2019
+
 -made ball freeze for one frame when it hits something from a set speed
 -fixed screen shake: the angular shake works now
 -centered ball shadow
@@ -167,7 +169,7 @@ manager
 -obstacle balls and inflatable balls are supported for huge appearance
 -reduced the time in which balls will spawn
 -bad balls will now spawn on the playing field
-[19-feb.-20] s: 82h38m e: 86h12m t: 3h34m
+[20-feb.-20] s: 82h38m e: 86h12m t: 3h34m
 -max deltaTime is now 5 frames long
 -fixed shader_bend for android
 -contactBall() is now called on both balls that collide
@@ -176,7 +178,23 @@ manager
 -most textures changed to textureRegions
 -loading time dramatically reduced
 -fixed: could get infinite hits by using multiple fingers simultaneously
-
+[21-feb.-20] s: 86h20m e:87h7m t:
+[22-feb.-20] s: 87h7m e: t:
+-make velocity resistance use natural linear resistance.
+[23-feb.-20] s: e: t:
+-add getNumberLength and getDigitTextures to make drawing numbers with getting the width easier
+-add class Ball_Orb
+-add class RewardOrb
+[24-feb.-20] s:89h41m e: t:
+-add combo penalty on main ball destroyed
+-make orb balls not produce a hit sound when touching a main ball and cause a collision
+-make cross particle shrinks to its center
+-add a bigger version of the orb
+-dispose assets and shaders
+-make tabletop textureRegions into textures
+-fix: the fading animation to another region would be bugged
+-make orbs become smaller when approaching combo meter
+-remove old score display on field
 
 deadline: 20 march 2020
 (set at 11 februari)
@@ -187,9 +205,8 @@ TODO: ball duplication glitch
 TODO: target circle at finger?
 TODO: choose good outline colors
 TODO: choose good ball colors
+TODO: choose good background colors
 TODO: optimize all entities
 TODO: add capsules to levels
-TODO: background colors
-TODO: infinite hits with two fingers
 TODO: force update
 TODO: glow in the dark?

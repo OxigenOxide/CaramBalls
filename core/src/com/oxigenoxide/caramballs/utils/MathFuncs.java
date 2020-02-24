@@ -1,6 +1,7 @@
 package com.oxigenoxide.caramballs.utils;
 
 import com.badlogic.gdx.math.Vector2;
+import com.oxigenoxide.caramballs.Main;
 
 public class MathFuncs {
     public static boolean intersectCircleLine(float xBegin, float yBegin, float xEnd, float yEnd, float x, float y, float r) {
@@ -63,6 +64,10 @@ public class MathFuncs {
 
     public static boolean pointInRectangle(float x, float y, float bx, float by, float bw, float bh) {
         return (x > bx && x < bx + bw && y > by && y < by + bh);
+    }
+
+    public static float toPPF(float mps){
+        return mps / 60 * Main.PIXELSPERMETER;
     }
 
     public static float interpolateAngle(float from, float to, float amount) {

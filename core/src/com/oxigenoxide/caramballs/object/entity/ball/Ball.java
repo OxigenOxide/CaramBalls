@@ -1,6 +1,7 @@
 package com.oxigenoxide.caramballs.object.entity.ball;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Filter;
+import com.oxigenoxide.caramballs.object.entity.particle.Particle_Ball;
 import com.oxigenoxide.caramballs.object.entity.particle.Particle_Cross;
 import com.oxigenoxide.caramballs.object.entity.particle.Particle_Hit;
 import com.oxigenoxide.caramballs.scene.Game;
@@ -20,6 +22,7 @@ import com.oxigenoxide.caramballs.Res;
 import com.oxigenoxide.caramballs.object.entity.Entity;
 import com.oxigenoxide.caramballs.object.entity.hole.Hole;
 import com.oxigenoxide.caramballs.object.entity.particle.Particle_Pulse;
+import com.oxigenoxide.caramballs.utils.Funcs;
 import com.oxigenoxide.caramballs.utils.MathFuncs;
 
 public class Ball extends Entity {
@@ -72,6 +75,7 @@ public class Ball extends Entity {
         this.height = height;
         this.size = size;
         pos = new Vector2(x, y);
+        createBody();
         construct();
     }
 
@@ -83,13 +87,24 @@ public class Ball extends Entity {
             doDispose = true;
             pos = new Vector2(1000, -100);
         }
+        createBody();
+        construct();
+    }
+
+    public Ball(float height, float radius) {
+        this.height = height;
+        pos = Game.getFreePosOnTable(radius + 1);
+        if (pos == null) {
+            doDispose = true;
+            pos = new Vector2(1000, -100);
+        }
+        createBody(radius);
         construct();
     }
 
     private void construct() {
         pos_last = new Vector2(pos);
         sprite = new Sprite(Res.tex_ball[0][0]);
-        createBody();
         body.setTransform(pos.x * Main.METERSPERPIXEL, pos.y * Main.METERSPERPIXEL, 0);
         radius = body.getFixtureList().first().getShape().getRadius() * Main.PIXELSPERMETER;
         radius_spawn = radius + 1;
@@ -442,7 +457,7 @@ public class Ball extends Entity {
         onCollision(p, impact);
     }
 
-    public void doCollisionEffect(Vector2 p, float impact) { // when its two balls will only execute on one of both
+    public void doCollisionEffect(Vector2 p, float impact, Object object_hit) { // when its two balls will only execute on one of both
         dropPulseParticle(p.x, p.y + height, 1.5f * impact);
         Main.addSoundRequest(ID.Sound.HIT, 5, impact * .1f);
     }
@@ -452,8 +467,10 @@ public class Ball extends Entity {
         //Main.addSoundRequest(ID.Sound.HIT);
     }
 
+    public void contactBall_pre(Ball ball) {
+    }
+
     static void dropPulseParticle(float x, float y, float size) {
-        if (!Main.noFX)
             Main.particles.add(new Particle_Pulse(x, y, size));
     }
 
@@ -472,6 +489,13 @@ public class Ball extends Entity {
     public void createBody() {
         body = Main.world.createBody(Res.bodyDef_dynamic);
         body.createFixture(Res.fixtureDef_ball[size]);
+        body.setUserData(this);
+    }
+
+    public void createBody(float radius) {
+        body = Main.world.createBody(Res.bodyDef_dynamic);
+        Res.fixtureDef_circle.shape.setRadius(radius * Main.METERSPERPIXEL);
+        body.createFixture(Res.fixtureDef_circle);
         body.setUserData(this);
     }
 
@@ -551,5 +575,23 @@ public class Ball extends Entity {
 
     public void doActivateShield() {
         doActivateShield = true;
+    }
+
+    static final float PARTICLESPREAD = (float) Math.PI * .75f;
+
+    public static void throwParticles(float angle, float impact, Vector2 pos, Color[] palette, int amount) {
+        for (int i = 0; i < amount; i++) {
+            Main.particlesToAdd.add(new Particle_Ball(pos.x, pos.y, angle + (float) Math.random() * PARTICLESPREAD - PARTICLESPREAD / 2, impact * (.5f + (float) Math.random()), palette));
+        }
+    }
+
+    public static void throwParticles(float angle, float impact, Vector2 pos, Color[] palette) {
+        throwParticles(angle, impact, pos, palette, 10);
+    }
+
+    public static void throwParticles(float angle, float impact, Vector2 pos, Color color, int amount) {
+        for (int i = 0; i < amount; i++) {
+            Main.particlesToAdd.add(new Particle_Ball(pos.x, pos.y, angle + (float) Math.random() * PARTICLESPREAD - PARTICLESPREAD / 2, impact * (.5f + (float) Math.random()), color));
+        }
     }
 }

@@ -62,7 +62,7 @@ public class Menu extends Scene {
         batch.begin();
         batch.setShader(Res.shader_palette);
         Main.setPalette(Res.tableTopPalette[0]);
-        batch.draw(Res.tex_tabletop[0], Main.width / 2 - Res.tex_tabletop[0].getRegionWidth() / 2, Main.height / 2 - Res.tex_tabletop[0].getRegionHeight() / 2);
+        batch.draw(Res.tex_tabletop[0], Main.width / 2 - Res.tex_tabletop[0].getWidth() / 2, Main.height / 2 - Res.tex_tabletop[0].getHeight() / 2);
         batch.setShader(null);
         button_options.render(batch);
         ttpText.render(batch);

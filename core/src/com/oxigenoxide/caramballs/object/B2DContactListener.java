@@ -54,7 +54,7 @@ public class B2DContactListener implements ContactListener {
             Ball ball1 = (Ball) udB;
             float impact = MathFuncs.getHypothenuse(ball0.body.getLinearVelocity().x, ball0.body.getLinearVelocity().y)
                     + MathFuncs.getHypothenuse(ball1.body.getLinearVelocity().x, ball1.body.getLinearVelocity().y);
-            ball0.doCollisionEffect(contactPoint, impact);
+            ball0.doCollisionEffect(contactPoint, impact, udB);
             ball0.contactBall(ball1);
             ball1.contactBall(ball0);
         }
@@ -73,14 +73,7 @@ public class B2DContactListener implements ContactListener {
                     jp.collide(ball);
                 }
                 if (classA == Ball_Main.class) {
-                    if (classB == Ball_Bad.class) {
-                        Ball_Bad ball_bad = (Ball_Bad) udB;
-                        //ball_bad.contactBall(ball);
-                        return;
-                    } else if (udB instanceof OrbContainer) {
-                        OrbContainer oc = (OrbContainer) udB;
-                        oc.destroy(ball);
-                    } else if (classB == Pin.class) {
+                    if (classB == Pin.class) {
                         Pin pin = (Pin) udB;
                         pin.destroy(ball);
                     } else if (classB == Bullet.class) {
@@ -105,7 +98,7 @@ public class B2DContactListener implements ContactListener {
                 ball.contact(udB, contactPoint, impact);
 
                 if (!(udB instanceof Ball) && classB != Spike.class)
-                    ball.doCollisionEffect(contactPoint, impact);
+                    ball.doCollisionEffect(contactPoint, impact, udB);
             }
 
             if (classA == Spike.class && (classB == Ball_Main.class || classB == Ball_Bad.class)) {
@@ -135,14 +128,38 @@ public class B2DContactListener implements ContactListener {
         java.lang.Object udA = contact.getFixtureA().getBody().getUserData();
         java.lang.Object udB = contact.getFixtureB().getBody().getUserData();
 
+        Class classA = getClass(udA);
+        Class classB = getClass(udB);
+
+        Vector2 contactPoint = new Vector2(contact.getWorldManifold().getPoints()[0]);
+        contactPoint.scl(Main.PIXELSPERMETER);
+
+        if (udB instanceof Ball && udA instanceof Ball) { // collision only called on one ball
+            Ball ball0 = (Ball) udA;
+            Ball ball1 = (Ball) udB;
+            ball0.contactBall_pre(ball1);
+            ball1.contactBall_pre(ball0);
+        }
+
         for (int i = 0; i < 2; i++) {
             if (udA instanceof Ball) {
                 Ball ball = (Ball) udA;
                 Main.shake(MathUtils.clamp(.2f * MathFuncs.getHypothenuse(ball.body.getLinearVelocity().y, ball.body.getLinearVelocity().x), 0, 4));
                 Main.setShakeAng(ball.body.getLinearVelocity().angleRad());
+
+                if (classA == Ball_Main.class) {
+                    if (udB instanceof OrbContainer) {
+                        OrbContainer oc = (OrbContainer) udB;
+                        oc.destroy(ball);
+                    }
+                }
             }
+
             udA = contact.getFixtureB().getBody().getUserData();
             udB = contact.getFixtureA().getBody().getUserData();
+
+            classA = getClass(udA);
+            classB = getClass(udB);
         }
     }
 

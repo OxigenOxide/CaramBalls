@@ -12,6 +12,7 @@ import com.oxigenoxide.caramballs.Main;
 import com.oxigenoxide.caramballs.Res;
 import com.oxigenoxide.caramballs.object.entity.hole.Hole;
 import com.oxigenoxide.caramballs.object.entity.particle.Particle_Ball;
+import com.oxigenoxide.caramballs.utils.Funcs;
 import com.oxigenoxide.caramballs.utils.MathFuncs;
 
 import static com.oxigenoxide.caramballs.scene.Game.ball_king;
@@ -133,6 +134,12 @@ public class Ball_Main extends Ball {
     }
 
     @Override
+    public void doCollisionEffect(Vector2 p, float impact, Object object_hit) {
+        if(Funcs.getClass(object_hit)!=Ball_Orb.class)
+            super.doCollisionEffect(p, impact, object_hit);
+    }
+
+    @Override
     public boolean testHit() {
         return super.testHit();
     }
@@ -247,11 +254,7 @@ public class Ball_Main extends Ball {
         if (!hasExeploded) {
             hasExeploded = true;
             impact = Math.min(impact, 4);
-            if (!Main.noFX) {
-                for (int i = 0; i < getParticleAmount(); i++) {
-                    Main.particlesToAdd.add(new Particle_Ball(pos.x, pos.y, (float) (angle + Math.random() * Math.PI * 1.2f - Math.PI * .6f), impact * (.5f + (float) Math.random()), palette));
-                }
-            }
+            throwParticles(angle, impact, pos, palette);
             super.explode(angle, impact);
             Game.doOnMainBallDestroyed = true;
         }
@@ -328,6 +331,7 @@ public class Ball_Main extends Ball {
         for (Ball_Main ball : Main.mainBalls)
             if (!ball.isUnderGround)
                 ballsCounted++;
+
         if (ballsCounted <= 1) {
             Game.beginGameOverCue(this);
             System.out.println("DOGAMEOVERCUE");
@@ -355,14 +359,14 @@ public class Ball_Main extends Ball {
 
         Color[] palette_normal = Res.ballPalette[level % (Res.ballPalette.length)];
 
-        if(loop == 0)
+        if (loop == 0)
             return palette_normal;
 
         Color[] palette = new Color[4];
-        palette[0]=Res.COLOR_OUTLINE[loop];
-        palette[1]=palette_normal[1];
-        palette[2]=palette_normal[2];
-        palette[3]=palette_normal[3];
+        palette[0] = Res.COLOR_OUTLINE[loop];
+        palette[1] = palette_normal[1];
+        palette[2] = palette_normal[2];
+        palette[3] = palette_normal[3];
 
         return palette;
     }

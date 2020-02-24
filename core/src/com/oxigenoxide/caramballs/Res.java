@@ -34,7 +34,7 @@ public class Res {
     public static TextureRegion[] tex_hand;
     public static TextureRegion[] tex_eye;
     public static TextureRegion[] tex_meter_dot;
-    public static TextureRegion[] tex_tabletop;
+    public static Texture[] tex_tabletop;
     public static TextureRegion[] tex_text_level;
     public static TextureRegion[] tex_particle_hit;
 
@@ -135,6 +135,7 @@ public class Res {
     public static TextureRegion tex_pin;
     public static float[] ballRadius;
     public static TextureRegion tex_orb;
+    public static TextureRegion tex_orb_big;
     public static TextureRegion tex_text_orbs;
     public static TextureRegion tex_text_youare;
     public static TextureRegion tex_symbolPlus;
@@ -280,7 +281,7 @@ public class Res {
         };
 
         tex_comboBar = Main.assets.get("images/comboBar.png");
-
+        tex_tabletop = new Texture[]{Main.assets.get("images/tabletop_0.png"),Main.assets.get("images/tabletop_1.png"),Main.assets.get("images/tabletop_2.png"),Main.assets.get("images/tabletop_3.png")};
 
         shader_floorFade.setUniformf("screenSize", Main.width, Main.height);
         /*
@@ -292,7 +293,7 @@ public class Res {
         tex_ballShard = new TextureRegion[]{new TextureRegion("images/ballShard", 0), new TextureRegion("images/ballShard", 1), new TextureRegion("images/ballShard", 2)};
         */
 
-        tex_ball = new TextureRegion[21][];
+        tex_ball = new TextureRegion[25][];
         tex_ball[0] = new TextureRegion[]{atlas.findRegion("ball_small"), atlas.findRegion("ball_medium"), atlas.findRegion("ball_large"), atlas.findRegion("ball_huge")};
         tex_ball[1] = new TextureRegion[]{atlas.findRegion("ball_face_small"), atlas.findRegion("ball_face_medium"), atlas.findRegion("ball_face_large")};
         tex_ball[2] = new TextureRegion[]{atlas.findRegion("ball_square_small"), atlas.findRegion("ball_square_medium"), atlas.findRegion("ball_square_large")};
@@ -303,6 +304,9 @@ public class Res {
         tex_ball[7] = new TextureRegion[]{atlas.findRegion("ball_hl_small"), atlas.findRegion("ball_hl_medium"), atlas.findRegion("ball_hl_large")};
         tex_ball[8] = new TextureRegion[]{atlas.findRegion("ball_moon_small"), atlas.findRegion("ball_moon_medium"), atlas.findRegion("ball_moon_large")};
         tex_ball[20] = new TextureRegion[]{atlas.findRegion("ball_inflate_small"), atlas.findRegion("ball_inflate_medium"), atlas.findRegion("ball_inflate_large"), atlas.findRegion("ball_inflate_huge")};
+        tex_ball[21] = new TextureRegion[]{atlas.findRegion("ball_inflate_small"), atlas.findRegion("ball_inflate_medium"), atlas.findRegion("ball_break1_large"), atlas.findRegion("ball_inflate_huge")};
+        tex_ball[22] = new TextureRegion[]{atlas.findRegion("ball_inflate_small"), atlas.findRegion("ball_inflate_medium"), atlas.findRegion("ball_break2_large"), atlas.findRegion("ball_inflate_huge")};
+        tex_ball[23] = new TextureRegion[]{atlas.findRegion("ball_inflate_small"), atlas.findRegion("ball_inflate_medium"), atlas.findRegion("ball_inflate_large"), atlas.findRegion("ball_inflate_huge")};
 
         tex_ball_bad = atlas.findRegion("ball_bad");
         tex_badSmile = new TextureRegion[]{atlas.findRegion("badSmile", 1), atlas.findRegion("badSmile", 2), atlas.findRegion("badSmile", 3), atlas.findRegion("badSmile", 4), atlas.findRegion("badSmile", 5),};
@@ -310,7 +314,6 @@ public class Res {
         tex_bomb_white = atlas.findRegion("bomb_white");
         tex_crown = atlas.findRegion("crown");
         tex_bumper = atlas.findRegion("bumper");
-        tex_tabletop = new TextureRegion[]{atlas.findRegion("tabletop",0), atlas.findRegion("tabletop", 1), atlas.findRegion("tabletop", 2), atlas.findRegion("tabletop", 3)};
         tex_watermark = atlas.findRegion("watermark");
 
         tex_buttonPressed_toGame = atlas.findRegion("buttonPressed_toGame");
@@ -400,6 +403,7 @@ public class Res {
         tex_ballCapsule = atlas.findRegion("ballCapsule");
         tex_ballCapsule_shine = atlas.findRegion("ballCapsule_shine");
         tex_orb = atlas.findRegion("orb");
+        tex_orb_big = atlas.findRegion("orb_big");
         tex_text_comingsoon = atlas.findRegion("text_comingsoon");
         tex_orbCounter = atlas.findRegion("orbCounter");
         tex_text_orbs = atlas.findRegion("text_orbs");
@@ -800,6 +804,10 @@ public class Res {
         Main.assets.load("sounds/bounce.mp3", Sound.class);
 
         Main.assets.load("images/comboBar.png", Texture.class);
+        Main.assets.load("images/tabletop_0.png", Texture.class);
+        Main.assets.load("images/tabletop_1.png", Texture.class);
+        Main.assets.load("images/tabletop_2.png", Texture.class);
+        Main.assets.load("images/tabletop_3.png", Texture.class);
     }
 
     public static void preload() {
@@ -830,6 +838,24 @@ public class Res {
 
     }
 
+    public static void dispose(){
+        atlas.dispose();
+
+        shader_c.dispose();
+        sound_bounce.dispose();
+        sound_ballHit.dispose();
+        shader_palette.dispose();
+        shader_slow.dispose();
+        shader_trailFade.dispose();
+        shader_tilt.dispose();
+        shader_random.dispose();
+        shader_a.dispose();
+        shader_fade.dispose();
+        shader_overlay.dispose();
+        shader_floorFade.dispose();
+        shader_bend.dispose();
+    }
+
     static public TextureRegion getRandomFruitTex() {
         int fruitType = (int) (Math.random() * 3);
         switch (fruitType) {
@@ -842,4 +868,15 @@ public class Res {
         }
         return null;
     }
+
+    public static TextureRegion getOrbTex(int type){
+        switch(type){
+            case 0:
+                return Res.tex_orb;
+            case 1:
+                return Res.tex_orb_big;
+        }
+        return null;
+    }
+
 }

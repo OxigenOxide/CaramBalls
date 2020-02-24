@@ -18,10 +18,15 @@ public class JumpingPad extends Entity {
     TextureRegion tex;
     Sprite sprite;
     float wiggle;
+    boolean doDispose;
 
     public JumpingPad() {
         radius_spawn = 10;
         pos = Game.getFreePosOnTable(radius_spawn);
+        if(pos==null) {
+            pos = new Vector2(-100, 100);
+            doDispose=true;
+        }
         pos.add(.5f,0);
         body = Main.world.createBody(Res.bodyDef_dynamic);
         body.createFixture(Res.fixtureDef_jumpingPad);
@@ -35,6 +40,9 @@ public class JumpingPad extends Entity {
         wiggle = Math.max(0, wiggle - .05f * Main.dt_one_slowed);
         sprite.setSize(tex.getRegionWidth() +  4 * (float) Math.sin(wiggle * Math.PI * 2), tex.getRegionHeight() +  4 * (float) Math.sin(wiggle * Math.PI * 2));
         sprite.setPosition(pos.x - sprite.getRegionWidth() / 2, pos.y - sprite.getHeight() / 2);
+
+        if(doDispose)
+            dispose();
     }
 
     void wiggle() {

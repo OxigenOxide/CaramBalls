@@ -1,3 +1,4 @@
+
 package com.oxigenoxide.caramballs.object.entity.particle;
 
 import com.badlogic.gdx.graphics.Color;
@@ -25,7 +26,8 @@ public class Particle_Cross extends Particle {
         float progress = (lifeTime - count_life) / lifeTime;
         float sizeFactor = Math.min(1, progress * 2);
         sprite.setSize(sprite.getRegionWidth() * sizeFactor, sprite.getRegionHeight() * sizeFactor);
-        sprite.setPosition((int) sprite.getX(), (int) sprite.getY());
+        setSpritePosition();
+        //sprite.setPosition((int) sprite.getX(), (int) sprite.getY());
     }
 
     public void render(SpriteBatch batch) {

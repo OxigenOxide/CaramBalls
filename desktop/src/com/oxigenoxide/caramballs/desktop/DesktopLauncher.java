@@ -16,7 +16,7 @@ public class DesktopLauncher {
         TexturePacker.Settings settings = new TexturePacker.Settings();
         settings.maxWidth = 1024;
         settings.maxHeight = 1024;
-        //TexturePacker.process(settings, "C:\\CaramBalls\\desktop\\images", "../assets", "images");
+        TexturePacker.process(settings, "C:\\CaramBalls\\desktop\\images", "../assets", "images");
 
         // Default
         config.width = 108 * 5;

@@ -22,6 +22,7 @@ public class Ball_Bad extends Ball {
     float count_glow;
     float count_smile;
     TextureRegion tex_smile;
+
     public Ball_Bad(float x, float y, float height, int size) {
         super(x, y, height, size);
         setSpriteTexture(Res.tex_ball_bad);
@@ -32,7 +33,7 @@ public class Ball_Bad extends Ball {
     }
 
     public Ball_Bad() {
-        super(Main.height,1);
+        super(Main.height, 1);
         setSpriteTexture(Res.tex_ball_bad);
         radius = Res.tex_ball_bad.getRegionWidth() / 2;
         maxSpeedMinimum = 4;
@@ -47,22 +48,22 @@ public class Ball_Bad extends Ball {
             ballmain_hit.destroy(destroyAngle, destroyImpact, pos);
             ballmain_hit = null;
         }
-        count_glow=(float)((count_glow+.1f*Main.dt_one_slowed)%(Math.PI*2));
-        glowRadiusVariation=(float)Math.sin(count_glow);
-        if(Game.doGameOverCue) {
+        count_glow = (float) ((count_glow + .1f * Main.dt_one_slowed) % (Math.PI * 2));
+        glowRadiusVariation = (float) Math.sin(count_glow);
+        if (Game.doGameOverCue) {
             count_smile += .1f;
-            count_smile=Math.min(4,count_smile);
-            tex_smile=Res.tex_badSmile[(int)count_smile];
+            count_smile = Math.min(4, count_smile);
+            tex_smile = Res.tex_badSmile[(int) count_smile];
         }
 
     }
 
     @Override
     public void drawShapes(ShapeRenderer sr) {
-        if(!Main.noFX) {
+        if (!Main.noFX) {
             sr.set(ShapeRenderer.ShapeType.Filled);
             sr.setColor(1, 0, 0, .3f - glowRadiusVariation * .1f);
-            sr.circle((int)pos.x, (int)pos.y + height - 3 * radius / 9, 8 + glowRadiusVariation * 6);
+            sr.circle((int) pos.x, (int) pos.y + height - 3 * radius / 9, 8 + glowRadiusVariation * 6);
         }
     }
 
@@ -70,8 +71,8 @@ public class Ball_Bad extends Ball {
     public void render(SpriteBatch batch) {
         //batch.setShader(null);
         sprite.draw(batch);
-        if(tex_smile!=null)
-            batch.draw(tex_smile,sprite.getX(),sprite.getY());
+        if (tex_smile != null)
+            batch.draw(tex_smile, sprite.getX(), sprite.getY());
         //batch.setShader(Res.shader_palette);
     }
 
@@ -98,7 +99,7 @@ public class Ball_Bad extends Ball {
     @Override
     public void contactBall(Ball ball) {
         super.contactBall(ball);
-        if(Funcs.getClass(ball)==Ball_Main.class) {
+        if (Funcs.getClass(ball) == Ball_Main.class) {
             Ball_Main ball_main = (Ball_Main) ball;
             if (!ball_main.isUnderGround) {
                 ballmain_hit = ball_main;
@@ -142,11 +143,7 @@ public class Ball_Bad extends Ball {
     public void explode(float angle, float impact) {
         super.explode(angle, impact);
         impact = Math.min(impact, 4);
-        if (!Main.noFX) {
-            for (int i = 0; i < getParticleAmount(); i++) {
-                Main.particles.add(new Particle_Ball(pos.x, pos.y, (float) (angle + Math.random() * Math.PI * 1 - Math.PI * .5), impact * (.5f + (float) Math.random()), Res.ballBadPalette));
-            }
-        }
+        throwParticles(angle, impact, pos, Res.ballBadPalette);
     }
 
     @Override

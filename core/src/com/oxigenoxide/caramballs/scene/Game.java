@@ -27,6 +27,7 @@ import com.oxigenoxide.caramballs.object.ComboBar;
 import com.oxigenoxide.caramballs.object.Meter;
 import com.oxigenoxide.caramballs.object.ProgressBar;
 import com.oxigenoxide.caramballs.object.Projection;
+import com.oxigenoxide.caramballs.object.RewardOrb;
 import com.oxigenoxide.caramballs.object.button.Button_Exit;
 import com.oxigenoxide.caramballs.object.button.Button_Music;
 import com.oxigenoxide.caramballs.object.button.Button_Sound;
@@ -38,8 +39,10 @@ import com.oxigenoxide.caramballs.object.Crown;
 import com.oxigenoxide.caramballs.object.entity.Entity;
 import com.oxigenoxide.caramballs.object.entity.Eye;
 import com.oxigenoxide.caramballs.object.entity.JumpingPad;
+import com.oxigenoxide.caramballs.object.entity.ball.Ball_Break;
 import com.oxigenoxide.caramballs.object.entity.ball.Ball_Inflate;
 import com.oxigenoxide.caramballs.object.entity.ball.Ball_Obstacle;
+import com.oxigenoxide.caramballs.object.entity.ball.Ball_Orb;
 import com.oxigenoxide.caramballs.object.entity.ball.Ball_Star;
 import com.oxigenoxide.caramballs.object.entity.draggable.Draggable;
 import com.oxigenoxide.caramballs.object.entity.draggable.Plank;
@@ -62,6 +65,7 @@ import com.oxigenoxide.caramballs.object.entity.hole.Hole_Ball;
 import com.oxigenoxide.caramballs.object.entity.hole.Hole_Fall;
 import com.oxigenoxide.caramballs.object.entity.orbContainer.OC_Fruit;
 import com.oxigenoxide.caramballs.object.entity.particle.Particle;
+import com.oxigenoxide.caramballs.object.entity.particle.Particle_Ball;
 import com.oxigenoxide.caramballs.object.entity.particle.Particle_Confetti;
 import com.oxigenoxide.caramballs.object.floatingReward.FR_Eye;
 import com.oxigenoxide.caramballs.object.floatingReward.FloatingReward;
@@ -92,11 +96,13 @@ import static com.oxigenoxide.caramballs.Main.gameData;
 import static com.oxigenoxide.caramballs.Main.holes;
 import static com.oxigenoxide.caramballs.Main.jumpingPads;
 import static com.oxigenoxide.caramballs.Main.mainBalls;
+import static com.oxigenoxide.caramballs.Main.orbContainers;
 import static com.oxigenoxide.caramballs.Main.orbs;
 import static com.oxigenoxide.caramballs.Main.particles;
 import static com.oxigenoxide.caramballs.Main.particles_sr;
 import static com.oxigenoxide.caramballs.Main.pins;
 import static com.oxigenoxide.caramballs.Main.projections;
+import static com.oxigenoxide.caramballs.Main.rewardOrbs;
 import static com.oxigenoxide.caramballs.Main.setCamEffects;
 import static com.oxigenoxide.caramballs.Main.setCamNormal;
 import static com.oxigenoxide.caramballs.Main.setCamShake;
@@ -380,47 +386,6 @@ public class Game extends Scene {
                     throwRandomBalls();
                 }
             }
-
-            if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
-                balls.add(new Ball_Main(tap[0].x, tap[0].y, 0, 1, 0));
-            }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.N)) {
-                setPlace(1);
-                nextLevel();
-            }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
-                throwRandomBalls();
-            }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.Y)) {
-                Main.draggables.add(new Tire());
-            }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
-                Main.draggables.add(new Plank());
-            }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.L)) {
-                gameOver();
-            }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
-                eyes.add(new Eye());
-            }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.J)) {
-                jumpingPads.add(new JumpingPad());
-            }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
-                balls.add(new Ball_Star(tap[0].x, tap[0].y, 0));
-            }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
-                floatingRewards.add(new FR_Eye(tap[0].x, tap[0].y, (int) (Math.random() * 4)));
-            }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
-                ballCapsules.add(new BallCapsule());
-            }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
-                balls.add(new Ball_Obstacle(tap[0].x, tap[0].y));
-            }
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
-            body_gap = Main.destroyBody(body_gap);
         }
 
         int value = 0;
@@ -819,7 +784,7 @@ public class Game extends Scene {
         tex_buffer_trail = buffer_trail.getColorBufferTexture();
         tex_buffer_trail.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         sprite_buffer_trail.setTexture(tex_buffer_trail);
-        sprite_buffer_trail.setSize(Main.width*Main.test_float, Main.height*Main.test_float);
+        sprite_buffer_trail.setSize(Main.width, Main.height);
         sprite_buffer_trail.setFlip(false, true);
         //sprite_buffer_trail.setAlpha(.8f);
 
@@ -855,6 +820,7 @@ public class Game extends Scene {
             setCamEffects();
         }
 
+        /*
         if (!isGameOver && !inTutorialMode && !Main.noScore) {
             batch.setShader(Res.shader_palette);
             Res.shader_palette.setUniformf("color1", palette_table[3].r * .85f, palette_table[3].g * .9f, palette_table[3].b * .9f, 1);
@@ -862,6 +828,7 @@ public class Game extends Scene {
             Main.drawNumber(batch, score, new Vector2(Main.width / 2, (int) (Main.height * 3 / 4f)), ID.Font.FIELD);
             batch.setShader(null);
         }
+        */
         if (inTutorialMode)
             render_tutorial(batch);
 
@@ -905,6 +872,9 @@ public class Game extends Scene {
 
         for (Orb orb : orbs)
             orb.render(batch);
+
+        for (RewardOrb ro : rewardOrbs)
+            ro.render(batch);
 
         setCamNormal();
         for (Bumper bumper : bumpers)
@@ -1032,7 +1002,7 @@ public class Game extends Scene {
     }
 
     void drawTabletop(SpriteBatch batch, int type) {
-        batch.draw(Res.tex_tabletop[type], Main.width / 2 - Res.tex_tabletop[type].getRegionWidth() / 2, Main.height / 2 - Res.tex_tabletop[type].getRegionHeight() / 2);
+        batch.draw(Res.tex_tabletop[type], Main.width / 2 - Res.tex_tabletop[type].getWidth() / 2, Main.height / 2 - Res.tex_tabletop[type].getHeight() / 2);
     }
 
     public static void pause() {
@@ -1288,6 +1258,8 @@ public class Game extends Scene {
         comboBar.onBallCombined();
     }
 
+
+
     public static void onOrbCollected(){
 
     }
@@ -1310,6 +1282,8 @@ public class Game extends Scene {
     }
 
     public static void onMainBallDestroyed() {
+
+        comboBar.onMainBallDestroyed();
 
         if (inTutorialMode) {
             switch (tutorialStage) {
@@ -1381,6 +1355,7 @@ public class Game extends Scene {
         count_hole = 0;
         unpause();
         button_pause.setTexture();
+        comboBar.reset();
     }
 
     public static void start() {
@@ -1508,12 +1483,14 @@ public class Game extends Scene {
                 break;
             case 2:
                 counter_dropObstacles.start();
+                /*
                 for (int i = 0; i < 10; i++)
                     ballsToDrop.add(new Ball_Obstacle());
                 for (int i = 0; i < 10; i++)
                     ballsToDrop.add(new Ball_Inflate());
                 for (int i = 0; i < 3; i++)
                     ballsToDrop.add(new Ball_Bad());
+                    */
                 break;
         }
     }
@@ -1707,5 +1684,79 @@ public class Game extends Scene {
         doClearTrail = true;
     }
 
+    public void onKeyDown(int keycode){
+
+        switch(keycode){
+            case Input.Keys.A:
+                floatingRewards.add(new FR_Eye(tap[0].x, tap[0].y, (int) (Math.random() * 4)));
+                break;
+            case Input.Keys.B:
+                balls.add(new Ball_Main(tap[0].x, tap[0].y, 0, 1, 0));
+                break;
+            case Input.Keys.C:
+                ballCapsules.add(new BallCapsule());
+                break;
+            case Input.Keys.D:
+                break;
+            case Input.Keys.E:
+                orbContainers.add(new OC_Egg());
+                break;
+            case Input.Keys.F:
+                break;
+            case Input.Keys.G:
+                break;
+            case Input.Keys.H:
+                break;
+            case Input.Keys.I:
+                createEggRing();
+                break;
+            case Input.Keys.J:
+                jumpingPads.add(new JumpingPad());
+                break;
+            case Input.Keys.K:
+                break;
+            case Input.Keys.L:
+                gameOver();
+                break;
+            case Input.Keys.M:
+                break;
+            case Input.Keys.N:
+                nextLevel();
+                break;
+            case Input.Keys.O:
+                balls.add(new Ball_Break(tap[0].x, tap[0].y));
+                break;
+            case Input.Keys.P:
+                break;
+            case Input.Keys.Q:
+                eyes.add(new Eye());
+                break;
+            case Input.Keys.R:
+                break;
+            case Input.Keys.S:
+                balls.add(new Ball_Star(tap[0].x, tap[0].y, 0));
+                break;
+            case Input.Keys.T:
+                throwRandomBalls();
+                break;
+            case Input.Keys.U:
+                break;
+            case Input.Keys.V:
+                for (int i = 0; i < 10; i++)
+                    Main.particlesToAdd.add(new Particle_Ball(tap[0].x, tap[0].y, (float) (0 + Math.random() * Math.PI * 1.2f - Math.PI * .6f), MathFuncs.toPPF(3) * (.5f + (float) Math.random()), 1));
+                break;
+            case Input.Keys.W:
+                Main.draggables.add(new Plank());
+                break;
+            case Input.Keys.X:
+                balls.add(new Ball_Orb());
+                break;
+            case Input.Keys.Y:
+                Main.draggables.add(new Tire());
+                break;
+            case Input.Keys.Z:
+                break;
+        }
+    }
 
 }

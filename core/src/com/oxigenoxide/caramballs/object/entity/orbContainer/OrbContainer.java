@@ -6,12 +6,15 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Filter;
+import com.oxigenoxide.caramballs.object.entity.ball.Ball_Orb;
 import com.oxigenoxide.caramballs.scene.Game;
 import com.oxigenoxide.caramballs.Main;
 import com.oxigenoxide.caramballs.Res;
 import com.oxigenoxide.caramballs.object.Orb;
 import com.oxigenoxide.caramballs.object.entity.ball.Ball;
 import com.oxigenoxide.caramballs.object.entity.Entity;
+import com.oxigenoxide.caramballs.utils.ActionListener;
+import com.oxigenoxide.caramballs.utils.MathFuncs;
 
 public class OrbContainer extends Entity {
     float height;
@@ -20,23 +23,26 @@ public class OrbContainer extends Entity {
     float velY;
     boolean doDispose;
     boolean isPassthrough;
+    ActionListener destroy_delayed;
+    Ball ball_hitBy;
 
-    int orbAmount=10;
+    int orbAmount = 10;
 
     public OrbContainer(TextureRegion tex) {
-        this.tex=tex;
-        pos = Game.getRandomPosOnTable(tex.getRegionWidth(),tex.getRegionHeight());
+        this.tex = tex;
+        pos = Game.getRandomPosOnTable(tex.getRegionWidth(), tex.getRegionHeight());
         height = Main.height;
         createBody();
-        body.setTransform(pos.x * Main.METERSPERPIXEL, (pos.y+3) * Main.METERSPERPIXEL, 0);
+        body.setTransform(pos.x * Main.METERSPERPIXEL, (pos.y + 3) * Main.METERSPERPIXEL, 0);
         setPassthrough(true);
         radius_spawn = 7;
     }
-    public OrbContainer(float x,float y,float height) {
-        pos = new Vector2(x,y);
+
+    public OrbContainer(float x, float y, float height) {
+        pos = new Vector2(x, y);
         this.height = height;
         createBody();
-        body.setTransform(pos.x * Main.METERSPERPIXEL, (pos.y+3) * Main.METERSPERPIXEL, 0);
+        body.setTransform(pos.x * Main.METERSPERPIXEL, (pos.y + 3) * Main.METERSPERPIXEL, 0);
         setPassthrough(true);
         radius_spawn = 7;
     }
@@ -58,25 +64,46 @@ public class OrbContainer extends Entity {
             }
         } else
             velY += Game.GRAVITY_PIXELS * .2f;
-        if(doDispose)
+
+        if (destroy_delayed != null) {
+            destroy_delayed.action();
+            destroy_delayed = null;
+        }
+
+        if (doDispose)
             dispose();
     }
 
-    public void destroy(Ball ball){
-        doDispose=true;
+    float SPREADORBS = (float) Math.PI * .75f;
 
-        for (int i = 0; i < orbAmount; i++) {
-            Main.orbs.add(new Orb(pos.x, pos.y));
+    public void destroy(Ball ball) {
+        if (!doDispose) {
+            doDispose = true;
+
+            ball_hitBy = ball;
+            destroy_delayed = new ActionListener() {
+                @Override
+                public void action() {
+                    float angle = ball_hitBy.body.getLinearVelocity().angleRad() + (float) Math.PI;
+                    float impact = ball_hitBy.body.getLinearVelocity().len();
+                    for (int i = 0; i < orbAmount; i++) {
+                        Ball_Orb ball_new = new Ball_Orb(pos.x, pos.y, 0);
+                        ball_new.setVelocity(impact * (float) Math.cos(angle + Math.random() * SPREADORBS - SPREADORBS / 2), impact * (float) Math.sin(angle + Math.random() * SPREADORBS - SPREADORBS / 2));
+                        Main.balls.add(ball_new);
+                    }
+                }
+            };
+            Main.shake();
         }
+    }
 
-        Main.shake();
-    }
     public void render(SpriteBatch batch) {
-        batch.draw(tex, (int)(pos.x - tex.getRegionWidth()/2), (int)(pos.y - 3 + height));
+        batch.draw(tex, (int) (pos.x - tex.getRegionWidth() / 2), (int) (pos.y - 3 + height));
     }
-    public void dispose(){
+
+    public void dispose() {
         body = Main.destroyBody(body);
-        body=null;
+        body = null;
         Main.orbContainersToRemove.add(this);
     }
 

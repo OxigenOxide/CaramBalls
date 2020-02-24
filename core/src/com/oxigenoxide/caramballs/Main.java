@@ -20,6 +20,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.oxigenoxide.caramballs.object.BallSelector;
 import com.oxigenoxide.caramballs.object.DragSelector;
 import com.oxigenoxide.caramballs.object.Projection;
+import com.oxigenoxide.caramballs.object.RewardOrb;
 import com.oxigenoxide.caramballs.object.entity.BallCapsule;
 import com.oxigenoxide.caramballs.object.entity.Bullet;
 import com.oxigenoxide.caramballs.object.Bumper;
@@ -157,6 +158,8 @@ public class Main extends ApplicationAdapter {
     public static ArrayList<Eye> eyesToRemove = new ArrayList<Eye>();
     public static ArrayList<Projection> projections = new ArrayList<Projection>();
     public static ArrayList<Projection> projectionsToRemove = new ArrayList<Projection>();
+    public static ArrayList<RewardOrb> rewardOrbs = new ArrayList<RewardOrb>();
+    public static ArrayList<RewardOrb> rewardOrbsToRemove = new ArrayList<RewardOrb>();
 
 
     public static BallSelector ballSelector;
@@ -567,6 +570,11 @@ public class Main extends ApplicationAdapter {
             d.update();
         draggables.removeAll(draggablesToRemove);
         draggablesToRemove.clear();
+
+        for (RewardOrb ro : rewardOrbs)
+            ro.update();
+        rewardOrbs.removeAll(rewardOrbsToRemove);
+        rewardOrbsToRemove.clear();
 
         // detect a selection of a ball or a draggable
         if (Funcs.justTouched() && (!Game.isGameOver && !Game.isPaused || Main.inFarm()) && !Main.isButtonPressed) {
@@ -1021,10 +1029,42 @@ public class Main extends ApplicationAdapter {
         return digits;
     }
 
+    public static ArrayList<TextureRegion> getDigitTextures(int number, int font) {
+        int digitAmount = 0;
+        ArrayList<Integer> digits = new ArrayList<Integer>();
+        int power = 0;
+        while (number >= Math.pow(10, power)) {
+            digitAmount++;
+            power++;
+        }
+        if (number == 0) {
+            digitAmount = 1;
+        }
+        int crunchNumber = number;
+        for (int i = digitAmount - 1; i >= 0; i--) {
+            digits.add((int) (crunchNumber / Math.pow(10, i)));
+            crunchNumber %= Math.pow(10, i);
+        }
+        ArrayList<TextureRegion> digitTextures = new ArrayList<TextureRegion>();
+        for (Integer i : digits) {
+            digitTextures.add(Res.tex_numbers[font][i]);
+        }
+        return digitTextures;
+    }
+
     public static int getTextWidth(ArrayList<Integer> digits, int font) {
         int width = 0;
         for (int i : digits) {
             width += Res.tex_numbers[font][i].getRegionWidth() + 1;
+        }
+        width--;
+        return width;
+    }
+
+    public static int getNumberWidth(ArrayList<TextureRegion> textures) {
+        int width = 0;
+        for (TextureRegion tex : textures) {
+            width += tex.getRegionWidth() + 1;
         }
         width--;
         return width;
@@ -1082,7 +1122,6 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-
         batch.dispose();
         if (isLoaded) {
             game.dispose();
@@ -1091,6 +1130,7 @@ public class Main extends ApplicationAdapter {
             splash.dispose();
             welcome.dispose();
             assets.dispose();
+            Res.dispose();
             DataManager.getInstance().saveData();
         }
     }
@@ -1472,6 +1512,8 @@ public class Main extends ApplicationAdapter {
         InputProcessor inputProcessor = new InputProcessor() {
             @Override
             public boolean keyDown(int keycode) {
+                if (game.isShown())
+                    game.onKeyDown(keycode);
                 return false;
             }
 

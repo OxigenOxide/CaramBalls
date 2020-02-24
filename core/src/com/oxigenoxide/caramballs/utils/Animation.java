@@ -39,7 +39,6 @@ public class Animation {
             }
         } else
             ended = false;
-
     }
 
     public void doLoop() {
@@ -52,18 +51,16 @@ public class Animation {
     float countPart;
 
     public TextureRegion getTexture() {
-        if (ended) {
-            return textures[0];
-        }
-        duration = 0;
-        countPart = count / (float) countMax;
-        for (int i = 0; i < durations.length; i++) {
-            if (countPart >= duration && countPart <= duration + durations[i]) {
-                return textures[i];
+        if (!ended) {
+            duration = 0;
+            countPart = count / (float) countMax;
+            for (int i = 0; i < durations.length; i++) {
+                if (countPart >= duration && countPart <= duration + durations[i]) {
+                    return textures[i];
+                }
+                duration += durations[i];
             }
-            duration += durations[i];
         }
-
         return textures[0];
     }
 }
