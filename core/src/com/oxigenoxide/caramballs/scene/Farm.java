@@ -2,6 +2,7 @@ package com.oxigenoxide.caramballs.scene;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -10,9 +11,12 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.oxigenoxide.caramballs.ID;
 import com.oxigenoxide.caramballs.Main;
 import com.oxigenoxide.caramballs.Res;
+import com.oxigenoxide.caramballs.object.RewardOrb;
 import com.oxigenoxide.caramballs.object.button.Button_Return;
+import com.oxigenoxide.caramballs.object.button.Button_Sell;
 import com.oxigenoxide.caramballs.object.entity.Entity;
 import com.oxigenoxide.caramballs.object.entity.ball.Ball;
 import com.oxigenoxide.caramballs.object.button.Button;
@@ -24,11 +28,16 @@ import com.oxigenoxide.caramballs.object.entity.hole.Hole_Reward;
 import com.oxigenoxide.caramballs.utils.ActionListener;
 import com.oxigenoxide.caramballs.utils.RepeatCounter;
 
+import static com.oxigenoxide.caramballs.Main.rewardOrbs;
+
 public class Farm extends Scene {
-    Vector2 pos_field;
+    public Vector2 pos_field;
+    public Vector2 pos_orbs;
+    public Vector2 pos_orb;
     Button_Play button_play;
-    Button button_shop;
+    Button_Balls button_shop;
     Button button_return;
+    Button_Sell button_sell;
     FrameBuffer buffer;
     Texture tex_buffer;
     Body cage;
@@ -36,12 +45,19 @@ public class Farm extends Scene {
     boolean isSpawningBalls;
     RepeatCounter counter_save;
     static boolean hasBeenInFarm;
+    static final Color COLOR_ORBNUMBER = new Color(0, 73 / 255f, 128 / 255f, 1);
+
+
+    public static final int FIELDWIDTH = 100;
 
     public Farm() {
         pos_field = new Vector2(4, 62);
+        button_return = new Button_Return(new Vector2(5, Main.height - 17));
         button_play = new Button_Play(new Vector2(22, 29));
-        button_shop = new Button_Balls(new Vector2(12, 4));
-        button_return = new Button_Return(new Vector2(5, Main.height - 19));
+        button_shop = new Button_Balls(new Vector2(4, 6));
+        button_sell = new Button_Sell(new Vector2(55,6));
+        pos_orbs = new Vector2(88, Main.height - 10);
+        pos_orb = new Vector2(0,pos_orbs.y-1+3.5f);
         buffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getHeight(), Gdx.graphics.getHeight(), true);
         counter_save = new RepeatCounter(new ActionListener() {
             @Override
@@ -53,7 +69,6 @@ public class Farm extends Scene {
 
     @Override
     public void update() {
-
         counter_save.update();
         if (button_play.isTouching())
             button_play.update();
@@ -62,6 +77,8 @@ public class Farm extends Scene {
                 button_shop.update();
         if (button_return.isTouching())
             button_return.update();
+        if (button_sell.isTouching())
+            button_sell.update();
         button_play.slide();
 
         if (hole_reward != null && hole_reward.isDisposed) {
@@ -97,11 +114,11 @@ public class Farm extends Scene {
         button_play.render(batch);
         button_shop.render(batch);
         button_return.render(batch);
+        button_sell.render(batch);
         batch.draw(Res.tex_text_yourBalls, 17, pos_field.y + 104);
         batch.end();
+
         sr.begin(ShapeRenderer.ShapeType.Filled);
-
-
         Main.ballSelector.render(sr);
         for (Hole h : Main.holes)
             h.render(sr);
@@ -109,9 +126,18 @@ public class Farm extends Scene {
         for (Ball b : Main.balls)
             b.renderShadow(sr);
         sr.end();
+
         batch.begin();
         for (Entity e : Main.entities_sorted)
             e.render(batch);
+
+        batch.draw(Res.tex_orbCountBar, pos_orbs.x - Res.tex_orbCountBar.getRegionWidth() / 2, pos_orbs.y - 2);
+        int width = Main.drawNumberSignColor(batch, Main.gameData.orbs, pos_orbs, ID.Font.SMALL, Res.tex_orb, -1, COLOR_ORBNUMBER);
+        pos_orb.x = pos_orbs.x-width/2 + 3.5f;
+
+        for(RewardOrb ro:rewardOrbs)
+            ro.render(batch);
+
         batch.end();
         buffer.end();
 
@@ -156,12 +182,20 @@ public class Farm extends Scene {
             Main.rewardBalls.clear();
         }
 
+
+        for (Ball_Main.Ball_Main_Data ball_main_data : Main.gameData.farmBalls) {
+            System.out.println(ball_main_data.timeElapsed + " : " + System.currentTimeMillis() + " - " + Main.gameData.time_leftFarm);
+            if (Main.gameData.time_leftFarm != 0)
+                ball_main_data.timeElapsed += System.currentTimeMillis() - Main.gameData.time_leftFarm;
+        }
+
         int i = 0;
         for (Ball_Main.Ball_Main_Data ball_data : Main.gameData.farmBalls) {
+            System.out.println("timelapsed: " + ball_data.timeElapsed);
             if (!hasBeenInFarm)
-                Main.balls.add(new Ball_Main(ball_data.x, ball_data.y, Main.height * 2 + i * 25, ball_data.size, ball_data.level));
+                Main.balls.add(new Ball_Main(ball_data.x, ball_data.y, Main.height * 2 + i * 25, ball_data.size, ball_data.level).setTimeElapsed(ball_data.timeElapsed));
             else
-                Main.balls.add(new Ball_Main(ball_data.x, ball_data.y, 0, ball_data.size, ball_data.level));
+                Main.balls.add(new Ball_Main(ball_data.x, ball_data.y, 0, ball_data.size, ball_data.level).setTimeElapsed(ball_data.timeElapsed));
             i++;
         }
         hasBeenInFarm = true;
@@ -171,10 +205,15 @@ public class Farm extends Scene {
     public void saveBalls() {
         Main.gameData.farmBalls.clear();
         for (Ball_Main bm : Main.mainBalls) {
-            Main.gameData.farmBalls.add(new Ball_Main.Ball_Main_Data(bm.pos.x, bm.pos.y, bm.size, bm.level));
+            System.out.println(" save: " + bm.timeElapsed);
+            Main.gameData.farmBalls.add(new Ball_Main.Ball_Main_Data(bm.pos.x, bm.pos.y, bm.size, bm.level, bm.timeElapsed));
         }
         // Lesson learned, again, most variables you shouldn't just set to an object
         // Second lesson learned, clear a list before adding objects again if you want to copy
+    }
+
+    public void onPause() {
+        Main.gameData.time_leftFarm = System.currentTimeMillis();
     }
 
     @Override
@@ -182,5 +221,7 @@ public class Farm extends Scene {
         saveBalls();
         cage = Main.destroyBody(cage);
         Main.clearEntities();
+        System.out.println("hide farmn");
+        Main.gameData.time_leftFarm = System.currentTimeMillis();
     }
 }

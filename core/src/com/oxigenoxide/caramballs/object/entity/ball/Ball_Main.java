@@ -22,12 +22,21 @@ public class Ball_Main extends Ball {
     public int level;
     public int loop;
     float count_noPull;
-    Color[] palette;
+    public Color[] palette;
     Projection projection;
+
+    Vector2 pos_speechBubble;
+
+    boolean readyToMilk;
+
+    public long timeElapsed;
+
+    float speechBubbleDisposition;
+    static final float SPEECHBUBBLEAMP = 2;
+    float count_speechBubble;
 
     public Ball_Main(float x, float y, float height, int size, int level) {
         super(x, y, height, size);
-
 
         if (Main.inGame()) {
             if (Game.level < level) {
@@ -49,8 +58,13 @@ public class Ball_Main extends Ball {
 
         isBallKing();
         setSpriteUnderGround();
+    }
 
-
+    @Override
+    void construct_farm() {
+        super.construct_farm();
+        count_speechBubble = (float) Math.random();
+        pos_speechBubble = new Vector2();
     }
 
     @Override
@@ -130,12 +144,24 @@ public class Ball_Main extends Ball {
                 projection.update();
             }
         }
+    }
 
+    public void update_farm() {
+        super.update_farm();
+
+        if (timeElapsed > 20000) {
+            readyToMilk = true;
+        }
+        if (readyToMilk) {
+            pos_speechBubble.set((int) pos.x, (int) pos.y + 2 + height);
+            count_speechBubble = (count_speechBubble + Main.dt * 5) % (2 * (float) Math.PI);
+            speechBubbleDisposition = SPEECHBUBBLEAMP * (float) Math.cos(count_speechBubble) + SPEECHBUBBLEAMP;
+        } else timeElapsed += Main.dt * 1000;
     }
 
     @Override
     public void doCollisionEffect(Vector2 p, float impact, Object object_hit) {
-        if(Funcs.getClass(object_hit)!=Ball_Orb.class)
+        if (Funcs.getClass(object_hit) != Ball_Orb.class)
             super.doCollisionEffect(p, impact, object_hit);
     }
 
@@ -212,7 +238,25 @@ public class Ball_Main extends Ball {
         sprite.draw(batch);
         batch.setShader(null);
         render_shield_shine(batch);
+        if (Main.inFarm())
+            render_farm(batch);
+    }
 
+    void render_farm(SpriteBatch batch) {
+        if (readyToMilk)
+            batch.draw(Res.tex_speechBubbleOrb, pos_speechBubble.x - Res.tex_speechBubbleOrb.getRegionWidth() / 2, pos_speechBubble.y + (int) speechBubbleDisposition);
+    }
+
+    void milk() {
+        int orbAmount = 5;
+        float angle;
+        timeElapsed=0;
+        for (int i = 0; i < orbAmount; i++) {
+            angle = (float) (Math.random() * Math.PI * 2);
+            Ball_Orb ball_new = new Ball_Orb(pos.x + 5 * (float) Math.cos(angle), pos.y + 5 * (float) Math.sin(angle), 0);
+            ball_new.setVelocity(5 * (float) Math.cos(angle), 5 * (float) Math.sin(angle));
+            Main.balls.add(ball_new);
+        }
     }
 
     @Override
@@ -334,7 +378,7 @@ public class Ball_Main extends Ball {
 
         if (ballsCounted <= 1) {
             Game.beginGameOverCue(this);
-            System.out.println("DOGAMEOVERCUE");
+            //System.out.println("DOGAMEOVERCUE");
             return;
         } else {
             Main.mainBalls.remove(this);
@@ -371,19 +415,42 @@ public class Ball_Main extends Ball {
         return palette;
     }
 
+    @Override
+    public void onSelect() {
+        if (readyToMilk) {
+            milk();
+            readyToMilk = false;
+        }
+    }
+
+    public Ball_Main setTimeElapsed(long timeElapsed) {
+        System.out.println("SETTIMEELAPSED: " + timeElapsed);
+        if (readyToMilk)
+            timeElapsed = 0;
+
+        this.timeElapsed = timeElapsed;
+        return this;
+    }
+
+    public static Color[] getBallPalette(int level) {
+        return getBallPalette(level % (Res.ballPalette.length), (level / Res.ballPalette.length));
+    }
+
     static public class Ball_Main_Data {
         public float x, y;
         public int size, level;
+        public long timeElapsed;
 
         public Ball_Main_Data() {
             // this constructor is actually being used for serialisation
         }
 
-        public Ball_Main_Data(float x, float y, int size, int level) {
+        public Ball_Main_Data(float x, float y, int size, int level, long timeElapsed) {
             this.x = x;
             this.y = y;
             this.size = size;
             this.level = level;
+            this.timeElapsed = timeElapsed;
         }
     }
 }

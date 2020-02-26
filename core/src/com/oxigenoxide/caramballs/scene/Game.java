@@ -27,6 +27,7 @@ import com.oxigenoxide.caramballs.object.ComboBar;
 import com.oxigenoxide.caramballs.object.Meter;
 import com.oxigenoxide.caramballs.object.ProgressBar;
 import com.oxigenoxide.caramballs.object.Projection;
+import com.oxigenoxide.caramballs.object.RewardBall;
 import com.oxigenoxide.caramballs.object.RewardOrb;
 import com.oxigenoxide.caramballs.object.button.Button_Exit;
 import com.oxigenoxide.caramballs.object.button.Button_Music;
@@ -187,6 +188,8 @@ public class Game extends Scene {
     static float count_nextCannon = countMax_nextCannon;
     static int countMax_nextEye = 300;
     static float count_nextEye = countMax_nextCannon;
+    static int countMax_nextOrb = 300;
+    static float count_nextOrb = countMax_nextOrb;
 
     static Counter counter_dropObstacles;
 
@@ -201,6 +204,7 @@ public class Game extends Scene {
     static boolean doFallHoles = false;
     static boolean doCircularBumpers = false;
     static boolean doCannons = false;
+    static boolean doSpawnOrbs = false;
 
     public static int ballType;
     public static int orbsCollected;
@@ -246,8 +250,6 @@ public class Game extends Scene {
     ContactListener contactListener;
     InputProcessor inputProcessor;
 
-    public static GameOver gameOver;
-
     static final boolean DODEBUGTOOLS = true;
     static boolean doSpawnObjects = true;
 
@@ -256,7 +258,6 @@ public class Game extends Scene {
 
 
     public Game() {
-        gameOver = new GameOver();
         gravity = new Vector2(9.81f, 0);
         worldGravity = new Vector2();
         pos_floorFadeStain = new Vector2();
@@ -326,6 +327,8 @@ public class Game extends Scene {
     public void hide() {
         Main.clearEntities();
         Main.worldProperties.setStandard();
+        ultraSlow = false;
+        Main.slowdown = 0;
     }
 
     @Override
@@ -354,8 +357,8 @@ public class Game extends Scene {
             }
         }
 
-        if (isGameOver || gameOver.alpha > 0)
-            gameOver.update();
+        if (isGameOver || Main.gameOver.alpha > 0)
+            Main.gameOver.update();
 
         if (!isGameOver && !inTutorialMode && !doGameOverCue && doSpawnObjects)
             update_game();
@@ -567,11 +570,15 @@ public class Game extends Scene {
                     hole.dispose();
             }
             for (Ball ball_ : balls) {
-                if (ball_.getClass() == Ball_Main.class && ball_ != ball)
+                if (ball_.getClass() == Ball_Main.class)
                     ball_.dispose();
             }
 
-            doGameOverCue = true;
+            Main.rewardBall = new RewardBall(ball.pos.x, ball.pos.y, ball.level);
+            Main.setSceneGameOver();
+            //Main.setScene(Main.gameOver);
+
+            //doGameOverCue = true;
             count_gameOverCue = countMax_gameOverCue;
             ultraSlow = true;
 
@@ -666,6 +673,14 @@ public class Game extends Scene {
             }
         }
 
+        if (doSpawnOrbs) {
+            count_nextOrb -= Main.dt_one_slowed * spawnSpeedFactor;
+            if (count_nextOrb <= 0) {
+                count_nextOrb = countMax_nextOrb * (.5f + .5f * (float) Math.random());
+                balls.add(new Ball_Orb());
+            }
+        }
+
         /*
         if (true) {
             count_nextEye -= Main.dt_one_slowed * spawnSpeedFactor;
@@ -677,17 +692,17 @@ public class Game extends Scene {
         }
 
 */
-        if (!Main.noFX) {
-            collectSoundsToPlay = Math.min(collectSoundsToPlay, 4);
-            if (collectSoundsToPlay > 0) {
-                count_collectSound -= Main.dt_one_slowed * spawnSpeedFactor;
-                if (count_collectSound <= 0) {
-                    count_collectSound = 2;
-                    collectSoundsToPlay--;
-                    Main.addSoundRequest(ID.Sound.COLLECT, 1, 1, (float) Math.random() * .4f + .8f);
-                }
+
+        collectSoundsToPlay = Math.min(collectSoundsToPlay, 4);
+        if (collectSoundsToPlay > 0) {
+            count_collectSound -= Main.dt_one_slowed * spawnSpeedFactor;
+            if (count_collectSound <= 0) {
+                count_collectSound = 2;
+                collectSoundsToPlay--;
+                Main.addSoundRequest(ID.Sound.COLLECT, 1, 1, (float) Math.random() * .4f + .8f);
             }
         }
+
     }
 
     public static int getTotalBallSize() {
@@ -953,8 +968,6 @@ public class Game extends Scene {
         font.draw(batch, String.valueOf(Gdx.graphics.getFramesPerSecond()), 0, 0);
         batch.end();
 
-        if (gameOver.alpha > 0)
-            gameOver.render(batch, sr);
         buffer_slow.end();
 
         tex_buffer_slow = buffer_slow.getColorBufferTexture();
@@ -1254,13 +1267,12 @@ public class Game extends Scene {
         }
     }
 
-    public static void onBallCombined(){
+    public static void onBallCombined() {
         comboBar.onBallCombined();
     }
 
 
-
-    public static void onOrbCollected(){
+    public static void onOrbCollected() {
 
     }
 
@@ -1350,7 +1362,6 @@ public class Game extends Scene {
         //entities are already cleared after leaving the scene
         resetLevel();
         ball_king = null;
-        gameOver.hide();
         isGameOver = false;
         count_hole = 0;
         unpause();
@@ -1448,6 +1459,8 @@ public class Game extends Scene {
         doFallHoles = false;
         doCircularBumpers = false;
         doSpikeLines = false;
+        doSpawnOrbs = true;
+        countMax_nextOrb = 800;
 
 
         float harderFactor = (1 + .5f * level);
@@ -1613,7 +1626,7 @@ public class Game extends Scene {
     }
 
     public static Vector2 getFreePosOnTable(float radius) {
-        return getFreePosOnTable(radius,5);
+        return getFreePosOnTable(radius, 5);
     }
 
     public static Vector2 getFreePosOnTable(float radius, int tries_max) {
@@ -1663,9 +1676,6 @@ public class Game extends Scene {
             }
             Main.setAdVisibility(true);
             isGameOver = true;
-            gameOver.show();
-            if (Main.shop.canAffordSomething())
-                gameOver.button_balls.setNew();
             Main.setNoMusic();
         }
     }
@@ -1684,9 +1694,9 @@ public class Game extends Scene {
         doClearTrail = true;
     }
 
-    public void onKeyDown(int keycode){
+    public void onKeyDown(int keycode) {
 
-        switch(keycode){
+        switch (keycode) {
             case Input.Keys.A:
                 floatingRewards.add(new FR_Eye(tap[0].x, tap[0].y, (int) (Math.random() * 4)));
                 break;
@@ -1734,7 +1744,7 @@ public class Game extends Scene {
             case Input.Keys.R:
                 break;
             case Input.Keys.S:
-                balls.add(new Ball_Star(tap[0].x, tap[0].y, 0));
+                spikes.add(new Spike(tap[0].x, tap[0].y, false));
                 break;
             case Input.Keys.T:
                 throwRandomBalls();

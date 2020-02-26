@@ -178,14 +178,14 @@ manager
 -most textures changed to textureRegions
 -loading time dramatically reduced
 -fixed: could get infinite hits by using multiple fingers simultaneously
-[21-feb.-20] s: 86h20m e:87h7m t:
+[21-feb.-20] s: 86h20m e:87h7m t:47m
 [22-feb.-20] s: 87h7m e: t:
 -make velocity resistance use natural linear resistance.
 [23-feb.-20] s: e: t:
 -add getNumberLength and getDigitTextures to make drawing numbers with getting the width easier
 -add class Ball_Orb
 -add class RewardOrb
-[24-feb.-20] s:89h41m e: t:
+[24-feb.-20] s:89h41m e:93h0m t:3h19m
 -add combo penalty on main ball destroyed
 -make orb balls not produce a hit sound when touching a main ball and cause a collision
 -make cross particle shrinks to its center
@@ -195,6 +195,31 @@ manager
 -fix: the fading animation to another region would be bugged
 -make orbs become smaller when approaching combo meter
 -remove old score display on field
+[25-feb.-20] s:93h0m e:98h18m t:5h18m
+-add class RewardBall: ball that gets transported from the game to the farm
+-remove old game over cue: would zoom on the last ball
+-make game over a separate scene instead of an overlay
+-remove shop button from game over screen
+-change lay-out of shop button to make space for the rewardBall
+-fix: ball won't collide on initial frame of existence
+-remake the pulse particle: uses shader instead of shape for performance
+-use shader to draw selection ring for performance and a perfect circle
+[26-feb.-20] s:98h19m e:102h47m t:4h28m
+-fix: sound muted would be saved as the value of music muted
+-initiate orbs with a size of zero and let them grow
+-make orbs drop as random rewards
+-dispose all balls in farm that get out of the coop
+-make main balls able to be milked i.e. drop orbs on touch
+-make main balls have a speech bubble with an orb in it if they can be milked
+-track time away from farm screen, also when not playing, add it to elapsedTime in main balls of farm
+-improve play button slightly
+-fix: when gone out of farm screen while some balls were ready to be milked it would reset these balls
+[25-feb.-20] s: e: t:
+
+
+
+TODO: count orbs in farm, sell balls in farm, different rewards from orbs.
+
 
 deadline: 20 march 2020
 (set at 11 februari)

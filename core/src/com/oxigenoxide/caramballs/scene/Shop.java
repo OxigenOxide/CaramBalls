@@ -110,7 +110,7 @@ public class Shop extends Scene {
 
     public void onPurchase(){
         if(!canAffordSomething())
-            Game.gameOver.button_balls.setNormal();
+            Main.farm.button_shop.setNormal();
     }
 
     public static void deselect() {

@@ -63,9 +63,10 @@ public class Res {
     public TextureRegion tex_watermark;
     public static TextureRegion tex_text_welcome;
     public static TextureRegion tex_text_highscore;
-    public static TextureRegion tex_buttonPressed_toGame;
     public static TextureRegion tex_shield;
     public static TextureRegion tex_shield_shine;
+
+    public static TextureRegion tex_buttonPressed_toGame;
     public static TextureRegion tex_button_toGame;
     public static TextureRegion tex_buttonPressed_options;
     public static TextureRegion tex_button_options;
@@ -79,6 +80,9 @@ public class Res {
     public static TextureRegion tex_buttonPressed_play;
     public static TextureRegion tex_button_return;
     public static TextureRegion tex_buttonPressed_return;
+    public static TextureRegion tex_button_sell;
+    public static TextureRegion tex_buttonPressed_sell;
+
     public static TextureRegion tex_apple;
     public static TextureRegion tex_lemon;
     public static TextureRegion tex_strawberry;
@@ -98,6 +102,7 @@ public class Res {
     public static TextureRegion tex_cannon_gun;
     public static TextureRegion tex_cannon_base;
     public static TextureRegion tex_orbCounter;
+    public static TextureRegion tex_orbCountBar;
     public static TextureRegion tex_button_pause;
     public static TextureRegion tex_buttonPressed_pause;
     public static TextureRegion tex_button_resume;
@@ -167,6 +172,7 @@ public class Res {
     public static TextureRegion tex_loadingBall;
     public static TextureRegion tex_loadingBall_shadow;
     public static TextureRegion tex_loadingBall_filled;
+    public static TextureRegion tex_speechBubbleOrb;
 
     public static Texture tex_comboBar;
 
@@ -186,6 +192,7 @@ public class Res {
     public static ShaderProgram shader_overlay;
     public static ShaderProgram shader_floorFade;
     public static ShaderProgram shader_bend;
+    public static ShaderProgram shader_circle;
 
     public static FixtureDef fixtureDef_border;
     public static FixtureDef fixtureDef_circle;
@@ -202,6 +209,7 @@ public class Res {
     public static FixtureDef fixtureDef_tire;
     public static FixtureDef fixtureDef_plank;
     public static FixtureDef[] fixtureDef_ball;
+    public static FixtureDef[] fixtureDef_ball_passThrough;
     public static Color[][] ballPalette;
     public static Color[][] tableTopPalette;
     public static Color[] ballBadPalette;
@@ -330,7 +338,6 @@ public class Res {
         tex_buttonPressed_play = atlas.findRegion("buttonPressed_play");
         tex_buttonPressed_return = atlas.findRegion("buttonPressed_return");
         tex_button_return = atlas.findRegion("button_return");
-
         tex_button_music = atlas.findRegion("button_music");
         tex_buttonPressed_music = atlas.findRegion("buttonPressed_music");
         tex_button_musicMuted = atlas.findRegion("button_musicMuted");
@@ -341,6 +348,8 @@ public class Res {
         tex_buttonPressed_soundMuted = atlas.findRegion("buttonPressed_soundMuted");
         tex_button_exit = atlas.findRegion("button_exit");
         tex_buttonPressed_exit = atlas.findRegion("buttonPressed_exit");
+        tex_button_sell = atlas.findRegion("button_sell");
+        tex_buttonPressed_sell = atlas.findRegion("buttonPressed_sell");
 
         tex_text_welcome = atlas.findRegion("text_welcome");
         tex_symbolPlus = atlas.findRegion("symbol_plus");
@@ -446,6 +455,8 @@ public class Res {
         tex_progressBar_ball = atlas.findRegion("progressBar_ball");
         tex_text_yourBalls = atlas.findRegion("text_yourBalls");
         tex_comboBar_end = atlas.findRegion("comboBar_end");
+        tex_speechBubbleOrb = atlas.findRegion("speechBubbleOrb");
+        tex_orbCountBar = atlas.findRegion("orbCountBar");
 
         tex_text_level = new TextureRegion[]{
                 atlas.findRegion("text_level_home"),
@@ -540,6 +551,15 @@ public class Res {
             fixtureDef_ball[i].restitution = 1;
             fixtureDef_ball[i].filter.maskBits = (short) (MASK_ZERO | MASK_WALL);
             fixtureDef_ball[i].filter.categoryBits = (MASK_ZERO);
+        }
+
+        fixtureDef_ball_passThrough = new FixtureDef[]{new FixtureDef(), new FixtureDef(), new FixtureDef(), new FixtureDef()};
+        for (int i = 0; i < 4; i++) { // ONLY FOR MAINBALLS
+            fixtureDef_ball_passThrough[i].density = 1;
+            fixtureDef_ball_passThrough[i].shape = shape_ball[i];
+            fixtureDef_ball_passThrough[i].restitution = 1;
+            fixtureDef_ball_passThrough[i].filter.maskBits = (MASK_ZERO | MASK_WALL);
+            fixtureDef_ball_passThrough[i].filter.categoryBits = (MASK_PASSTHROUGH);
         }
 
         fixtureDef_shield = new FixtureDef();
@@ -834,8 +854,7 @@ public class Res {
         shader_overlay = new ShaderProgram(Gdx.files.internal("shaders/shader_overlay.vert"), Gdx.files.internal("shaders/shader_overlay.frag"));
         shader_floorFade = new ShaderProgram(Gdx.files.internal("shaders/shader_floorFade.vert"), Gdx.files.internal("shaders/shader_floorFade.frag"));
         shader_bend = new ShaderProgram(Gdx.files.internal("shaders/shader_bend.vert"), Gdx.files.internal("shaders/shader_bend.frag"));
-
-
+        shader_circle = new ShaderProgram(Gdx.files.internal("shaders/shader_circle.vert"), Gdx.files.internal("shaders/shader_circle.frag"));
     }
 
     public static void dispose(){

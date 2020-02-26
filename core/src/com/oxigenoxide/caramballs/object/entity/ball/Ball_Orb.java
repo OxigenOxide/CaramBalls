@@ -18,31 +18,35 @@ public class Ball_Orb extends Ball {
 
     private static final float[] RADIUS = new float[]{3.5f, 6};
 
+    static final int SPAWNHEIGHT = 30;
+
     public Ball_Orb() {
-        super(Main.height, 1);
+        super(SPAWNHEIGHT, 1);
         type = (int) (Math.random() * 2);
         construct();
     }
 
-    public Ball_Orb(float x, float y,int type) {
-        super(x,y,0, 1);
+    public Ball_Orb(float x, float y, int type) {
+        super(x, y, 0, 1);
         this.type = type;
-        this.type = (int) (Math.random() * 2);
-        velY=(float)Math.random()*4;
+        velY = (float) Math.random() * 4;
         construct();
     }
 
     private void construct() {
-        radius=RADIUS[type];
+        radius = RADIUS[type];
         radius_spawn = radius + 1;
-        body.getFixtureList().first().getShape().setRadius(radius*Main.METERSPERPIXEL);
+        body.getFixtureList().first().getShape().setRadius(radius * Main.METERSPERPIXEL);
         setSpriteTexture(Res.getOrbTex(type));
+        sizeFactor = 0;
         lock();
     }
 
     @Override
     public void update() {
         super.update();
+
+        //sprite.setSize(Math.min(sprite.getRegionWidth(),sprite.getWidth()+Main.dt),Math.min(sprite.getRegionHeight(),sprite.getHeight()+Main.dt));
     }
 
     public void render(SpriteBatch batch) {
@@ -64,7 +68,7 @@ public class Ball_Orb extends Ball {
         super.contactBall_pre(ball);
         if (Funcs.getClass(ball) == Ball_Main.class) {
             doDispose = true;
-            Main.rewardOrbs.add(new RewardOrb(pos.x, pos.y,type));
+            Main.rewardOrbs.add(new RewardOrb(pos.x, pos.y, type));
             body.getFixtureList().first().setSensor(true);
         }
     }

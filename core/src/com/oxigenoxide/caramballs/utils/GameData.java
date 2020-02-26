@@ -16,6 +16,7 @@ public class GameData {
     public UserData userData;
     public boolean isSoundMuted;
     public boolean isMusicMuted;
+    public long time_leftFarm;
     public ArrayList<Ball_Main.Ball_Main_Data> farmBalls;
     public GameData(){
         unlocks[0]=true;

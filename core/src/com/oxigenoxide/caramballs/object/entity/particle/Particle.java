@@ -67,6 +67,11 @@ public class Particle extends Entity {
 
     }
 
+    @Override
+    public void render(SpriteBatch batch, ShapeRenderer sr){ // only called when in particles_batch
+        render(batch);
+    }
+
     public void setSpritePosition() {
         sprite.setPosition((int) (pos.x - sprite.getWidth() / 2), (int) (pos.y + height - sprite.getHeight() / 2));
     }

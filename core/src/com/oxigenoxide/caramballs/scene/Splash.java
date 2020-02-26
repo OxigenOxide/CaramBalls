@@ -33,7 +33,6 @@ public class Splash extends Scene {
     boolean goDown;
     int count;
     int dotRowLength = (int) Main.width / 2;
-    boolean isLoadingResources;
     LoadingBall loadingBall;
     Counter counter_dropBall;
     FrameBuffer buffer;

@@ -14,23 +14,16 @@ public class MathFuncs {
 
         float discriminant = b * b - 4 * a * c;
 
-        if (discriminant < 0) {
-            return false;
-        } else {
+        if (discriminant >= 0) {
+
             discriminant = (float) Math.sqrt(discriminant);
 
             float t1 = (-b - discriminant) / (2 * a);
             float t2 = (-b + discriminant) / (2 * a);
 
-            if (t1 >= 0 && t1 <= 1) {
-                return true;
-            }
-
-            if (t2 >= 0 && t2 <= 1) {
-                return true;
-            }
-            return false;
+            return (t1 >= 0 && t1 <= 1) || (t2 >= 0 && t2 <= 1);
         }
+        return false;
     }
 
     public static float getHypothenuse(float x, float y) {
@@ -46,7 +39,6 @@ public class MathFuncs {
         for (float f : floats) {
             sum += f;
         }
-
         return sum;
     }
 
@@ -66,7 +58,7 @@ public class MathFuncs {
         return (x > bx && x < bx + bw && y > by && y < by + bh);
     }
 
-    public static float toPPF(float mps){
+    public static float toPPF(float mps){ // meter per second to pixels per frame (frame = 1 / 60 s)
         return mps / 60 * Main.PIXELSPERMETER;
     }
 

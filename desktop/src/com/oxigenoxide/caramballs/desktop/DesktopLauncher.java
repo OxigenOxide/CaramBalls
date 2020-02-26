@@ -12,23 +12,25 @@ import com.oxigenoxide.caramballs.utils.UserData;
 
 public class DesktopLauncher {
     public static void main(String[] arg) {
-        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+
         TexturePacker.Settings settings = new TexturePacker.Settings();
         settings.maxWidth = 1024;
         settings.maxHeight = 1024;
         TexturePacker.process(settings, "C:\\CaramBalls\\desktop\\images", "../assets", "images");
+
+        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 
         // Default
         config.width = 108 * 5;
         config.height = 192 * 5;
 
         // Mi A2
-        config.width = 100 * 5;
-        config.height = 200 * 5;
+        //config.width = 100 * 5;
+        //config.height = 200 * 5;
 
         // Poster Phone Screens
-        config.width = 36 * 14;
-        config.height = 66 * 14;
+        //config.width = 36 * 14;
+        //config.height = 66 * 14;
 
         // Old iPad
         //config.width = 64 * 10;

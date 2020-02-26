@@ -20,6 +20,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.oxigenoxide.caramballs.object.BallSelector;
 import com.oxigenoxide.caramballs.object.DragSelector;
 import com.oxigenoxide.caramballs.object.Projection;
+import com.oxigenoxide.caramballs.object.RewardBall;
 import com.oxigenoxide.caramballs.object.RewardOrb;
 import com.oxigenoxide.caramballs.object.entity.BallCapsule;
 import com.oxigenoxide.caramballs.object.entity.Bullet;
@@ -65,6 +66,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
+import static jdk.nashorn.internal.runtime.regexp.joni.Syntax.Java;
 
 public class Main extends ApplicationAdapter {
     static SpriteBatch batch;
@@ -182,6 +185,8 @@ public class Main extends ApplicationAdapter {
     public static boolean isLoaded;
     public static Body border;
     public static final int adHeight = 17;
+    public static RewardBall rewardBall;
+
 
     public static boolean noAds = false; // DONE
     public static boolean noFX = false; // DONE
@@ -290,6 +295,7 @@ public class Main extends ApplicationAdapter {
         menu = new Menu();
         splash = new Splash();
 
+
         dim_screen = new Vector2(Main.width, Main.height);
         tap = new Vector2[]{new Vector2(), new Vector2()};
         tap_previous = new Vector2[]{new Vector2(), new Vector2()};
@@ -310,6 +316,7 @@ public class Main extends ApplicationAdapter {
 
         DataManager.getInstance().initializeGameData();
         gameData = DataManager.getInstance().gameData;
+
 
         isMusicMuted = gameData.isMusicMuted;
         isSoundMuted = gameData.isSoundMuted;
@@ -616,6 +623,9 @@ public class Main extends ApplicationAdapter {
         ballSelector.update();
         dragSelector.update();
 
+        if (rewardBall != null)
+            rewardBall.update();
+
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT_BRACKET))
             test_float += .01f;
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT_BRACKET))
@@ -810,6 +820,8 @@ public class Main extends ApplicationAdapter {
     public void render() {
         update();
 
+
+
         entities.clear();
         entities_sorted.clear();
 
@@ -865,6 +877,8 @@ public class Main extends ApplicationAdapter {
                 batch.draw(Res.tex_fade, 0, 0);
                 batch.setShader(null);
             }
+            if (rewardBall != null)
+                rewardBall.render(batch);
             batch.end();
         }
 
@@ -964,6 +978,43 @@ public class Main extends ApplicationAdapter {
         iWidth += tex_sign.getRegionWidth() + 2;
         batch.setShader(Res.shader_c);
         Res.shader_c.setUniformf("c", 1, 1, 1, 1);
+
+        for (int i : digits) {
+            batch.draw(Res.tex_numbers[font][i], pos.x - width / 2 + iWidth, pos.y);
+            iWidth += Res.tex_numbers[font][i].getRegionWidth() + 1;
+        }
+        batch.setShader(null);
+        return textWidth;
+    }
+
+    public static int drawNumberSignColor(SpriteBatch batch, int number, Vector2 pos, int font, TextureRegion tex_sign, int yDisposition, Color c) {
+        int digitAmount = 0;
+        ArrayList<Integer> digits = new ArrayList<Integer>();
+        int power = 0;
+        while (number >= Math.pow(10, power)) {
+            digitAmount++;
+            power++;
+        }
+        if (number == 0) {
+            digitAmount = 1;
+        }
+        int crunchNumber = number;
+        for (int i = digitAmount - 1; i >= 0; i--) {
+            digits.add((int) (crunchNumber / Math.pow(10, i)));
+            crunchNumber %= Math.pow(10, i);
+        }
+        int width = 0;
+        for (int i : digits) {
+            width += Res.tex_numbers[font][i].getRegionWidth() + 1;
+        }
+        width += tex_sign.getRegionWidth() + 2;
+        int textWidth = width;
+        width--;
+        int iWidth = 0;
+        batch.draw(tex_sign, pos.x - width / 2 + iWidth, pos.y + yDisposition);
+        iWidth += tex_sign.getRegionWidth() + 2;
+        batch.setShader(Res.shader_c);
+        Res.shader_c.setUniformf("c", c);
 
         for (int i : digits) {
             batch.draw(Res.tex_numbers[font][i], pos.x - width / 2 + iWidth, pos.y);
@@ -1121,7 +1172,9 @@ public class Main extends ApplicationAdapter {
     }
 
     @Override
-    public void dispose() {
+    public void dispose() { // called on desktop
+        currentScene.hide();
+        System.out.println("DISPOSE MAIN");
         batch.dispose();
         if (isLoaded) {
             game.dispose();
@@ -1135,9 +1188,11 @@ public class Main extends ApplicationAdapter {
         }
     }
 
-    public void onPause() { // refering to the android 'pause' when leaving the app
+    public void onPause() { // refering to the android 'pause' when leaving the app // for android
+        System.out.println("ONPAUSE");
+        farm.onPause();
+
         if (signedIn) {
-            System.out.println("ONPAUSE");
             userData.timePlayed += (System.currentTimeMillis() - startTime) / 1000;
             startTime = System.currentTimeMillis();
             userData.adsClicked += amm.getAdsClicked();
@@ -1148,14 +1203,17 @@ public class Main extends ApplicationAdapter {
 
             userData.ballsUnlocked.clear();
             userData.highscore = gameData.highscore;
+
             for (boolean b : Main.gameData.unlocks) {
                 userData.ballsUnlocked.add(b);
             }
             fbm.setUserData(userData);
             fbm.leave();
-
-            DataManager.getInstance().saveData();
         }
+
+
+
+        DataManager.getInstance().saveData();
     }
 
     public void onResume() {
@@ -1200,12 +1258,18 @@ public class Main extends ApplicationAdapter {
         createWorld();
         isLoaded = true;
         game = new Game();
+        gameOver = new GameOver();
         if (DOSCREENSHOTMODE)
             setScreenShotMode();
         menu = new Menu();
         farm = new Farm();
         welcome = new Welcome();
         shop = new Shop();
+    }
+
+    public static void onSetScene(Scene scene){
+        if(rewardBall!=null)
+            rewardBall.onSetScene(scene);
     }
 
     public static void muteMusic() {
@@ -1222,12 +1286,12 @@ public class Main extends ApplicationAdapter {
 
     public static void muteSound() {
         isSoundMuted = true;
-        gameData.isSoundMuted = isMusicMuted;
+        gameData.isSoundMuted = isSoundMuted;
     }
 
     public static void unmuteSound() {
         isSoundMuted = false;
-        gameData.isSoundMuted = isMusicMuted;
+        gameData.isSoundMuted = isSoundMuted;
     }
 
 
@@ -1335,7 +1399,10 @@ public class Main extends ApplicationAdapter {
         startFade(game);
         inGame = true; // not really
     }
-
+    public static void setSceneGameOver() {
+        popScene();
+        startFade(gameOver);
+    }
 
     public static void setSceneMenu() {
         startFade(menu);
@@ -1348,6 +1415,10 @@ public class Main extends ApplicationAdapter {
             sceneStack.remove(sceneStack.size() - 1);
             sceneStack.remove(sceneStack.size() - 1); // Yes, twice
         }
+    }
+
+    public static void popScene(){
+        sceneStack.remove(sceneStack.size() - 1);
     }
 
     public static void setSceneMenuNow() {
@@ -1373,6 +1444,8 @@ public class Main extends ApplicationAdapter {
             currentScene.hide();
         currentScene = scene;
         scene.show();
+
+        onSetScene(scene);
     }
 
     public static void setAdVisibility(boolean visibility) {
@@ -1508,11 +1581,15 @@ public class Main extends ApplicationAdapter {
         return this;
     }
 
+    public static boolean isInScene(Class scene) {
+        return Funcs.getClass(currentScene) == scene;
+    }
+
     public void createInputProcessor() {
         InputProcessor inputProcessor = new InputProcessor() {
             @Override
             public boolean keyDown(int keycode) {
-                if (game.isShown())
+                if (game !=null && game.isShown())
                     game.onKeyDown(keycode);
                 return false;
             }
@@ -1535,6 +1612,7 @@ public class Main extends ApplicationAdapter {
             @Override
             public boolean touchUp(int screenX, int screenY, int pointer, int button) {
                 //point.onRelease();
+                System.out.println("touchup " + Math.random());
                 if (!Gdx.input.isTouched(0)) {
                     ballSelector.onRelease();
                     dragSelector.onRelease();

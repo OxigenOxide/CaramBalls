@@ -40,12 +40,11 @@ public class BallSelector {
             Game.slowdown_effect = Math.max(Game.slowdown_effect - Main.dt_one * .05f, 0);
         }
         if (active) {
-            if (Main.noFlow)
-                Game.slowdown_effect = Math.min(Game.slowdown_effect + Main.dt_one * .05f, .8f);
-            else
-                Game.slowdown_effect = Math.min(Game.slowdown_effect + Main.dt_one * .05f, .9f);
 
-            Main.slowdown = Game.slowdown_effect;
+            if(Main.isInScene(Game.class)) {
+                Game.slowdown_effect = Math.min(Game.slowdown_effect + Main.dt_one * .05f, .9f);
+                Main.slowdown = Game.slowdown_effect;
+            }
 
             cang = MathFuncs.angleBetweenPoints(ball_selected.pos, tap[0]);
             v0.set(ball_selected.radius + 2, 0);
@@ -82,6 +81,7 @@ public class BallSelector {
 
     public void setSelected(Ball ball) {
         ball_selected = ball;
+        ball_selected.onSelect();
     }
 
     public void render(ShapeRenderer sr) {
