@@ -214,16 +214,76 @@ manager
 -track time away from farm screen, also when not playing, add it to elapsedTime in main balls of farm
 -improve play button slightly
 -fix: when gone out of farm screen while some balls were ready to be milked it would reset these balls
-[25-feb.-20] s: e: t:
-
-
-
-TODO: count orbs in farm, sell balls in farm, different rewards from orbs.
-
+-add sell button
+[27-feb.-20] s:103h20m e:106h2m t:2h42m
+-make sell button spawn a sell hole
+-sell balls that fall in the hole
+-reset sell button when coming back to the farm screen
+-give RewardOrbs a short spreading animation when they come from selling a ball
+-milk ball when it is ready to and being combined with another ball
+-push balls away when the sell hole opens
+-Let the sell hole be permanently in the farm and just open and close
+-draw ball selector in front of holes in farm
+[28-feb.-20] s:106h5m e:109h6m t:3h1m
+-draw shine behind reward ball in game over
+-draw pedestal for the reward ball
+-make the replay button green
+-remove orbs section in game over
+-score and highscore get a color in game over
+-changed the number textures of POP and POP_LARGE slightly
+-make reward ball hover over pedestal
+-fix: collect sounds would start playing right after changing to the game screen
+[3-mar.-20]
+-fix: shadows too low when using tall skins
+-fix: shop background too high on some screens
+[9-mar.-20] s:110h0m e: 111h0m t: 1h0m
+-center all elements on all screens with variable scrHD and fix some at the bottom and top
+-lower position of title so it doesn't overlap with the options button
+[10-mar.-20] s: 111h0m e:113h10m t:2h10m
+-fix shadows for different skins (position would be one pixel off sometimes)
+-fix shop items not on the right spot and not saved right
+-add improved textures of skins: brain, egg, face, square
+-add new skins: cd, scales, virus, ring
+-add top and bottom margins to shop
+-add scrolling to shop
+[11-mar.-20] s: 113h10m e:114h5m t: 0h55m
+-fix top margin height in the shop
+-put option button at the bottom right corner
+-remove HL ball
+[12-mar.-20] s: 114h05m e:~117h10m t:3h5m
+-fix: orbs out of broken orb containers went the opposite direction
+-make slow shader depend on flow
+-change combo mechanics
+-make possible to buy something when having just enough orbs
+-remove trail from orbs
+-play sound when flow begins
+-make hits harder when in flow
+-make balls not jump on hit
+-fix, finally: sometimes the ball wouldn't get hit on Android
+[14-mar.-20] s: ~117h10m e:118h8m t:0h58m
+-make the combo bar's amplitude and speed peak very shortly every time the combo gets increased.
+-small optimisation in the gravitation section of Ball_Main
+[15-mar.-20] s: 118h8m e:118h34m t:0h26m
+-create Scooper class
+[16-mar.-20] s: 118h34m e: t:
+-complete scooper fully functional
+-make scooper compatible with torque
+-create subclasses of Scooper
+-fix: circular bumpers wouldn't grow from the center
+-make orbs not wiggle
+-make scoopers and spikes disappear on next level
+-add a few levels
+-remove shake from the farm screen
 
 deadline: 20 march 2020
 (set at 11 februari)
 
+LIST 16 march
+TODO: create some levels and think of a level system.
+TODO: design lootbox system. Do research on legality. Does the tank game still use?
+TODO: new reward system. Fruits drop from air etc.
+
+TODO: fade sound
 TODO: split sound
 TODO: fix multiple pulse particles when combining
 TODO: ball duplication glitch
@@ -232,6 +292,12 @@ TODO: choose good outline colors
 TODO: choose good ball colors
 TODO: choose good background colors
 TODO: optimize all entities
+TODO: growing hitboxes?
 TODO: add capsules to levels
 TODO: force update
 TODO: glow in the dark?
+TODO: only 0.1% will reach pink color
+TODO: particle pool for optimization
+TODO: powerful hit animation
+TODO: Box2D iterations might dramatically improve performance
+TODO: virus balls

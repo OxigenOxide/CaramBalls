@@ -36,6 +36,14 @@ public class DesktopLauncher {
         //config.width = 64 * 10;
         //config.height = 92 * 10;
 
+        // Square
+        //config.width = 92 * 10;
+        //config.height = 92 * 10;
+
+        // Test long
+        //config.width = 100 * 3;
+        //config.height = 300 * 3;
+
         FirebaseInterface fbm = new FirebaseInterface() {
             @Override
             public void writeMerges() {
@@ -103,14 +111,17 @@ public class DesktopLauncher {
         };
 
         AdMobInterface amm = new AdMobInterface() {
+
+            boolean bannerVisible;
+
             @Override
             public void show() {
-
+                bannerVisible=true;
             }
 
             @Override
             public void hide() {
-
+                bannerVisible=false;
             }
 
             @Override
@@ -131,6 +142,11 @@ public class DesktopLauncher {
             @Override
             public void loadInterstitial() {
 
+            }
+
+            @Override
+            public boolean isBannerVisible() {
+                return bannerVisible;
             }
 
             @Override

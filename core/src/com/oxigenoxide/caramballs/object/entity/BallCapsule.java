@@ -1,6 +1,5 @@
 package com.oxigenoxide.caramballs.object.entity;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -9,7 +8,6 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.oxigenoxide.caramballs.ID;
 import com.oxigenoxide.caramballs.Main;
 import com.oxigenoxide.caramballs.Res;
-import com.oxigenoxide.caramballs.object.entity.ball.Ball_Main;
 import com.oxigenoxide.caramballs.object.entity.particle.Particle_BallShard;
 import com.oxigenoxide.caramballs.object.floatingReward.FR_Ball;
 import com.oxigenoxide.caramballs.scene.Game;
@@ -42,9 +40,9 @@ public class BallCapsule extends Entity {
 
     public void createBody() {
         body = Main.world.createBody(Res.bodyDef_static);
-        Res.fixtureDef_circle.shape.setRadius(6 * Main.METERSPERPIXEL);
+        Res.fixtureDef_circle.shape.setRadius(6 * Main.MPP);
         body.createFixture(Res.fixtureDef_circle);
-        body.setTransform(pos.x * Main.METERSPERPIXEL, pos.y * Main.METERSPERPIXEL, 0);
+        body.setTransform(pos.x * Main.MPP, pos.y * Main.MPP, 0);
         body.setUserData(this);
     }
 

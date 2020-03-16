@@ -29,6 +29,7 @@ public class Hole extends Entity {
     }
 
     public void render(ShapeRenderer sr) {
+        sr.setColor(0, 0, 0, 1);
         sr.circle(pos.x, pos.y, radius, 15);
     }
 

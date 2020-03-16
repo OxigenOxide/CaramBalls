@@ -4,14 +4,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.oxigenoxide.caramballs.ID;
 import com.oxigenoxide.caramballs.Main;
 import com.oxigenoxide.caramballs.Res;
 import com.oxigenoxide.caramballs.object.entity.particle.Particle_Ball;
-import com.oxigenoxide.caramballs.scene.Game;
 import com.oxigenoxide.caramballs.utils.Counter;
 import com.oxigenoxide.caramballs.utils.Funcs;
-import com.oxigenoxide.caramballs.utils.MathFuncs;
 
 public class Ball_Inflate extends Ball {
 
@@ -81,7 +78,7 @@ public class Ball_Inflate extends Ball {
             size++;
             body.destroyFixture(body.getFixtureList().first());
             body.createFixture(Res.fixtureDef_ball[size]);
-            radius = body.getFixtureList().first().getShape().getRadius() * Main.PIXELSPERMETER;
+            radius = body.getFixtureList().first().getShape().getRadius() * Main.PPM;
             setSpriteTexture(Res.tex_ball[20][size]);
         }
     }

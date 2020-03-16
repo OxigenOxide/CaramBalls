@@ -9,7 +9,6 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.oxigenoxide.caramballs.Main;
 import com.oxigenoxide.caramballs.object.entity.BallCapsule;
 import com.oxigenoxide.caramballs.object.entity.Bullet;
-import com.oxigenoxide.caramballs.object.entity.Cat;
 import com.oxigenoxide.caramballs.object.entity.CircularBumper;
 import com.oxigenoxide.caramballs.object.entity.Eye;
 import com.oxigenoxide.caramballs.object.entity.JumpingPad;
@@ -33,7 +32,7 @@ public class B2DContactListener implements ContactListener {
         Class classB = getClass(udB);
 
         Vector2 contactPoint = new Vector2(contact.getWorldManifold().getPoints()[0]);
-        contactPoint.scl(Main.PIXELSPERMETER);
+        contactPoint.scl(Main.PPM);
 
         if (classA == Ball_Main.class && classB == Ball_Main.class) {
             Ball ballA = (Ball) udA;
@@ -132,7 +131,7 @@ public class B2DContactListener implements ContactListener {
         Class classB = getClass(udB);
 
         Vector2 contactPoint = new Vector2(contact.getWorldManifold().getPoints()[0]);
-        contactPoint.scl(Main.PIXELSPERMETER);
+        contactPoint.scl(Main.PPM);
 
         if (udB instanceof Ball && udA instanceof Ball) { // collision only called on one ball
             Ball ball0 = (Ball) udA;

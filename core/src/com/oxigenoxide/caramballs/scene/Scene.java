@@ -6,23 +6,29 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 public class Scene {
     public int timesShown;
     boolean isShown;
-    public void update(){
+
+    public void update() {
 
     }
-    public void render(SpriteBatch batch, ShapeRenderer sr){
+
+    public void render(SpriteBatch batch, ShapeRenderer sr) {
 
     }
-    public void dispose(){
+
+    public void dispose() {
 
     }
-    public void show(){
+
+    public void show() {
         timesShown++;
-        isShown=true;
+        isShown = true;
     }
-    public void hide(){
-        isShown=false;
+
+    public void hide() {
+        isShown = false;
     }
-    public boolean isShown(){
+
+    public boolean isShown() {
         return isShown;
     }
 }

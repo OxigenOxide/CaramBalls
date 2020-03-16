@@ -97,6 +97,7 @@ public class Res {
     public static TextureRegion tex_statisticsBackground;
     public static TextureRegion tex_numberSign;
     public static TextureRegion tex_shopSpot;
+    public static TextureRegion tex_shopSpotEmpty;
     public static TextureRegion tex_shopSpotPressed;
     public static TextureRegion tex_underTitle;
     public static TextureRegion tex_cannon_gun;
@@ -138,6 +139,9 @@ public class Res {
     public static TextureRegion tex_honey;
     public static TextureRegion tex_tutorialHole;
     public static TextureRegion tex_pin;
+    public static TextureRegion tex_scooper;
+    public static TextureRegion tex_scooper_0;
+    public static TextureRegion tex_scooperShine_0;
     public static float[] ballRadius;
     public static TextureRegion tex_orb;
     public static TextureRegion tex_orb_big;
@@ -173,6 +177,10 @@ public class Res {
     public static TextureRegion tex_loadingBall_shadow;
     public static TextureRegion tex_loadingBall_filled;
     public static TextureRegion tex_speechBubbleOrb;
+    public static TextureRegion tex_pedestal;
+    public static TextureRegion tex_shopMarginBottom;
+    public static TextureRegion tex_shopMarginTop;
+    public static TextureRegion tex_ad;
 
     public static Texture tex_comboBar;
 
@@ -208,6 +216,7 @@ public class Res {
     public static FixtureDef fixtureDef_spike;
     public static FixtureDef fixtureDef_tire;
     public static FixtureDef fixtureDef_plank;
+    public static FixtureDef fixtureDef_box;
     public static FixtureDef[] fixtureDef_ball;
     public static FixtureDef[] fixtureDef_ball_passThrough;
     public static Color[][] ballPalette;
@@ -232,6 +241,15 @@ public class Res {
     public static final Color[] COLOR_PROJECTION = new Color[]{COLOR_PROJECTION_RED, COLOR_PROJECTION_GREEN, COLOR_PROJECTION_YELLOW, COLOR_PROJECTION_PURPLE};
     public static final Color[] COLOR_OUTLINE = new Color[]{Color.BLACK, COLOR_PROJECTION_GREEN, COLOR_PROJECTION_YELLOW, COLOR_PROJECTION_PURPLE}; // test colors currently
     public static final Color[] PALETTE_BASICBALL = new Color[]{new Color(0, 0, 0, 1), new Color(62 / 255f, 180 / 255f, 227 / 255f, 1), new Color(1, 1, 1, 1), new Color(1, 1, 1, 1)};
+    public static final Color[][] PALETTE_SCORE = new Color[][]{
+            new Color[]{null, null, new Color(162 / 255f, 162 / 255f, 162 / 255f, 1), Color.WHITE}, // white
+            new Color[]{null, null, new Color(51 / 255f, 174 / 255f, 58 / 255f, 1), new Color(95 / 255f, 205 / 255f, 111 / 255f, 1)}, // light green
+            new Color[]{null, null, new Color(27 / 255f, 131 / 255f, 33 / 255f, 1), new Color(51 / 255f, 174 / 255f, 58 / 255f, 1)}, // dark green
+            new Color[]{null, null, new Color(88 / 255f, 96 / 255f, 194 / 255f, 1), new Color(99 / 255f, 179 / 255f, 194 / 255f, 1)}, // light blue
+            new Color[]{null, null, new Color(131 / 255f, 26 / 255f, 72 / 255f, 1), new Color(191 / 255f, 53 / 255f, 205 / 255f, 1)}, // purple
+            new Color[]{null, null, new Color(213 / 255f, 109 / 255f, 0, 1), new Color(227 / 255f, 202 / 255f, 22 / 255f, 1)}, // gold
+            new Color[]{null, null, new Color(177 / 255f, 15 / 255f, 145/255f, 1), new Color(1, 28 / 255f, 161 / 255f, 1)}, // pink
+    };
 
     public static Sound sound_ballHit;
     public static Sound sound_speedup;
@@ -262,7 +280,6 @@ public class Res {
     public static final short MASK_GAP = 0x0032;
     public static final short MASK_WALL = 0x0128;
 
-
     public static void createAtlas() {
         atlas = new TextureAtlas(Gdx.files.internal("images.atlas"));
         //new TextureRegion(atlas.findRegion())
@@ -289,7 +306,7 @@ public class Res {
         };
 
         tex_comboBar = Main.assets.get("images/comboBar.png");
-        tex_tabletop = new Texture[]{Main.assets.get("images/tabletop_0.png"),Main.assets.get("images/tabletop_1.png"),Main.assets.get("images/tabletop_2.png"),Main.assets.get("images/tabletop_3.png")};
+        tex_tabletop = new Texture[]{Main.assets.get("images/tabletop_0.png"), Main.assets.get("images/tabletop_1.png"), Main.assets.get("images/tabletop_2.png"), Main.assets.get("images/tabletop_3.png")};
 
         shader_floorFade.setUniformf("screenSize", Main.width, Main.height);
         /*
@@ -309,8 +326,11 @@ public class Res {
         tex_ball[4] = new TextureRegion[]{atlas.findRegion("ball_egg_small"), atlas.findRegion("ball_egg_medium"), atlas.findRegion("ball_egg_large")};
         tex_ball[5] = new TextureRegion[]{atlas.findRegion("ball_apple_small"), atlas.findRegion("ball_apple_medium"), atlas.findRegion("ball_apple_large")};
         tex_ball[6] = new TextureRegion[]{atlas.findRegion("ball_rasp_small"), atlas.findRegion("ball_rasp_medium"), atlas.findRegion("ball_rasp_large")};
-        tex_ball[7] = new TextureRegion[]{atlas.findRegion("ball_hl_small"), atlas.findRegion("ball_hl_medium"), atlas.findRegion("ball_hl_large")};
+        tex_ball[7] = new TextureRegion[]{atlas.findRegion("ball_scales_small"), atlas.findRegion("ball_scales_medium"), atlas.findRegion("ball_scales_large")};
         tex_ball[8] = new TextureRegion[]{atlas.findRegion("ball_moon_small"), atlas.findRegion("ball_moon_medium"), atlas.findRegion("ball_moon_large")};
+        tex_ball[9] = new TextureRegion[]{atlas.findRegion("ball_ring_small"), atlas.findRegion("ball_ring_medium"), atlas.findRegion("ball_ring_large")};
+        tex_ball[10] = new TextureRegion[]{atlas.findRegion("ball_virus_small"), atlas.findRegion("ball_virus_medium"), atlas.findRegion("ball_virus_large")};
+        tex_ball[11] = new TextureRegion[]{atlas.findRegion("ball_cd_small"), atlas.findRegion("ball_cd_medium"), atlas.findRegion("ball_cd_large")};
         tex_ball[20] = new TextureRegion[]{atlas.findRegion("ball_inflate_small"), atlas.findRegion("ball_inflate_medium"), atlas.findRegion("ball_inflate_large"), atlas.findRegion("ball_inflate_huge")};
         tex_ball[21] = new TextureRegion[]{atlas.findRegion("ball_inflate_small"), atlas.findRegion("ball_inflate_medium"), atlas.findRegion("ball_break1_large"), atlas.findRegion("ball_inflate_huge")};
         tex_ball[22] = new TextureRegion[]{atlas.findRegion("ball_inflate_small"), atlas.findRegion("ball_inflate_medium"), atlas.findRegion("ball_break2_large"), atlas.findRegion("ball_inflate_huge")};
@@ -397,6 +417,7 @@ public class Res {
         tex_symbolOrb = atlas.findRegion("symbol_orb");
         tex_shopSpot = atlas.findRegion("shopSpot");
         tex_shopSpotPressed = atlas.findRegion("shopSpotPressed");
+        tex_shopSpotEmpty = atlas.findRegion("shopSpotEmpty");
         tex_symbolSelected = atlas.findRegion("symbol_selected");
         tex_pin = atlas.findRegion("pin");
         tex_jumpingPad = atlas.findRegion("jumpingPad");
@@ -457,6 +478,15 @@ public class Res {
         tex_comboBar_end = atlas.findRegion("comboBar_end");
         tex_speechBubbleOrb = atlas.findRegion("speechBubbleOrb");
         tex_orbCountBar = atlas.findRegion("orbCountBar");
+        tex_pedestal = atlas.findRegion("pedestal");
+        tex_shopMarginBottom = atlas.findRegion("shopMarginBottom");
+        tex_shopMarginTop = atlas.findRegion("shopMarginTop");
+        tex_ad = atlas.findRegion("ad");
+        tex_scooper = atlas.findRegion("scooper");
+        tex_scooper_0 = atlas.findRegion("scooper",0);
+        tex_scooperShine_0 = atlas.findRegion("scooperShine",0);
+
+
 
         tex_text_level = new TextureRegion[]{
                 atlas.findRegion("text_level_home"),
@@ -538,10 +568,10 @@ public class Res {
         new World(new Vector2(0, 0), false);
 
         shape_ball = new CircleShape[]{new CircleShape(), new CircleShape(), new CircleShape(), new CircleShape()};
-        shape_ball[0].setRadius(4 * Main.METERSPERPIXEL);
-        shape_ball[1].setRadius(7 * Main.METERSPERPIXEL);
-        shape_ball[2].setRadius(9.5f * Main.METERSPERPIXEL);
-        shape_ball[3].setRadius(13.5f * Main.METERSPERPIXEL);
+        shape_ball[0].setRadius(4 * Main.MPP);
+        shape_ball[1].setRadius(7 * Main.MPP);
+        shape_ball[2].setRadius(9.5f * Main.MPP);
+        shape_ball[3].setRadius(13.5f * Main.MPP);
 
 
         fixtureDef_ball = new FixtureDef[]{new FixtureDef(), new FixtureDef(), new FixtureDef(), new FixtureDef()};
@@ -586,21 +616,21 @@ public class Res {
         fixtureDef_egg.density = 1;
         fixtureDef_egg.restitution = 1;
         fixtureDef_egg.shape = new CircleShape();
-        fixtureDef_egg.shape.setRadius(5 * Main.METERSPERPIXEL);
+        fixtureDef_egg.shape.setRadius(5 * Main.MPP);
         fixtureDef_egg.filter.maskBits = (short) (MASK_ZERO);
         fixtureDef_egg.filter.categoryBits = MASK_ZERO;
 
         fixtureDef_badBall_opponents = new FixtureDef();
         fixtureDef_badBall_opponents.density = 1;
         fixtureDef_badBall_opponents.shape = new CircleShape();
-        fixtureDef_badBall_opponents.shape.setRadius(2 * Main.METERSPERPIXEL);
+        fixtureDef_badBall_opponents.shape.setRadius(2 * Main.MPP);
         fixtureDef_badBall_opponents.filter.maskBits = (short) (MASK_ZERO);
         fixtureDef_badBall_opponents.filter.categoryBits = MASK_ZERO;
 
         fixtureDef_badBall_normal = new FixtureDef();
         fixtureDef_badBall_normal.density = 1;
         fixtureDef_badBall_normal.shape = new CircleShape();
-        fixtureDef_badBall_normal.shape.setRadius(7 * Main.METERSPERPIXEL);
+        fixtureDef_badBall_normal.shape.setRadius(7 * Main.MPP);
         fixtureDef_badBall_normal.filter.maskBits = (MASK_ZERO);
         fixtureDef_badBall_normal.filter.categoryBits = MASK_ZERO;
 
@@ -608,19 +638,19 @@ public class Res {
         fixtureDef_collectable.density = 1;
         fixtureDef_collectable.isSensor = true;
         fixtureDef_collectable.shape = new CircleShape();
-        fixtureDef_collectable.shape.setRadius(7 * Main.METERSPERPIXEL);
+        fixtureDef_collectable.shape.setRadius(7 * Main.MPP);
         fixtureDef_collectable.filter.maskBits = (MASK_ZERO);
         fixtureDef_collectable.filter.categoryBits = MASK_ZERO;
 
         fixtureDef_jumpingPad = new FixtureDef();
         fixtureDef_jumpingPad.isSensor = true;
         fixtureDef_jumpingPad.shape = new CircleShape();
-        fixtureDef_jumpingPad.shape.setRadius(7f * Main.METERSPERPIXEL);
+        fixtureDef_jumpingPad.shape.setRadius(7f * Main.MPP);
         fixtureDef_jumpingPad.filter.maskBits = MASK_ZERO;
         fixtureDef_jumpingPad.filter.categoryBits = MASK_ZERO;
 
         ChainShape chainShape_gap = new ChainShape();
-        chainShape_gap.createLoop(new float[]{Main.METERSPERPIXEL * 29, Main.METERSPERPIXEL * 71, Main.METERSPERPIXEL * 29, Main.METERSPERPIXEL * 121, Main.METERSPERPIXEL * 79, Main.METERSPERPIXEL * 121, Main.METERSPERPIXEL * 79, Main.METERSPERPIXEL * 71});
+        chainShape_gap.createLoop(new float[]{Main.MPP * 29, Main.MPP * 71, Main.MPP * 29, Main.MPP * 121, Main.MPP * 79, Main.MPP * 121, Main.MPP * 79, Main.MPP * 71});
         fixtureDef_gap = new FixtureDef();
         fixtureDef_gap.density = 1;
         fixtureDef_gap.shape = chainShape_gap;
@@ -628,7 +658,7 @@ public class Res {
         fixtureDef_gap.filter.categoryBits = MASK_WALL;
 
         shape_spike = new CircleShape();
-        shape_spike.setRadius(3.5f * Main.METERSPERPIXEL);
+        shape_spike.setRadius(3.5f * Main.MPP);
 
         fixtureDef_spike = new FixtureDef();
         fixtureDef_spike.density = 1;
@@ -637,7 +667,7 @@ public class Res {
         fixtureDef_spike.filter.categoryBits = MASK_ZERO;
 
         CircleShape shape_tire = new CircleShape();
-        shape_tire.setRadius(23 * Main.METERSPERPIXEL);
+        shape_tire.setRadius(23 * Main.MPP);
 
         fixtureDef_tire = new FixtureDef();
         fixtureDef_tire.density = 2;
@@ -647,7 +677,7 @@ public class Res {
         fixtureDef_tire.filter.categoryBits = MASK_ZERO;
 
         PolygonShape shape_plank = new PolygonShape();
-        shape_plank.setAsBox(64 * Main.METERSPERPIXEL / 2, 19 * Main.METERSPERPIXEL / 2);
+        shape_plank.setAsBox(64 * Main.MPP / 2, 19 * Main.MPP / 2);
         fixtureDef_plank = new FixtureDef();
         fixtureDef_plank.density = 1;
         fixtureDef_plank.shape = shape_plank;
@@ -655,15 +685,24 @@ public class Res {
         fixtureDef_plank.filter.maskBits = (short) (MASK_ZERO | MASK_WALL);
         fixtureDef_plank.filter.categoryBits = MASK_ZERO;
 
+        PolygonShape shape_box = new PolygonShape();
+        shape_box.setAsBox(1,1);
+        fixtureDef_box = new FixtureDef();
+        fixtureDef_box.density = 1;
+        fixtureDef_box.shape = shape_box;
+        fixtureDef_box.restitution = 1;
+        fixtureDef_box.filter.maskBits = (short) (MASK_ZERO | MASK_WALL);
+        fixtureDef_box.filter.categoryBits = MASK_ZERO;
+
         shape_pin = new CircleShape();
-        shape_pin.setRadius(5 * Main.METERSPERPIXEL);
+        shape_pin.setRadius(5 * Main.MPP);
 
         shape_bullet = new PolygonShape();
-        ((PolygonShape) shape_bullet).setAsBox(3.5f * Main.METERSPERPIXEL, 2.5f * Main.METERSPERPIXEL);
+        ((PolygonShape) shape_bullet).setAsBox(3.5f * Main.MPP, 2.5f * Main.MPP);
 
         fixtureDef_border = new FixtureDef();
         ChainShape chainShape = new ChainShape();
-        chainShape.createLoop(new float[]{0, 0, Main.width * Main.METERSPERPIXEL, 0, Main.width * Main.METERSPERPIXEL, Main.height * Main.METERSPERPIXEL, 0, Main.height * Main.METERSPERPIXEL});
+        chainShape.createLoop(new float[]{0, 0, Main.width * Main.MPP, 0, Main.width * Main.MPP, Main.height * Main.MPP, 0, Main.height * Main.MPP});
         fixtureDef_border.shape = chainShape;
         fixtureDef_border.density = 1;
         fixtureDef_border.restitution = 1;
@@ -673,7 +712,7 @@ public class Res {
 
         fixtureDef_cage = new FixtureDef();
         ChainShape chainShape_cage = new ChainShape();
-        chainShape_cage.createLoop(new float[]{0, 0, 100 * Main.METERSPERPIXEL, 0, 100 * Main.METERSPERPIXEL, 100 * Main.METERSPERPIXEL, 0, 100 * Main.METERSPERPIXEL});
+        chainShape_cage.createLoop(new float[]{0, 0, 100 * Main.MPP, 0, 100 * Main.MPP, 100 * Main.MPP, 0, 100 * Main.MPP});
         fixtureDef_cage.shape = chainShape_cage;
         fixtureDef_cage.density = 1;
         fixtureDef_cage.restitution = 1;
@@ -834,12 +873,12 @@ public class Res {
         tex_wifiSymbol = atlas.findRegion("wifiSymbol");
         tex_text_noInternet = atlas.findRegion("nointernet");
         tex_loadingBall = atlas.findRegion("loadingBall");
-        System.out.println("loadingball: "+tex_loadingBall);
+        System.out.println("loadingball: " + tex_loadingBall);
         tex_loadingBall_shadow = atlas.findRegion("loadingBall_shadow");
         tex_loadingBall_filled = atlas.findRegion("loadingBallFilled");
         tex_oxigenoxide = atlas.findRegion("oxigenoxide");
         tex_numbers = new TextureRegion[5][];
-        tex_numbers[ID.Font.SMALL] = new TextureRegion[]{atlas.findRegion("numbers/number_m",0), atlas.findRegion("numbers/number_m",1), atlas.findRegion("numbers/number_m", 2), atlas.findRegion("numbers/number_m", 3), atlas.findRegion("numbers/number_m", 4), atlas.findRegion("numbers/number_m", 5), atlas.findRegion("numbers/number_m", 6), atlas.findRegion("numbers/number_m", 7), atlas.findRegion("numbers/number_m", 8), atlas.findRegion("numbers/number_m", 9)};
+        tex_numbers[ID.Font.SMALL] = new TextureRegion[]{atlas.findRegion("numbers/number_m", 0), atlas.findRegion("numbers/number_m", 1), atlas.findRegion("numbers/number_m", 2), atlas.findRegion("numbers/number_m", 3), atlas.findRegion("numbers/number_m", 4), atlas.findRegion("numbers/number_m", 5), atlas.findRegion("numbers/number_m", 6), atlas.findRegion("numbers/number_m", 7), atlas.findRegion("numbers/number_m", 8), atlas.findRegion("numbers/number_m", 9)};
         tex_number_small_percent = atlas.findRegion("numbers/number_m_percent");
         shader_c = new ShaderProgram(Gdx.files.internal("shaders/shader_c.vert"), Gdx.files.internal("shaders/shader_c.frag"));
         sound_bounce = Gdx.audio.newSound(Gdx.files.internal("sounds/bounce.mp3"));
@@ -857,7 +896,7 @@ public class Res {
         shader_circle = new ShaderProgram(Gdx.files.internal("shaders/shader_circle.vert"), Gdx.files.internal("shaders/shader_circle.frag"));
     }
 
-    public static void dispose(){
+    public static void dispose() {
         atlas.dispose();
 
         shader_c.dispose();
@@ -888,8 +927,8 @@ public class Res {
         return null;
     }
 
-    public static TextureRegion getOrbTex(int type){
-        switch(type){
+    public static TextureRegion getOrbTex(int type) {
+        switch (type) {
             case 0:
                 return Res.tex_orb;
             case 1:

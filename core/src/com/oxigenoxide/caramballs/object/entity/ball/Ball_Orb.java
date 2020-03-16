@@ -1,16 +1,13 @@
 package com.oxigenoxide.caramballs.object.entity.ball;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.oxigenoxide.caramballs.Main;
 import com.oxigenoxide.caramballs.Res;
 import com.oxigenoxide.caramballs.object.RewardOrb;
-import com.oxigenoxide.caramballs.utils.Counter;
+import com.oxigenoxide.caramballs.scene.Game;
 import com.oxigenoxide.caramballs.utils.Funcs;
-import com.oxigenoxide.caramballs.utils.MathFuncs;
 
 public class Ball_Orb extends Ball {
 
@@ -36,9 +33,10 @@ public class Ball_Orb extends Ball {
     private void construct() {
         radius = RADIUS[type];
         radius_spawn = radius + 1;
-        body.getFixtureList().first().getShape().setRadius(radius * Main.METERSPERPIXEL);
+        body.getFixtureList().first().getShape().setRadius(radius * Main.MPP);
         setSpriteTexture(Res.getOrbTex(type));
         sizeFactor = 0;
+        doWiggle = false;
         lock();
     }
 
@@ -68,10 +66,13 @@ public class Ball_Orb extends Ball {
         super.contactBall_pre(ball);
         if (Funcs.getClass(ball) == Ball_Main.class) {
             doDispose = true;
+            if(Main.inGame())
+                Game.comboBar.pickupOrb(RewardOrb.getValue(type));
             Main.rewardOrbs.add(new RewardOrb(pos.x, pos.y, type));
             body.getFixtureList().first().setSensor(true);
         }
     }
+
 
     @Override
     public void destroy(float angle, float impact, Vector2 pos_danger) {
@@ -100,8 +101,7 @@ public class Ball_Orb extends Ball {
 
     @Override
     public void drawTrail(ShapeRenderer sr) {
-        sr.setColor(Res.COLOR_SPLASH_BLUE.r, Res.COLOR_SPLASH_BLUE.g, Res.COLOR_SPLASH_BLUE.b, 1);
-        super.drawTrail(sr);
+        // no trail
     }
 
 }

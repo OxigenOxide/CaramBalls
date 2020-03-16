@@ -21,7 +21,7 @@ public class Pin extends Entity {
         body = Main.world.createBody(Res.bodyDef_static);
         body.createFixture(Res.shape_pin, 1);
         body.setUserData(this);
-        body.setTransform(Main.METERSPERPIXEL * (pos.x), Main.METERSPERPIXEL * (pos.y), 0);
+        body.setTransform(Main.MPP * (pos.x), Main.MPP * (pos.y), 0);
     }
 
     public void update() {

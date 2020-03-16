@@ -13,7 +13,7 @@ public class Title {
 
     public Title() {
         letterHeight = new int[amount_letters];
-        y = Main.height - 26 - Main.adHeight - amp;
+        y = Main.height - 29 - Main.adHeight - amp;
     }
 
     public void update() {

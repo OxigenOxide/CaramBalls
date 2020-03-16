@@ -63,6 +63,7 @@ public class Orb extends Entity {
         Game.collectSoundsToPlay++;
         Game.orbsCollected++;
         Main.userData.orbsCollected++;
+        System.out.println("collect orb");
     }
 
     public void render(SpriteBatch batch) {

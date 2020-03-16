@@ -29,7 +29,7 @@ public class Button_Play extends Button {
             @Override
             public void action() {
                 //if(Main.game.timesShown>0)
-                    Game.reset(); // first reset so gameOver == false TODO: FIX
+                    Game.reset();
                 Main.setScene(Main.game); // game will setup because gameOver == false
             }
         });

@@ -5,8 +5,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Array;
 import com.oxigenoxide.caramballs.Main;
 import com.oxigenoxide.caramballs.Res;
 import com.oxigenoxide.caramballs.utils.Funcs;
@@ -14,7 +12,6 @@ import com.oxigenoxide.caramballs.utils.MathFuncs;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class Plank extends Draggable {
     Vector2[] v;
@@ -33,7 +30,7 @@ public class Plank extends Draggable {
     void createBody(float radius) {
         body = Main.world.createBody(Res.bodyDef_dynamic);
         body.createFixture(Res.fixtureDef_plank);
-        body.setTransform(pos.x * Main.METERSPERPIXEL, pos.y * Main.METERSPERPIXEL, 0);
+        body.setTransform(pos.x * Main.MPP, pos.y * Main.MPP, 0);
         body.setUserData(this);
     }
 
@@ -52,10 +49,10 @@ public class Plank extends Draggable {
         v[1].rotateRad(body.getAngle());
         v[2].rotateRad(body.getAngle());
         v[3].rotateRad(body.getAngle());
-        v[0].add(body.getPosition().scl(Main.PIXELSPERMETER));
-        v[1].add(body.getPosition().scl(Main.PIXELSPERMETER));
-        v[2].add(body.getPosition().scl(Main.PIXELSPERMETER));
-        v[3].add(body.getPosition().scl(Main.PIXELSPERMETER));
+        v[0].add(body.getPosition().scl(Main.PPM));
+        v[1].add(body.getPosition().scl(Main.PPM));
+        v[2].add(body.getPosition().scl(Main.PPM));
+        v[3].add(body.getPosition().scl(Main.PPM));
         v[0].add(0,8);
         v[1].add(0,8);
         v[2].add(0,8);

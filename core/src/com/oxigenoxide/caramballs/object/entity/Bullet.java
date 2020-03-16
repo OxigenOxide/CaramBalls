@@ -18,16 +18,16 @@ public class Bullet extends Entity {
         sprite.setRotation((float)Math.toDegrees(ang));
         body= Main.world.createBody(Res.bodyDef_dynamic);
         body.createFixture(Res.shape_bullet,1);
-        body.setTransform(x* Main.METERSPERPIXEL,y*Main.METERSPERPIXEL,ang);
+        body.setTransform(x* Main.MPP,y*Main.MPP,ang);
         body.setLinearVelocity(10*(float)Math.cos(ang),10*(float)Math.sin(ang));
         body.setFixedRotation(true);
         body.setUserData(this);
-        sprite.setPosition(body.getPosition().x*Main.PIXELSPERMETER-sprite.getRegionWidth()/2,body.getPosition().y*Main.PIXELSPERMETER-sprite.getHeight()/2);
+        sprite.setPosition(body.getPosition().x*Main.PPM -sprite.getRegionWidth()/2,body.getPosition().y*Main.PPM -sprite.getHeight()/2);
         pos=new Vector2();
     }
     public void update(){
         pos.set(sprite.getX(),sprite.getY());
-        sprite.setPosition(body.getPosition().x*Main.PIXELSPERMETER-sprite.getRegionWidth()/2,body.getPosition().y*Main.PIXELSPERMETER-sprite.getHeight()/2);
+        sprite.setPosition(body.getPosition().x*Main.PPM -sprite.getRegionWidth()/2,body.getPosition().y*Main.PPM -sprite.getHeight()/2);
         if(doDispose)
             dispose();
     }
@@ -35,7 +35,7 @@ public class Bullet extends Entity {
         sprite.draw(batch);
     }
     public void hit(Ball ball){
-        ball.destroy(body.getAngle(),5,new Vector2(body.getPosition().x*Main.PIXELSPERMETER,body.getPosition().y*Main.PIXELSPERMETER));
+        ball.destroy(body.getAngle(),5,new Vector2(body.getPosition().x*Main.PPM,body.getPosition().y*Main.PPM));
     }
 
     public void dispose(){

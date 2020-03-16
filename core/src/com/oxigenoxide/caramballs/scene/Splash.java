@@ -67,7 +67,6 @@ public class Splash extends Scene {
         loadingBall = new LoadingBall();
         sprite = new Sprite(tex_splash);
         sprite.setPosition(Main.width / 2 - tex_splash.getRegionWidth() / 2, Main.height / 2 - tex_splash.getRegionWidth() / 2);
-
     }
 
     @Override
@@ -76,7 +75,7 @@ public class Splash extends Scene {
         loadingProgress = Main.assets.getProgress();
         counter_dropBall.update();
         if (Main.assets.isFinished() && Main.fbm.isSignedIn() && alpha == 0 && !Main.isLoaded && Main.fbm.isUpToDate()) {
-            if (Main.signedIn) {
+            if (Main.signedIn) { // done loading and everything
                 Main.initializeResources();
                 Main.onLoaded();
                 Main.setSceneMenu();

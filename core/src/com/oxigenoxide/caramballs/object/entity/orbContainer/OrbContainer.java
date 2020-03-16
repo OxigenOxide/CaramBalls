@@ -1,6 +1,5 @@
 package com.oxigenoxide.caramballs.object.entity.orbContainer;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -10,11 +9,9 @@ import com.oxigenoxide.caramballs.object.entity.ball.Ball_Orb;
 import com.oxigenoxide.caramballs.scene.Game;
 import com.oxigenoxide.caramballs.Main;
 import com.oxigenoxide.caramballs.Res;
-import com.oxigenoxide.caramballs.object.Orb;
 import com.oxigenoxide.caramballs.object.entity.ball.Ball;
 import com.oxigenoxide.caramballs.object.entity.Entity;
 import com.oxigenoxide.caramballs.utils.ActionListener;
-import com.oxigenoxide.caramballs.utils.MathFuncs;
 
 public class OrbContainer extends Entity {
     float height;
@@ -33,7 +30,7 @@ public class OrbContainer extends Entity {
         pos = Game.getRandomPosOnTable(tex.getRegionWidth(), tex.getRegionHeight());
         height = Main.height;
         createBody();
-        body.setTransform(pos.x * Main.METERSPERPIXEL, (pos.y + 3) * Main.METERSPERPIXEL, 0);
+        body.setTransform(pos.x * Main.MPP, (pos.y + 3) * Main.MPP, 0);
         setPassthrough(true);
         radius_spawn = 7;
     }
@@ -42,7 +39,7 @@ public class OrbContainer extends Entity {
         pos = new Vector2(x, y);
         this.height = height;
         createBody();
-        body.setTransform(pos.x * Main.METERSPERPIXEL, (pos.y + 3) * Main.METERSPERPIXEL, 0);
+        body.setTransform(pos.x * Main.MPP, (pos.y + 3) * Main.MPP, 0);
         setPassthrough(true);
         radius_spawn = 7;
     }
@@ -76,19 +73,25 @@ public class OrbContainer extends Entity {
 
     float SPREADORBS = (float) Math.PI * .75f;
 
+
+    float hitImpact;
+    float hitAngle;
+
     public void destroy(Ball ball) {
         if (!doDispose) {
             doDispose = true;
 
             ball_hitBy = ball;
+
+            hitAngle = ball_hitBy.body.getLinearVelocity().angleRad();
+            hitImpact = ball_hitBy.body.getLinearVelocity().len();
+
             destroy_delayed = new ActionListener() {
                 @Override
                 public void action() {
-                    float angle = ball_hitBy.body.getLinearVelocity().angleRad() + (float) Math.PI;
-                    float impact = ball_hitBy.body.getLinearVelocity().len();
                     for (int i = 0; i < orbAmount; i++) {
                         Ball_Orb ball_new = new Ball_Orb(pos.x, pos.y, 0);
-                        ball_new.setVelocity(impact * (float) Math.cos(angle + Math.random() * SPREADORBS - SPREADORBS / 2), impact * (float) Math.sin(angle + Math.random() * SPREADORBS - SPREADORBS / 2));
+                        ball_new.setVelocity(hitImpact * (float) Math.cos(hitAngle + Math.random() * SPREADORBS - SPREADORBS / 2), hitImpact * (float) Math.sin(hitAngle + Math.random() * SPREADORBS - SPREADORBS / 2));
                         Main.balls.add(ball_new);
                     }
                 }

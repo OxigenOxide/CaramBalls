@@ -23,7 +23,6 @@ import com.oxigenoxide.caramballs.Res;
 import com.oxigenoxide.caramballs.object.entity.Entity;
 import com.oxigenoxide.caramballs.object.entity.hole.Hole;
 import com.oxigenoxide.caramballs.object.entity.particle.Particle_Pulse;
-import com.oxigenoxide.caramballs.utils.Funcs;
 import com.oxigenoxide.caramballs.utils.MathFuncs;
 
 public class Ball extends Entity {
@@ -76,6 +75,7 @@ public class Ball extends Entity {
     final static float HEIGHT_PASSTHROUGH = 15f;
     final static int MAXRINGRADIUS = 20;
     final static float RINGWIDTH = 3f;
+    boolean doWiggle=true;
 
     static Texture tex_ring = new Texture(new Pixmap(MAXRINGRADIUS * 2, MAXRINGRADIUS * 2, Pixmap.Format.RGBA8888));
 
@@ -113,8 +113,8 @@ public class Ball extends Entity {
     private void construct() {
         pos_last = new Vector2(pos);
         sprite = new Sprite(Res.tex_ball[0][0]);
-        body.setTransform(pos.x * Main.METERSPERPIXEL, pos.y * Main.METERSPERPIXEL, 0);
-        radius = body.getFixtureList().first().getShape().getRadius() * Main.PIXELSPERMETER;
+        body.setTransform(pos.x * Main.MPP, pos.y * Main.MPP, 0);
+        radius = body.getFixtureList().first().getShape().getRadius() * Main.PPM;
         radius_spawn = radius + 1;
 
         isPassthrough = true;
@@ -164,8 +164,8 @@ public class Ball extends Entity {
 
                 pos_last.set(pos);
                 pos.set(body.getPosition());
-                pos.scl(Main.PIXELSPERMETER);
-                if (size > 0)
+                pos.scl(Main.PPM);
+                if (size > 0 && doWiggle) // wiggle
                     sprite.setSize(sizeFactor * (float) (sprite.getRegionWidth() * (1 + wiggle * WIGGLEFACTOR * -Math.sin(wiggle * 15))), sizeFactor * (float) (sprite.getRegionHeight() * (1 + wiggle * WIGGLEFACTOR * -Math.cos(wiggle * 15))));
                 sprite.setPosition((int) ((int) pos.x - sprite.getWidth() / 2), (int) ((int) pos.y + height - sprite.getHeight() / 2));
 
@@ -297,7 +297,7 @@ public class Ball extends Entity {
 
     public void activateShield() {
         if (!isShielded) {
-            Res.fixtureDef_shield.shape.setRadius((radius + 2) * Main.METERSPERPIXEL);
+            Res.fixtureDef_shield.shape.setRadius((radius + 2) * Main.MPP);
             body.createFixture(Res.fixtureDef_shield);
             isShielded = true;
         }
@@ -370,9 +370,13 @@ public class Ball extends Entity {
         } else
             height -= Main.dt_one * .1f;
 
-        if (sprite.getRegionWidth() < 2 || hole_fall.isDisposed) {
-            doDispose = true;
+        if (sprite.getWidth() < 2 || hole_fall.isDisposed) {
+            disappearInHole();
         }
+    }
+
+    public void disappearInHole(){
+        doDispose = true;
     }
 
     public void fallInHole(Hole hole) {
@@ -436,7 +440,7 @@ public class Ball extends Entity {
             //sr.ellipse((int) ((int) pos.x - shadowWidth_small / 2), (int) ((int) pos.y - shadowHeight_small / 2 - radius - 1 + shadowHeight / 2), shadowWidth_small, shadowHeight_small);
             //if (radius % 1 == 0)
             //sr.ellipse((sprite.getX() + radius - shadowWidth_small / 2), (int) ((int) pos.y - Main.test_float * radius - shadowHeight_small / 2), shadowWidth_small, shadowHeight_small);
-            sr.ellipse((int) ((int) pos.x - sprite.getRegionWidth() / 2f) + radius - shadowWidth_small / 2, (int) ((int) ((int) pos.y - sprite.getRegionHeight() / 2f) + .6f * radius - shadowHeight_small / 2), shadowWidth_small, shadowHeight_small, 20);
+            sr.ellipse((int) ((int) pos.x - sprite.getRegionWidth() / 2f) + sprite.getRegionWidth() / 2f - shadowWidth_small / 2, (int) ((int) ((int) pos.y - radius) + .6f * radius - shadowHeight_small / 2), shadowWidth_small, shadowHeight_small, 20);
             //else
             //    sr.ellipse((int)(pos.x - (shadowWidth_small / 2)), (int) ((int) pos.y - Main.test_float * radius - shadowHeight_small / 2), shadowWidth_small, shadowHeight_small);
             //sr.ellipse((int) (pos.x - sprite.getRegionWidth() / 2 * smallFactor), (int) (pos.y - sprite.getRegionWidth() / 2 * Game.WIDTHTOHEIGHTRATIO * smallFactor) - 2, sprite.getRegionWidth() / 2 * smallFactor * 2, radius * smallFactor * 2 * Game.WIDTHTOHEIGHTRATIO);
@@ -472,17 +476,18 @@ public class Ball extends Entity {
 
 
     public void hit(float angle, float speed) {
+        if(Main.game.inFlow())
+            speed*=1.5f;
         body.setType(BodyDef.BodyType.DynamicBody);
         isStuck = false;
         count_cantGetStuck = 10;
         body.setLinearVelocity((float) Math.cos(angle) * speed, (float) Math.sin(angle) * speed);
         maxSpeed = speed;
-        if (!Main.noFX)
-            velY = speed * .2f;
+        //velY = speed * .2f;
         count_hitCooldown = COUNTMAX_HITCOOLDOWN;
         Main.particles.add(new Particle_Hit(pos.x, pos.y, angle + (float) Math.PI, radius));
         //dropPulseParticle(pos.x - radius * (float) Math.cos(angle), pos.y - radius * (float) Math.sin(angle) + height, 7.5f);
-        Main.addSoundRequest(ID.Sound.HIT, 0, speed, 0.82f + (float) Math.random() * 0.2f - 0.1f);
+        Main.addSoundRequest(ID.Sound.HIT, 0, 2f*speed, 0.82f + (float) Math.random() * 0.2f - 0.1f);
         time_off = 0;
     }
 
@@ -540,7 +545,7 @@ public class Ball extends Entity {
 
     public void createBody(float radius) {
         body = Main.world.createBody(Res.bodyDef_dynamic);
-        Res.fixtureDef_circle.shape.setRadius(radius * Main.METERSPERPIXEL);
+        Res.fixtureDef_circle.shape.setRadius(radius * Main.MPP);
         body.createFixture(Res.fixtureDef_circle);
         body.setUserData(this);
     }
@@ -586,18 +591,17 @@ public class Ball extends Entity {
     }
 
     public void drawTrail(ShapeRenderer sr) {
-        if (!Main.noFX) {
-            if (height == 0) {
+            //if (height == 0) {
                 float distance = MathFuncs.distanceBetweenPoints(pos, pos_last);
                 float angle = MathFuncs.angleBetweenPoints(pos, pos_last);
-                float angle_random = (float) (Math.random() * Math.PI * 2);
+
 
                 for (int i = 0; i < distance; i++) {
                     //sr.circle(pos.x + (float) Math.cos(angle) * i * 1 + radius / 2 * (float) Math.cos(angle_random), pos.y + (float) Math.sin(angle) * i * 1 + radius / 2 * (float) Math.sin(angle_random), radius - (float) Math.random() * 3);
-                    sr.circle(pos.x + (float) Math.cos(angle) * i * 1, pos.y + (float) Math.sin(angle) * i * 1 - 2, radius - (float) Math.random() * 3);
+                    //sr.circle(pos.x + (float) Math.cos(angle) * i * 1, pos.y + (float) Math.sin(angle) * i * 1 - 2, radius - (float) Math.random() * 3);
+                    sr.circle(pos.x + (float) Math.cos(angle) * i * 1, pos.y + (float) Math.sin(angle) * i * 1 - 2 + height, radius);
                 }
-            }
-        }
+            //}
         //float angle=(float)(Math.random()*Math.PI*2);
         //sr.circle(pos.x + radius/2*(float)Math.cos(angle), pos.y + radius/2*(float)Math.sin(angle), 5);
     }

@@ -28,7 +28,7 @@ public class Cannon extends Entity {
         gun.setOrigin(6.5f, 6.5f);
         gun.setPosition(x - 6, y - 6.5f + 4);
         createBody();
-        body.setTransform(pos.x*Main.METERSPERPIXEL,(pos.y+4.5f)*Main.METERSPERPIXEL,0);
+        body.setTransform(pos.x*Main.MPP,(pos.y+4.5f)*Main.MPP,0);
         radius_spawn = 10; // not perfect
     }
 
@@ -39,12 +39,12 @@ public class Cannon extends Entity {
         gun.setOrigin(6.5f, 6.5f);
         gun.setPosition(pos.x - 6, pos.y + 4);
         createBody();
-        body.setTransform(pos.x*Main.METERSPERPIXEL,(pos.y+4.5f)*Main.METERSPERPIXEL,0);
+        body.setTransform(pos.x*Main.MPP,(pos.y+4.5f)*Main.MPP,0);
         radius_spawn = 10; // not perfect
     }
     public void createBody() {
         body = Main.world.createBody(Res.bodyDef_static);
-        Res.fixtureDef_circle.shape.setRadius(4.5f*Main.METERSPERPIXEL);
+        Res.fixtureDef_circle.shape.setRadius(4.5f*Main.MPP);
         body.createFixture(Res.fixtureDef_circle);
         body.setUserData(this);
     }

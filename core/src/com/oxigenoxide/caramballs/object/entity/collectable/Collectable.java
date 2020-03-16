@@ -1,6 +1,5 @@
 package com.oxigenoxide.caramballs.object.entity.collectable;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -33,7 +32,7 @@ public class Collectable extends Entity {
             pos = new Vector2(-100, -100);
             dispose();
         }
-        body.setTransform(pos.x * Main.METERSPERPIXEL, pos.y * Main.METERSPERPIXEL, 0);
+        body.setTransform(pos.x * Main.MPP, pos.y * Main.MPP, 0);
         sprite.setPosition((int) (pos.x - sprite.getRegionWidth() / 2), (int) (pos.y - sprite.getRegionHeight() / 2));
     }
 

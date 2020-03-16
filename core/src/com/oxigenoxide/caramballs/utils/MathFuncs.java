@@ -58,12 +58,20 @@ public class MathFuncs {
         return (x > bx && x < bx + bw && y > by && y < by + bh);
     }
 
-    public static float toPPF(float mps){ // meter per second to pixels per frame (frame = 1 / 60 s)
-        return mps / 60 * Main.PIXELSPERMETER;
+    public static float toPPF(float mps) { // meter per second to pixels per frame (frame = 1 / 60 s)
+        return mps / 60 * Main.PPM;
     }
 
     public static float interpolateAngle(float from, float to, float amount) {
         float shortest_angle = (float) (((((to - from) % (Math.PI * 2)) + (Math.PI * 1.5f)) % (Math.PI * 2)) - (Math.PI));
         return (float) (from + (shortest_angle * amount) % (Math.PI * 2));
+    }
+
+    public static float loopRadians(float f, float add) {
+        return (f + add) % ((float) Math.PI * 2);
+    }
+
+    public static float loopOne(float f, float add) {
+        return (f + add) % 1;
     }
 }

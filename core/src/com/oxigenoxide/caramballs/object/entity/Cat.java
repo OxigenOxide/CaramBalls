@@ -6,7 +6,6 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.oxigenoxide.caramballs.Main;
 import com.oxigenoxide.caramballs.Res;
-import com.oxigenoxide.caramballs.object.entity.Entity;
 
 public class Cat extends Entity {
 
@@ -15,12 +14,12 @@ public class Cat extends Entity {
     public Cat(float x, float y) {
         pos = new Vector2(x, y);
         createBody();
-        body.setTransform(pos.x * Main.METERSPERPIXEL, (pos.y) * Main.METERSPERPIXEL, 0);
+        body.setTransform(pos.x * Main.MPP, (pos.y) * Main.MPP, 0);
     }
 
     public void createBody() {
         body = Main.world.createBody(Res.bodyDef_static);
-        Res.fixtureDef_circle.shape.setRadius(5 * Main.METERSPERPIXEL);
+        Res.fixtureDef_circle.shape.setRadius(5 * Main.MPP);
         body.createFixture(Res.fixtureDef_circle);
         body.setUserData(this);
         Filter filter = new Filter();

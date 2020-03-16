@@ -1,6 +1,5 @@
 package com.oxigenoxide.caramballs.object.entity;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -9,7 +8,6 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.oxigenoxide.caramballs.ID;
 import com.oxigenoxide.caramballs.Main;
 import com.oxigenoxide.caramballs.Res;
-import com.oxigenoxide.caramballs.object.entity.Entity;
 import com.oxigenoxide.caramballs.object.entity.ball.Ball;
 import com.oxigenoxide.caramballs.scene.Game;
 
@@ -30,7 +28,7 @@ public class JumpingPad extends Entity {
         pos.add(.5f,0);
         body = Main.world.createBody(Res.bodyDef_dynamic);
         body.createFixture(Res.fixtureDef_jumpingPad);
-        body.setTransform(pos.x * Main.METERSPERPIXEL, pos.y * Main.METERSPERPIXEL, 0);
+        body.setTransform(pos.x * Main.MPP, pos.y * Main.MPP, 0);
         body.setUserData(this);
         tex = Res.tex_jumpingPad;
         sprite = new Sprite(tex);

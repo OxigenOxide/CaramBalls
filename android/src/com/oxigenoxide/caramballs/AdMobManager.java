@@ -25,15 +25,12 @@ public class AdMobManager implements AdMobInterface {
 
     private final String id;
 
-
-
     int adsClicked;
 
     //private final String TEST_DEVICE1 = "073D9C239F33183A0076A4EE5AF62B70";
 
     public AdView adView = null;
     public RelativeLayout.LayoutParams adParams = null;
-
 
     private Handler handler = new Handler() {
         @Override
@@ -153,6 +150,13 @@ public class AdMobManager implements AdMobInterface {
 
     public void loadInterstitial() {
         handler.sendEmptyMessage(LOAD_INTER);
+    }
+
+    @Override
+    public boolean isBannerVisible() {
+        if(adView!=null)
+            return adView.getVisibility() == View.VISIBLE;
+        return false;
     }
 
     public boolean isInterstitialLoaded() {

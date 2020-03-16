@@ -12,6 +12,8 @@ import com.oxigenoxide.caramballs.object.Title;
 import com.oxigenoxide.caramballs.object.button.Button;
 import com.oxigenoxide.caramballs.object.button.Button_Options;
 import com.oxigenoxide.caramballs.object.button.Button_Tutorial;
+import com.oxigenoxide.caramballs.utils.EventListener;
+import com.oxigenoxide.caramballs.utils.EventManager;
 
 public class Menu extends Scene {
     Title title;
@@ -19,17 +21,43 @@ public class Menu extends Scene {
     Button button_options;
     Button button_tutorial;
     boolean buttonTouched;
+    boolean optionsMenuOpen;
+    EventManager eventManager_options;
+    boolean musicButtonOut, soundButtonOut;
+
+    Vector2 pos_musicButton_hidden, pos_soundButton_hidden;
+    Vector2 pos_musicButton_out, pos_soundButton_out;
 
     public Menu() {
         title = new Title();
         ttpText = new TTPText(Main.height / 2);
-        //button_options=new Button_Options(new Vector2(2,2));
+        eventManager_options = new EventManager(new EventListener() {
+            @Override
+            public int onEvent(int event) {
+                switch (event) {
+                    case 0:
+                        musicButtonOut = optionsMenuOpen;
+                        return 20;
+                    case 1:
+                        soundButtonOut = optionsMenuOpen;
+                }
+                return -1;
+            }
+        });
+
+        pos_musicButton_out =new Vector2(76,3);
+        pos_soundButton_out=new Vector2(61,3);
+
+        pos_musicButton_hidden = new Vector2();
+        //pos_soundButton_hidden
+
     }
 
     @Override
     public void show() {
+        optionsMenuOpen = false;
         Main.setAdVisibility(true);
-        button_options = new Button_Options(new Vector2(2, Main.height - 2 - Res.tex_button_options.getRegionHeight()));
+        button_options = new Button_Options(new Vector2(Main.width - 2 - Res.tex_button_options.getRegionWidth(), 2));
         button_tutorial = new Button_Tutorial(new Vector2(12, 10));
         button_tutorial.setVisibility(false);
     }
@@ -53,6 +81,9 @@ public class Menu extends Scene {
             Main.amm.hide();
             Main.setSceneFarm();
         }
+
+        //if (soundButtonOut)
+        //    button_tutorial.pos.
     }
 
     @Override
@@ -69,6 +100,10 @@ public class Menu extends Scene {
         title.render(batch);
         button_tutorial.render(batch);
         batch.end();
+    }
+
+    public void onOptionsPressed() {
+        optionsMenuOpen = !optionsMenuOpen;
     }
 
     @Override

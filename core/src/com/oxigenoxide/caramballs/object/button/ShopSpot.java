@@ -14,12 +14,16 @@ public class ShopSpot extends Button {
     int type = 0;
     int price = 420;
     Vector2 pos_num;
+    int scrolled;
+    Vector2 pos_original;
 
-    public ShopSpot(Vector2 pos) {
+    public ShopSpot(Vector2 pos, int type) {
         super(pos);
+        pos_original = new Vector2(pos);
         tex = Res.tex_shopSpot;
         tex_pressed = Res.tex_shopSpotPressed;
         pos_num = new Vector2(pos.x + 14, pos.y + 6);
+        this.type = type;
     }
 
     @Override
@@ -30,14 +34,14 @@ public class ShopSpot extends Button {
     @Override
     public void action() {
         if (isUnlocked) {
-            Shop.select(type);
+            Main.shop.select(type);
             isSelected = true;
         }
 
         if (!isUnlocked) {
-            if (Main.gameData.orbs > price) {
+            if (Main.gameData.orbs >= price) {
                 isUnlocked = true;
-                Main.gameData.orbs-=price;
+                Main.gameData.orbs -= price;
                 Main.shop.onPurchase();
             }
         }
@@ -46,31 +50,34 @@ public class ShopSpot extends Button {
     public void setPrice(int price) {
         this.price = price;
     }
+
     public int getPrice() {
         return price;
     }
+
     public void setType(int type) {
         this.type = type;
     }
 
+    public void setScrolled(int scrolled){
+        this.scrolled=scrolled;
+        pos.set(pos_original.x,pos_original.y+scrolled);
+    }
     @Override
     public void render(SpriteBatch batch) {
-        super.render(batch);
-        pos_num.set(pos.x + 14, pos.y + 6 - touchOffset);
+
         if (isUnlocked) {
-            int level=0;
+            super.render(batch);
+            pos_num.set(pos.x + 14, pos.y + 6 - touchOffset);
+            int level = 0;
             batch.setShader(Res.shader_palette);
-            Res.shader_palette.setUniformf("color0", Res.ballPalette[level][0].r, Res.ballPalette[level][0].g, Res.ballPalette[level][0].b, 1);
-            Res.shader_palette.setUniformf("color1", Res.ballPalette[level][1].r, Res.ballPalette[level][1].g, Res.ballPalette[level][1].b, 1);
-            Res.shader_palette.setUniformf("color2", Res.ballPalette[level][2].r, Res.ballPalette[level][2].g, Res.ballPalette[level][2].b, 1);
-            Res.shader_palette.setUniformf("color3", Res.ballPalette[level][3].r, Res.ballPalette[level][3].g, Res.ballPalette[level][3].b, 1);
-            batch.draw(Res.tex_ball[type][1], pos.x + 7, pos.y + 24 - Res.tex_ball[type][1].getRegionHeight() / 2 - touchOffset);
+            Main.setPalette(Res.ballPalette[level]);
+            batch.draw(Res.tex_ball[type][1], pos.x + 14 - Res.tex_ball[type][1].getRegionWidth() / 2, pos.y + 24 - Res.tex_ball[type][1].getRegionHeight() / 2 - touchOffset);
             batch.setShader(null);
             if (isSelected)
                 batch.draw(Res.tex_symbolSelected, pos.x + 7, pos.y + 4 - touchOffset);
         } else {
-            batch.draw(Res.tex_lockedBall, pos.x + 7, pos.y + 17 - touchOffset);
-            Main.drawNumberSign(batch, price, pos_num, ID.Font.SMALL, Res.tex_symbolOrb, 0);
+            batch.draw(Res.tex_shopSpotEmpty,pos.x,pos.y);
         }
     }
 }

@@ -30,9 +30,9 @@ public class Draggable extends Entity {
 
     void createBody(float radius) {
         body = Main.world.createBody(Res.bodyDef_dynamic);
-        Res.fixtureDef_circle.shape.setRadius(radius * Main.METERSPERPIXEL);
+        Res.fixtureDef_circle.shape.setRadius(radius * Main.MPP);
         body.createFixture(Res.fixtureDef_circle);
-        body.setTransform(pos.x * Main.METERSPERPIXEL, pos.y * Main.METERSPERPIXEL, 0);
+        body.setTransform(pos.x * Main.MPP, pos.y * Main.MPP, 0);
         body.setUserData(this);
     }
 
@@ -42,7 +42,7 @@ public class Draggable extends Entity {
             return;
         }
         pos.set(body.getPosition());
-        pos.scl(Main.PIXELSPERMETER);
+        pos.scl(Main.PPM);
         setPivotPosition();
 
         body.setAngularVelocity(body.getAngularVelocity()*.9f);
@@ -60,7 +60,7 @@ public class Draggable extends Entity {
     }
 
     public void drag(float dx,float dy){
-        body.applyForce(dx,dy,pos_pivot.x*Main.METERSPERPIXEL,pos_pivot.y*Main.METERSPERPIXEL,true);
+        body.applyForce(dx,dy,pos_pivot.x*Main.MPP,pos_pivot.y*Main.MPP,true);
         //body.applyForceToCenter(dx,dy,true);
     }
 

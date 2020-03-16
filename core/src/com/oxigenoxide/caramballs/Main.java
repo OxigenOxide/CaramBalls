@@ -31,6 +31,7 @@ import com.oxigenoxide.caramballs.object.entity.CircularBumper;
 import com.oxigenoxide.caramballs.object.entity.Entity;
 import com.oxigenoxide.caramballs.object.entity.Eye;
 import com.oxigenoxide.caramballs.object.entity.JumpingPad;
+import com.oxigenoxide.caramballs.object.entity.scooper.Scooper;
 import com.oxigenoxide.caramballs.object.entity.draggable.Draggable;
 import com.oxigenoxide.caramballs.object.entity.orbContainer.OC_Egg;
 import com.oxigenoxide.caramballs.object.entity.FloorButton;
@@ -67,12 +68,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import static jdk.nashorn.internal.runtime.regexp.joni.Syntax.Java;
-
 public class Main extends ApplicationAdapter {
     static SpriteBatch batch;
     public static Game game;
-    public static Scene menu;
+    public static Menu menu;
     public static Farm farm;
     public static Scene welcome;
     public static Scene splash;
@@ -105,9 +104,9 @@ public class Main extends ApplicationAdapter {
     public static SoundRequest[] soundRequestsToPlay;
     public static float dt_one;
     public static float dt;
-    public static final float PIXELSPERMETER = 40;
-    //public static final float PIXELSPERMETER = 1;
-    public static final float METERSPERPIXEL = 1 / PIXELSPERMETER;
+    public static final float PPM = 40;
+    //public static final float PPM = 1;
+    public static final float MPP = 1 / PPM;
 
     public static ArrayList<Ball> balls;
     public static ArrayList<Ball_Main> mainBalls;
@@ -163,7 +162,8 @@ public class Main extends ApplicationAdapter {
     public static ArrayList<Projection> projectionsToRemove = new ArrayList<Projection>();
     public static ArrayList<RewardOrb> rewardOrbs = new ArrayList<RewardOrb>();
     public static ArrayList<RewardOrb> rewardOrbsToRemove = new ArrayList<RewardOrb>();
-
+    public static ArrayList<Scooper> scoopers = new ArrayList<Scooper>();
+    public static ArrayList<Scooper> scoopersToRemove = new ArrayList<Scooper>();
 
     public static BallSelector ballSelector;
     public static DragSelector dragSelector;
@@ -224,6 +224,7 @@ public class Main extends ApplicationAdapter {
     public static float test_float = 1;
     public static boolean isButtonPressed;
     public static int fingersOnScreen;
+    public static int scrHD;
 
     static ActionListener action_peak;
     static ActionListener action_peak_delayed;
@@ -284,6 +285,8 @@ public class Main extends ApplicationAdapter {
         pixelsPerPoint = 1 / pointsPerPixel;
 
         batch = new SpriteBatch();
+
+        scrHD = (int) ((Main.height - 192) / 2);
 
         cam = new OrthographicCamera(width, height);
         cam.position.set(width / 2, height / 2, 0);
@@ -583,6 +586,11 @@ public class Main extends ApplicationAdapter {
         rewardOrbs.removeAll(rewardOrbsToRemove);
         rewardOrbsToRemove.clear();
 
+        for (Scooper s : scoopers)
+            s.update();
+        scoopers.removeAll(scoopersToRemove);
+        scoopersToRemove.clear();
+
         // detect a selection of a ball or a draggable
         if (Funcs.justTouched() && (!Game.isGameOver && !Game.isPaused || Main.inFarm()) && !Main.isButtonPressed) {
             float distance;
@@ -724,21 +732,24 @@ public class Main extends ApplicationAdapter {
     }
 
     public static void shake() {
-        if (!noFX && !inScreenShotMode)
-            if (shakeIntensity < 3)
-                shakeIntensity = 3;
+        if (inGame())
+            if (!noFX && !inScreenShotMode)
+                if (shakeIntensity < 3)
+                    shakeIntensity = 3;
     }
 
     public static void shake(float impact) {
-        if (!noFX && !inScreenShotMode)
-            if (impact > shakeIntensity && impact > 2)
-                shakeIntensity = impact;
+        if (inGame())
+            if (!noFX && !inScreenShotMode)
+                if (impact > shakeIntensity && impact > 2)
+                    shakeIntensity = impact;
     }
 
     public static void shakeSmall() {
-        if (!noFX)
-            if (shakeIntensity < 2)
-                shakeIntensity = 2;
+        if (inGame())
+            if (!noFX)
+                if (shakeIntensity < 2)
+                    shakeIntensity = 2;
     }
 
     public static void setShakeAng(float ang) {
@@ -820,11 +831,8 @@ public class Main extends ApplicationAdapter {
     public void render() {
         update();
 
-
-
         entities.clear();
         entities_sorted.clear();
-
         entities.addAll(balls);
         entities.addAll(collectables);
         entities.addAll(orbContainers);
@@ -840,6 +848,7 @@ public class Main extends ApplicationAdapter {
         entities.addAll(eyes);
         entities.addAll(draggables);
         entities.addAll(particles_batch);
+        entities.addAll(scoopers);
 
         if (entities.size() > 0) {
             entities_sorted.add(entities.get(0));
@@ -877,12 +886,20 @@ public class Main extends ApplicationAdapter {
                 batch.draw(Res.tex_fade, 0, 0);
                 batch.setShader(null);
             }
-            if (rewardBall != null)
+
+            if (rewardBall != null) {
+                batch.end();
+                //TODO: f
+                batch.begin();
                 rewardBall.render(batch);
+            }
+
+            if (amm.isBannerVisible()) {
+                batch.draw(Res.tex_ad, 0, height - Res.tex_ad.getRegionHeight());
+            }
+
             batch.end();
         }
-
-
     }
 
     public static void setCamEffects() {
@@ -1174,7 +1191,6 @@ public class Main extends ApplicationAdapter {
     @Override
     public void dispose() { // called on desktop
         currentScene.hide();
-        System.out.println("DISPOSE MAIN");
         batch.dispose();
         if (isLoaded) {
             game.dispose();
@@ -1188,9 +1204,10 @@ public class Main extends ApplicationAdapter {
         }
     }
 
-    public void onPause() { // refering to the android 'pause' when leaving the app // for android
-        System.out.println("ONPAUSE");
-        farm.onPause();
+    public void onPause() { // refering to the android 'pause' when leaving the app // for android // called when starting the game up for some reason
+        System.out.println("onPause()");
+
+        if (farm != null) farm.onPause();
 
         if (signedIn) {
             userData.timePlayed += (System.currentTimeMillis() - startTime) / 1000;
@@ -1199,7 +1216,7 @@ public class Main extends ApplicationAdapter {
             userData.orbs = Main.gameData.orbs;
 
             Main.gameData.userData = userData;
-            Shop.saveData();
+            shop.saveData();
 
             userData.ballsUnlocked.clear();
             userData.highscore = gameData.highscore;
@@ -1210,8 +1227,6 @@ public class Main extends ApplicationAdapter {
             fbm.setUserData(userData);
             fbm.leave();
         }
-
-
 
         DataManager.getInstance().saveData();
     }
@@ -1267,8 +1282,8 @@ public class Main extends ApplicationAdapter {
         shop = new Shop();
     }
 
-    public static void onSetScene(Scene scene){
-        if(rewardBall!=null)
+    public static void onSetScene(Scene scene) {
+        if (rewardBall != null)
             rewardBall.onSetScene(scene);
     }
 
@@ -1371,10 +1386,10 @@ public class Main extends ApplicationAdapter {
     }
 
     public static void setPalette(Color[] colors) {
-        Res.shader_palette.setUniformf("color0", colors[0]);
-        Res.shader_palette.setUniformf("color1", colors[1]);
-        Res.shader_palette.setUniformf("color2", colors[2]);
-        Res.shader_palette.setUniformf("color3", colors[3]);
+        if (colors[0] != null) Res.shader_palette.setUniformf("color0", colors[0]);
+        if (colors[1] != null) Res.shader_palette.setUniformf("color1", colors[1]);
+        if (colors[2] != null) Res.shader_palette.setUniformf("color2", colors[2]);
+        if (colors[3] != null) Res.shader_palette.setUniformf("color3", colors[3]);
     }
 
     public static void setFloorFade(Color[] colors, Vector2 center, float radius) {
@@ -1399,6 +1414,7 @@ public class Main extends ApplicationAdapter {
         startFade(game);
         inGame = true; // not really
     }
+
     public static void setSceneGameOver() {
         popScene();
         startFade(gameOver);
@@ -1417,7 +1433,7 @@ public class Main extends ApplicationAdapter {
         }
     }
 
-    public static void popScene(){
+    public static void popScene() {
         sceneStack.remove(sceneStack.size() - 1);
     }
 
@@ -1589,7 +1605,7 @@ public class Main extends ApplicationAdapter {
         InputProcessor inputProcessor = new InputProcessor() {
             @Override
             public boolean keyDown(int keycode) {
-                if (game !=null && game.isShown())
+                if (game != null && inGame())
                     game.onKeyDown(keycode);
                 return false;
             }
@@ -1609,10 +1625,10 @@ public class Main extends ApplicationAdapter {
                 return false;
             }
 
+            int touchupamount;
+
             @Override
             public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-                //point.onRelease();
-                System.out.println("touchup " + Math.random());
                 if (!Gdx.input.isTouched(0)) {
                     ballSelector.onRelease();
                     dragSelector.onRelease();

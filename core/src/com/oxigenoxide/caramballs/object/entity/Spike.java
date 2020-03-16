@@ -1,6 +1,5 @@
 package com.oxigenoxide.caramballs.object.entity;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -55,7 +54,7 @@ public class Spike extends Entity {
         body=Main.world.createBody(Res.bodyDef_static);
         body.createFixture(Res.fixtureDef_spike);
         body.setUserData(this);
-        body.setTransform(Main.METERSPERPIXEL*(pos.x+.5f),Main.METERSPERPIXEL*(pos.y+3),0);
+        body.setTransform(Main.MPP *(pos.x+.5f),Main.MPP *(pos.y+3),0);
     }
     public void update() {
         delay=Math.max(delay-Main.dt_one,0);
@@ -70,9 +69,8 @@ public class Spike extends Entity {
         tex_index = (int) (4 - state * 4);
         tex = Res.tex_spike[tex_index];
 
-        if(state==1 && body==null){
+        if(state==1 && body==null)
             createBody();
-        }
 
         if(!isPermanent) {
             count += Main.dt_one;
@@ -107,6 +105,9 @@ public class Spike extends Entity {
         batch.draw(tex, (int)(pos.x-tex.getRegionWidth()/2), (int)pos.y);
     }
 
+    public void disappear(){
+        close();
+    }
     public void dispose(){
         body = Main.destroyBody(body);
         Main.spikesToRemove.add(this);

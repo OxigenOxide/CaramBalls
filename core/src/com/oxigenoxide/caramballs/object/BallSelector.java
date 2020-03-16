@@ -35,13 +35,11 @@ public class BallSelector {
     public void update() {
         active = ball_selected != null && Gdx.input.isTouched(0) && !ball_selected.isDisposed && !Game.doGameOverCue;
         if (!active) {
-            ball_selected = null;
-            //Game.slowdown = Math.max(Game.slowdown - Main.dt_one * .05f, 0);
             Game.slowdown_effect = Math.max(Game.slowdown_effect - Main.dt_one * .05f, 0);
         }
         if (active) {
 
-            if(Main.isInScene(Game.class)) {
+            if (Main.isInScene(Game.class)) {
                 Game.slowdown_effect = Math.min(Game.slowdown_effect + Main.dt_one * .05f, .9f);
                 Main.slowdown = Game.slowdown_effect;
             }
@@ -74,9 +72,11 @@ public class BallSelector {
         }
     }
 
-    public void onRelease() {
-        if (active && !ball_selected.isDisposed)
+    public void onRelease() { // apparently onRelease sometimes is called after Gdx.input.isTouched is changed on android. This is always the contrary on desktop.
+        if (ball_selected != null) {
             ball_selected.hit(cang, 15 * stretched);
+            ball_selected = null;
+        }
     }
 
     public void setSelected(Ball ball) {

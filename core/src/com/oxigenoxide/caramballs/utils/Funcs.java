@@ -1,6 +1,7 @@
 package com.oxigenoxide.caramballs.utils;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
@@ -17,5 +18,16 @@ public class Funcs {
         if (object == null)
             return null;
         return object.getClass();
+    }
+
+    //static final Color COLOR_SHINE = new Color(1, 1, 200 / 255f, 210 / 255f);
+    static final Color COLOR_SHINE = new Color(1, 1, .8f,.75f);
+
+    public static void drawShine(ShapeRenderer sr, Vector2 pos, float radius, float progress) {
+        float angle = progress * 360;
+        float offset = 2.5f * (float) Math.cos(progress * 2 * Math.PI);
+        sr.setColor(COLOR_SHINE);
+        for (int i = 0; i < 6; i++)
+            sr.arc(pos.x, pos.y, radius + offset, angle + 60 * i, 30, 5);
     }
 }

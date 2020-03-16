@@ -17,6 +17,14 @@ public class Button_Sell extends Button {
     @Override
     public void action() {
         doSell = !doSell;
+        if(doSell)
+            Main.farm.startSelling();
+        else
+            Main.farm.endSelling();
+    }
+
+    public void set(boolean doSell){
+        this.doSell=doSell;
     }
 
     public void render(SpriteBatch batch) {

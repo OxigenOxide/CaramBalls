@@ -25,10 +25,15 @@ import com.oxigenoxide.caramballs.object.button.Button_Play;
 import com.oxigenoxide.caramballs.object.entity.ball.Ball_Main;
 import com.oxigenoxide.caramballs.object.entity.hole.Hole;
 import com.oxigenoxide.caramballs.object.entity.hole.Hole_Reward;
+import com.oxigenoxide.caramballs.object.entity.hole.Hole_Sell;
 import com.oxigenoxide.caramballs.utils.ActionListener;
 import com.oxigenoxide.caramballs.utils.RepeatCounter;
 
+import static com.oxigenoxide.caramballs.Main.balls;
+import static com.oxigenoxide.caramballs.Main.holes;
 import static com.oxigenoxide.caramballs.Main.rewardOrbs;
+import static com.oxigenoxide.caramballs.Main.scrHD;
+import static com.oxigenoxide.caramballs.Main.tap;
 
 public class Farm extends Scene {
     public Vector2 pos_field;
@@ -46,18 +51,18 @@ public class Farm extends Scene {
     RepeatCounter counter_save;
     static boolean hasBeenInFarm;
     static final Color COLOR_ORBNUMBER = new Color(0, 73 / 255f, 128 / 255f, 1);
+    Hole_Sell hole_sell;
 
 
     public static final int FIELDWIDTH = 100;
 
     public Farm() {
-        pos_field = new Vector2(4, 62);
+        pos_field = new Vector2(4, 62 + scrHD);
         button_return = new Button_Return(new Vector2(5, Main.height - 17));
         button_play = new Button_Play(new Vector2(22, 29));
         button_shop = new Button_Balls(new Vector2(4, 6));
-        button_sell = new Button_Sell(new Vector2(55,6));
         pos_orbs = new Vector2(88, Main.height - 10);
-        pos_orb = new Vector2(0,pos_orbs.y-1+3.5f);
+        pos_orb = new Vector2(0, pos_orbs.y - 1 + 3.5f);
         buffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getHeight(), Gdx.graphics.getHeight(), true);
         counter_save = new RepeatCounter(new ActionListener() {
             @Override
@@ -92,9 +97,12 @@ public class Farm extends Scene {
                 if (bm.pos.y > pos_field.y + bm.radius + 1)
                     bm.setPermaPassthrough(false);
 
-        if (Gdx.input.isKeyPressed(Input.Keys.R)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
             hole_reward = new Hole_Reward(54, 43, new int[]{1, 2, 3});
-            Main.holes.add(hole_reward);
+            holes.add(hole_reward);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
+            balls.add(new Ball_Main(tap[0].x, tap[0].y, 0, 0, 0));
         }
 
         Main.world.step(Main.dt, 3, 8);
@@ -119,12 +127,12 @@ public class Farm extends Scene {
         batch.end();
 
         sr.begin(ShapeRenderer.ShapeType.Filled);
-        Main.ballSelector.render(sr);
-        for (Hole h : Main.holes)
+        for (Hole h : holes)
             h.render(sr);
         sr.setColor(0, 0, 0, .8f);
-        for (Ball b : Main.balls)
+        for (Ball b : balls)
             b.renderShadow(sr);
+        Main.ballSelector.render(sr);
         sr.end();
 
         batch.begin();
@@ -133,9 +141,9 @@ public class Farm extends Scene {
 
         batch.draw(Res.tex_orbCountBar, pos_orbs.x - Res.tex_orbCountBar.getRegionWidth() / 2, pos_orbs.y - 2);
         int width = Main.drawNumberSignColor(batch, Main.gameData.orbs, pos_orbs, ID.Font.SMALL, Res.tex_orb, -1, COLOR_ORBNUMBER);
-        pos_orb.x = pos_orbs.x-width/2 + 3.5f;
+        pos_orb.x = pos_orbs.x - width / 2 + 3.5f;
 
-        for(RewardOrb ro:rewardOrbs)
+        for (RewardOrb ro : rewardOrbs)
             ro.render(batch);
 
         batch.end();
@@ -164,10 +172,14 @@ public class Farm extends Scene {
 
     @Override
     public void show() {
+
+        super.show();
+        //cage
         cage = Main.world.createBody(Res.bodyDef_static);
         cage.createFixture(Res.fixtureDef_cage);
-        cage.setTransform(pos_field.x * Main.METERSPERPIXEL, pos_field.y * Main.METERSPERPIXEL, 0);
+        cage.setTransform(pos_field.x * Main.MPP, pos_field.y * Main.MPP, 0);
 
+        //reward (legacy)
         int amount_rewardBalls = Main.rewardBalls.size();
         if (amount_rewardBalls > 0) {
             int[] levels = new int[amount_rewardBalls];
@@ -176,30 +188,36 @@ public class Farm extends Scene {
                 levels[i] = Main.rewardBalls.get(i);
             }
             hole_reward = new Hole_Reward(54, 43, levels);
-            Main.holes.add(hole_reward);
+            holes.add(hole_reward);
             isSpawningBalls = true;
             button_play.placeOutOfScreen();
             Main.rewardBalls.clear();
         }
 
-
+        //add elapsed time to farm balls
         for (Ball_Main.Ball_Main_Data ball_main_data : Main.gameData.farmBalls) {
             System.out.println(ball_main_data.timeElapsed + " : " + System.currentTimeMillis() + " - " + Main.gameData.time_leftFarm);
             if (Main.gameData.time_leftFarm != 0)
                 ball_main_data.timeElapsed += System.currentTimeMillis() - Main.gameData.time_leftFarm;
         }
 
+        //spawn farm balls
         int i = 0;
         for (Ball_Main.Ball_Main_Data ball_data : Main.gameData.farmBalls) {
             System.out.println("timelapsed: " + ball_data.timeElapsed);
             if (!hasBeenInFarm)
-                Main.balls.add(new Ball_Main(ball_data.x, ball_data.y, Main.height * 2 + i * 25, ball_data.size, ball_data.level).setTimeElapsed(ball_data.timeElapsed));
+                balls.add(new Ball_Main(ball_data.x, ball_data.y, Main.height * 2 + i * 25, ball_data.size, ball_data.level).setTimeElapsed(ball_data.timeElapsed));
             else
-                Main.balls.add(new Ball_Main(ball_data.x, ball_data.y, 0, ball_data.size, ball_data.level).setTimeElapsed(ball_data.timeElapsed));
+                balls.add(new Ball_Main(ball_data.x, ball_data.y, 0, ball_data.size, ball_data.level).setTimeElapsed(ball_data.timeElapsed));
             i++;
         }
+
+        button_sell = new Button_Sell(new Vector2(55, 6));
+
         hasBeenInFarm = true;
 
+        hole_sell = new Hole_Sell(85, 80 + scrHD);
+        holes.add(hole_sell);
     }
 
     public void saveBalls() {
@@ -216,12 +234,21 @@ public class Farm extends Scene {
         Main.gameData.time_leftFarm = System.currentTimeMillis();
     }
 
+    public void startSelling() {
+        hole_sell.open();
+    }
+
+    public void endSelling() {
+        hole_sell.close();
+    }
+
     @Override
     public void hide() {
+        super.hide();
+
         saveBalls();
         cage = Main.destroyBody(cage);
         Main.clearEntities();
-        System.out.println("hide farmn");
         Main.gameData.time_leftFarm = System.currentTimeMillis();
     }
 }

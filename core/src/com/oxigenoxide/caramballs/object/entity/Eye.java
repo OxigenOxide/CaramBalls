@@ -1,11 +1,9 @@
 package com.oxigenoxide.caramballs.object.entity;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.oxigenoxide.caramballs.Main;
@@ -53,19 +51,19 @@ public class Eye extends Entity {
         sprite.setSize(0,0);
         projection = new Projection(pos.x, pos.y, 20, type, tier);
         createBody();
-        body.setTransform(pos.x * Main.METERSPERPIXEL, pos.y * Main.METERSPERPIXEL, 0);
+        body.setTransform(pos.x * Main.MPP, pos.y * Main.MPP, 0);
     }
 
     public void createBody() {
         body = Main.world.createBody(Res.bodyDef_dynamic);
-        Res.fixtureDef_circle_noWall.shape.setRadius(6 * Main.METERSPERPIXEL);
+        Res.fixtureDef_circle_noWall.shape.setRadius(6 * Main.MPP);
         body.createFixture(Res.fixtureDef_circle_noWall);
         body.setUserData(this);
     }
 
     public void update() {
         pos.set(body.getPosition());
-        pos.scl(Main.PIXELSPERMETER);
+        pos.scl(Main.PPM);
 
         count_float = (float) ((count_float + Main.dt_one * .05) % (2 * Math.PI));
         pos_eye.set(pos.x, pos.y + (int) (3 * Math.sin(count_float)));

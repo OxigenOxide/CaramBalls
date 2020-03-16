@@ -9,4 +9,5 @@ public interface AdMobInterface {
     void loadInterstitial();
     int getAdsClicked();
     boolean isInterstitialLoaded();
+    boolean isBannerVisible();
 }

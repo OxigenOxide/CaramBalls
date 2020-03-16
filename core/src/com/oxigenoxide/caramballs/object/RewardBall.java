@@ -3,6 +3,8 @@ package com.oxigenoxide.caramballs.object;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.oxigenoxide.caramballs.Main;
 import com.oxigenoxide.caramballs.Res;
@@ -12,6 +14,7 @@ import com.oxigenoxide.caramballs.scene.Game;
 import com.oxigenoxide.caramballs.scene.GameOver;
 import com.oxigenoxide.caramballs.scene.Scene;
 import com.oxigenoxide.caramballs.utils.Funcs;
+import com.oxigenoxide.caramballs.utils.MathFuncs;
 
 public class RewardBall {
     Sprite sprite;
@@ -21,6 +24,7 @@ public class RewardBall {
     static final float HEIGHT = 30;
     int level;
     float count_inFarm;
+    float count_shine;
 
     public RewardBall(float x, float y, int level) {
         this.level = level;
@@ -32,8 +36,11 @@ public class RewardBall {
 
     public void update() {
         pos.lerp(pos_target, .1f);
+        if(MathFuncs.distanceBetweenPoints(pos,pos_target)<.1f){
+            pos.set(pos_target);
+        }
         sprite.setPosition((int) (pos.x - sprite.getWidth() / 2), (int) (pos.y - sprite.getHeight() / 2));
-
+        count_shine = MathFuncs.loopOne(count_shine, Main.dt*.1f);
         if (Main.isInScene(Farm.class)) {
             count_inFarm += Main.dt;
             if (count_inFarm > 1) {
@@ -47,6 +54,10 @@ public class RewardBall {
         Ball_Main ball_new = new Ball_Main(pos.x, pos.y - HEIGHT, HEIGHT, 0, level);
         ball_new.velY = 1;
         Main.balls.add(ball_new);
+    }
+
+    public void render(ShapeRenderer sr) {
+        Funcs.drawShine(sr, pos, 20, count_shine);
     }
 
     public void render(SpriteBatch batch) {

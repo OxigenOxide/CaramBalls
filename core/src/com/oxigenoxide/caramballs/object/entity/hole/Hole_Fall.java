@@ -62,7 +62,6 @@ public class Hole_Fall extends Hole {
     public void render(ShapeRenderer sr) {
         sr.setColor(1,.5f+.5f*breatheProgress,.5f+.5f*breatheProgress, 1);
         sr.circle(pos.x, pos.y, radius * 1.2f);
-        sr.setColor(0, 0, 0, 1);
         super.render(sr);
     }
 

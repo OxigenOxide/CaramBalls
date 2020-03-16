@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.oxigenoxide.caramballs.object.Projection;
+import com.oxigenoxide.caramballs.object.RewardOrb;
+import com.oxigenoxide.caramballs.object.entity.hole.Hole_Sell;
 import com.oxigenoxide.caramballs.scene.Game;
 import com.oxigenoxide.caramballs.ID;
 import com.oxigenoxide.caramballs.Main;
@@ -77,14 +79,17 @@ public class Ball_Main extends Ball {
                 doDispose = true;
                 ballmain_hit.doDispose = true;
 
-                Ball_Main ball_new;
+                onCombine();
+                ballmain_hit.onCombine();
 
+                // Projection
                 Projection projectionToPass = null;
                 if (ballmain_hit.projection != null)
                     projectionToPass = ballmain_hit.projection;
                 else if (projection != null)
                     projectionToPass = projection;
 
+                Ball_Main ball_new;
                 if (size + 1 < 3) { // stay in same level
                     ball_new = new Ball_Main((pos.x + ballmain_hit.pos.x) / 2, (pos.y + ballmain_hit.pos.y) / 2, 0, (size + 1), level);
 
@@ -108,7 +113,8 @@ public class Ball_Main extends Ball {
 
                 ball_new.body.setLinearVelocity(body.getLinearVelocity().add(ballmain_hit.body.getLinearVelocity()).scl(.5f));
                 Main.ballsToAdd.add(ball_new);
-                Game.onBallCombined();
+                if(Main.inGame())
+                    Game.onBallCombined();
 
                 ballmain_hit = null;
                 Main.shake();
@@ -117,16 +123,18 @@ public class Ball_Main extends Ball {
                 Game.onBallMerge();
             }
 
+            // gravitate to close balls
             if (count_noPull <= 0) {
-                for (Ball ball : Main.balls) {
-                    if (ball != this && ball.getClass() == Ball_Main.class && !ball.isStuck && ball.isKinetic() && !ball.isPassthrough && isKinetic() && !isPassthrough) {
-                        Ball_Main bm = (Ball_Main) ball;
-                        if (bm.level == level && bm.size == size && MathFuncs.distanceBetweenPoints(ball.pos, pos) - ball.radius - radius < 10) {
-                            float ang = MathFuncs.angleBetweenPoints(pos, ball.pos);
-                            body.setLinearVelocity(body.getLinearVelocity().x + (float) Math.cos(ang) * 2, body.getLinearVelocity().y + (float) Math.sin(ang) * 2);
+                if (isKinetic() && !isPassthrough)
+                    for (Ball ball : Main.mainBalls) {
+                        if (ball != this && !ball.isStuck && ball.isKinetic() && !ball.isPassthrough) {
+                            Ball_Main bm = (Ball_Main) ball;
+                            if (bm.level == level && bm.size == size && MathFuncs.distanceBetweenPoints(ball.pos, pos) < 16) {
+                                float ang = MathFuncs.angleBetweenPoints(pos, ball.pos);
+                                body.setLinearVelocity(body.getLinearVelocity().x + (float) Math.cos(ang) * 2, body.getLinearVelocity().y + (float) Math.sin(ang) * 2);
+                            }
                         }
                     }
-                }
             } else
                 count_noPull -= Main.dt_one;
 
@@ -149,11 +157,10 @@ public class Ball_Main extends Ball {
     public void update_farm() {
         super.update_farm();
 
-        if (timeElapsed > 20000) {
-            readyToMilk = true;
-        }
+        if (timeElapsed > 20000) readyToMilk = true;
+
         if (readyToMilk) {
-            pos_speechBubble.set((int) pos.x, (int) pos.y + 2 + height);
+            pos_speechBubble.set((int) pos.x, (int) pos.y + height);
             count_speechBubble = (count_speechBubble + Main.dt * 5) % (2 * (float) Math.PI);
             speechBubbleDisposition = SPEECHBUBBLEAMP * (float) Math.cos(count_speechBubble) + SPEECHBUBBLEAMP;
         } else timeElapsed += Main.dt * 1000;
@@ -244,18 +251,18 @@ public class Ball_Main extends Ball {
 
     void render_farm(SpriteBatch batch) {
         if (readyToMilk)
-            batch.draw(Res.tex_speechBubbleOrb, pos_speechBubble.x - Res.tex_speechBubbleOrb.getRegionWidth() / 2, pos_speechBubble.y + (int) speechBubbleDisposition);
+            batch.draw(Res.tex_speechBubbleOrb, pos_speechBubble.x - Res.tex_speechBubbleOrb.getRegionWidth() / 2 - 1, pos_speechBubble.y + (int) speechBubbleDisposition);
     }
 
     void milk() {
         int orbAmount = 5;
         float angle;
-        timeElapsed=0;
+        timeElapsed = 0;
         for (int i = 0; i < orbAmount; i++) {
             angle = (float) (Math.random() * Math.PI * 2);
             Ball_Orb ball_new = new Ball_Orb(pos.x + 5 * (float) Math.cos(angle), pos.y + 5 * (float) Math.sin(angle), 0);
             ball_new.setVelocity(5 * (float) Math.cos(angle), 5 * (float) Math.sin(angle));
-            Main.balls.add(ball_new);
+            Main.ballsToAdd.add(ball_new);
         }
     }
 
@@ -286,7 +293,6 @@ public class Ball_Main extends Ball {
                 destroyShield();
             }
         }
-
     }
 
     boolean doBeginGameOverCue;
@@ -300,7 +306,8 @@ public class Ball_Main extends Ball {
             impact = Math.min(impact, 4);
             throwParticles(angle, impact, pos, palette);
             super.explode(angle, impact);
-            Game.doOnMainBallDestroyed = true;
+            if(Main.inGame())
+                Game.doOnMainBallDestroyed = true;
         }
     }
 
@@ -370,18 +377,38 @@ public class Ball_Main extends Ball {
     @Override
     public void fallInHole(Hole hole) {
         super.fallInHole(hole);
-        int ballsCounted = 0;
 
-        for (Ball_Main ball : Main.mainBalls)
-            if (!ball.isUnderGround)
-                ballsCounted++;
+        if (Main.inGame()) {
+            int ballsCounted = 0;
 
-        if (ballsCounted <= 1) {
-            Game.beginGameOverCue(this);
-            //System.out.println("DOGAMEOVERCUE");
-            return;
-        } else {
-            Main.mainBalls.remove(this);
+            for (Ball_Main ball : Main.mainBalls)
+                if (!ball.isUnderGround)
+                    ballsCounted++;
+
+            if (ballsCounted <= 1) {
+                Game.beginGameOverCue(this);
+            } else {
+                Main.mainBalls.remove(this);
+            }
+        }
+    }
+
+    @Override
+    public void disappearInHole() {
+        if (Funcs.getClass(hole_fall) == Hole_Sell.class)
+            sell();
+        super.disappearInHole();
+    }
+
+    public void sell() {
+        for (int i = 0; i < getNum() + 1; i++)
+            Main.rewardOrbs.add(new RewardOrb(pos.x, pos.y, 0).spread());
+    }
+
+    public void onCombine() {
+        if (readyToMilk) {
+            milk();
+            readyToMilk = false;
         }
     }
 
