@@ -23,17 +23,20 @@ public class Tire extends Draggable {
     @Override
     public void update() {
         super.update();
-        pos.set((int)pos.x,(int)pos.y);
-        sprite.setPosition(pos.x - sprite.getRegionWidth() / 2, pos.y - sprite.getHeight() / 2 + 5);
+        if(isDisposed)
+            return;
+        pos.set((int) pos.x, (int) pos.y);
+        sprite.setSize(sprite.getRegionWidth() * size, sprite.getRegionHeight() * size);
+        sprite.setPosition(pos.x - sprite.getWidth() / 2, pos.y - sprite.getHeight() / 2 + 5 * size);
 
         float wiggleFactor = (1 - counter_wiggle.getProgress()) * (.04f - .04f * (float) Math.cos(7.5 * Math.PI * (1 - counter_wiggle.getProgress())));
-        sprite_base.setSize(sprite_base.getTexture().getWidth() * (1 + wiggleFactor), sprite_base.getTexture().getHeight() * (1 + wiggleFactor));
-        sprite_base.setPosition(pos.x - sprite_base.getWidth() / 2, pos.y - 25 * (1 + wiggleFactor));
+        sprite_base.setSize(sprite_base.getRegionWidth() * (1 + wiggleFactor) * size, sprite_base.getRegionHeight() * (1 + wiggleFactor) * size);
+        sprite_base.setPosition(pos.x - sprite_base.getWidth() / 2, pos.y - 25 * (1 + wiggleFactor) * size);
         sprite.setRotation((float) Math.toDegrees(body.getAngle()));
         counter_wiggle.update();
     }
 
-    public void createBody(float radius){
+    public void createBody(float radius) {
         body = Main.world.createBody(Res.bodyDef_dynamic);
         body.createFixture(Res.fixtureDef_tire);
         body.setTransform(pos.x * Main.MPP, pos.y * Main.MPP, 0);
@@ -42,7 +45,7 @@ public class Tire extends Draggable {
 
     public void onCollision() {
         counter_wiggle.start();
-        Main.soundRequests.add(new SoundRequest(ID.Sound.BOUNCE,1));
+        Main.soundRequests.add(new SoundRequest(ID.Sound.BOUNCE, 1));
     }
 
     @Override
@@ -50,7 +53,7 @@ public class Tire extends Draggable {
         pos_pivot.set(16, 0);
         pos_pivot.rotateRad(body.getAngle());
         pos_pivot.add(pos.x, pos.y);
-        pos_pivot.set((int)pos_pivot.x,(int)pos_pivot.y);
+        pos_pivot.set((int) pos_pivot.x, (int) pos_pivot.y);
         pos_pivot_visual.set(pos_pivot.x, pos_pivot.y + 5);
     }
 

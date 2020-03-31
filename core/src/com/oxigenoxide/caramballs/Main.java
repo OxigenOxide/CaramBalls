@@ -63,10 +63,7 @@ import com.oxigenoxide.caramballs.utils.GameData;
 import com.oxigenoxide.caramballs.utils.MathFuncs;
 import com.oxigenoxide.caramballs.utils.UserData;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 public class Main extends ApplicationAdapter {
     static SpriteBatch batch;
@@ -105,7 +102,6 @@ public class Main extends ApplicationAdapter {
     public static float dt_one;
     public static float dt;
     public static final float PPM = 40;
-    //public static final float PPM = 1;
     public static final float MPP = 1 / PPM;
 
     public static ArrayList<Ball> balls;
@@ -184,7 +180,7 @@ public class Main extends ApplicationAdapter {
     public static Shop shop;
     public static boolean isLoaded;
     public static Body border;
-    public static final int adHeight = 17;
+    public static final int adHeight = 13;
     public static RewardBall rewardBall;
 
 
@@ -195,6 +191,8 @@ public class Main extends ApplicationAdapter {
     public static boolean noLevels = false; // DONE
     public static boolean noFlow = false; // DONE
     public static boolean noScore = false; // DONE
+
+    public static boolean inHTML;
 
     public static boolean doFade;
     public static boolean inScreenShotMode;
@@ -225,6 +223,7 @@ public class Main extends ApplicationAdapter {
     public static boolean isButtonPressed;
     public static int fingersOnScreen;
     public static int scrHD;
+    public static int orbs_visual;
 
     static ActionListener action_peak;
     static ActionListener action_peak_delayed;
@@ -239,6 +238,7 @@ public class Main extends ApplicationAdapter {
         - DEBUGTOOLS in Main should be false
         - RESEARCHMODE should be false
         - DOSCREENSHOTMODE should be false
+        - Check for crashes when you remove bin/gamedata.json
 */
 
     // GET RELEASE KEY: keytool -list -v -keystore ‪C:\Keys\googlekeys.jks -alias key_ball (Release key is pretty useless)
@@ -250,6 +250,9 @@ public class Main extends ApplicationAdapter {
     public static final int SOUNDCAP = 4;
     public static final boolean RESEARCHMODE = false;
     public static final boolean DOSCREENSHOTMODE = false;
+    static final boolean DODEBUG = false;
+    public static final boolean DODEBUGRENDER = true;
+    public static final boolean INVINCIBLE = false;
     // CONFIG //
 
     public Main(FirebaseInterface fbm, AdMobInterface amm, GameInterface gm) {
@@ -298,7 +301,6 @@ public class Main extends ApplicationAdapter {
         menu = new Menu();
         splash = new Splash();
 
-
         dim_screen = new Vector2(Main.width, Main.height);
         tap = new Vector2[]{new Vector2(), new Vector2()};
         tap_previous = new Vector2[]{new Vector2(), new Vector2()};
@@ -320,6 +322,7 @@ public class Main extends ApplicationAdapter {
         DataManager.getInstance().initializeGameData();
         gameData = DataManager.getInstance().gameData;
 
+        orbs_visual = gameData.orbs;
 
         isMusicMuted = gameData.isMusicMuted;
         isSoundMuted = gameData.isSoundMuted;
@@ -334,7 +337,6 @@ public class Main extends ApplicationAdapter {
 
         ballSelector = new BallSelector();
         dragSelector = new DragSelector();
-
 
         balls = new ArrayList<Ball>();
         ballsToAdd = new ArrayList<Ball>();
@@ -641,7 +643,6 @@ public class Main extends ApplicationAdapter {
         if (Gdx.input.isKeyPressed(Input.Keys.BACKSLASH))
             System.out.println("TEST_FLOAT: " + test_float);
 
-
         if (!isSoundMuted) {
             int index = 0;
             for (SoundRequest sr : soundRequests) { // add as many soundrequests to soundRequestsToPlay as allowed
@@ -679,6 +680,10 @@ public class Main extends ApplicationAdapter {
             startFade(action_peak_delayed);
             action_peak_delayed = null;
         }
+
+        // Visual amount of orbs
+        if (orbs_visual != gameData.orbs)
+            orbs_visual += Math.signum(gameData.orbs - orbs_visual);
 
         // Music
         if (currentMusic != null)
@@ -823,6 +828,9 @@ public class Main extends ApplicationAdapter {
             case ID.Entity.DRAGGABLE:
                 arrayList = draggables;
                 break;
+            case ID.Entity.SCOOPER:
+                arrayList = scoopers;
+                break;
         }
         return (ArrayList<Entity>) arrayList; // going against the laws of java
     }
@@ -833,22 +841,8 @@ public class Main extends ApplicationAdapter {
 
         entities.clear();
         entities_sorted.clear();
-        entities.addAll(balls);
-        entities.addAll(collectables);
-        entities.addAll(orbContainers);
-        entities.addAll(bullets);
-        entities.addAll(cannons);
-        entities.addAll(cats);
-        entities.addAll(circularBumpers);
-        entities.addAll(floorButtons);
-        entities.addAll(honey);
-        entities.addAll(spikes);
-        entities.addAll(jumpingPads);
-        entities.addAll(ballCapsules);
-        entities.addAll(eyes);
-        entities.addAll(draggables);
-        entities.addAll(particles_batch);
-        entities.addAll(scoopers);
+
+        for (int i = 0; i < ID.Entity.AMOUNT; i++) entities.addAll(getEntityArrayList(i));
 
         if (entities.size() > 0) {
             entities_sorted.add(entities.get(0));
@@ -899,6 +893,13 @@ public class Main extends ApplicationAdapter {
             }
 
             batch.end();
+
+            if (DODEBUG) {
+                sr.begin(ShapeRenderer.ShapeType.Filled);
+                for (Entity entity : entities)
+                    sr.circle(entity.pos.x, entity.pos.y, 1, 10);
+                sr.end();
+            }
         }
     }
 
@@ -934,262 +935,17 @@ public class Main extends ApplicationAdapter {
         sr.setProjectionMatrix(cam.combined);
     }
 
-    public static int drawNumberSign(SpriteBatch batch, int number, Vector2 pos, int font, TextureRegion tex_sign, int yDisposition) {
-        int digitAmount = 0;
-        ArrayList<Integer> digits = new ArrayList<Integer>();
-        int power = 0;
-        while (number >= Math.pow(10, power)) {
-            digitAmount++;
-            power++;
-        }
-        if (number == 0) {
-            digitAmount = 1;
-        }
-        int crunchNumber = number;
-        for (int i = digitAmount - 1; i >= 0; i--) {
-            digits.add((int) (crunchNumber / Math.pow(10, i)));
-            crunchNumber %= Math.pow(10, i);
-        }
-        int width = 0;
-        for (int i : digits) {
-            width += Res.tex_numbers[font][i].getRegionWidth() + 1;
-        }
-        width += tex_sign.getRegionWidth() + 2;
-        int textWidth = width;
-        width--;
-        int iWidth = 0;
-        batch.draw(tex_sign, pos.x - width / 2 + iWidth, pos.y + yDisposition);
-        iWidth += tex_sign.getRegionWidth() + 2;
-        for (int i : digits) {
-            batch.draw(Res.tex_numbers[font][i], pos.x - width / 2 + iWidth, pos.y);
-            iWidth += Res.tex_numbers[font][i].getRegionWidth() + 1;
-        }
-        return textWidth;
-    }
 
-    public static int drawNumberSignWhiteText(SpriteBatch batch, int number, Vector2 pos, int font, TextureRegion tex_sign, int yDisposition) {
-        int digitAmount = 0;
-        ArrayList<Integer> digits = new ArrayList<Integer>();
-        int power = 0;
-        while (number >= Math.pow(10, power)) {
-            digitAmount++;
-            power++;
-        }
-        if (number == 0) {
-            digitAmount = 1;
-        }
-        int crunchNumber = number;
-        for (int i = digitAmount - 1; i >= 0; i--) {
-            digits.add((int) (crunchNumber / Math.pow(10, i)));
-            crunchNumber %= Math.pow(10, i);
-        }
-        int width = 0;
-        for (int i : digits) {
-            width += Res.tex_numbers[font][i].getRegionWidth() + 1;
-        }
-        width += tex_sign.getRegionWidth() + 2;
-        int textWidth = width;
-        width--;
-        int iWidth = 0;
-        batch.draw(tex_sign, pos.x - width / 2 + iWidth, pos.y + yDisposition);
-        iWidth += tex_sign.getRegionWidth() + 2;
-        batch.setShader(Res.shader_c);
-        Res.shader_c.setUniformf("c", 1, 1, 1, 1);
-
-        for (int i : digits) {
-            batch.draw(Res.tex_numbers[font][i], pos.x - width / 2 + iWidth, pos.y);
-            iWidth += Res.tex_numbers[font][i].getRegionWidth() + 1;
-        }
-        batch.setShader(null);
-        return textWidth;
-    }
-
-    public static int drawNumberSignColor(SpriteBatch batch, int number, Vector2 pos, int font, TextureRegion tex_sign, int yDisposition, Color c) {
-        int digitAmount = 0;
-        ArrayList<Integer> digits = new ArrayList<Integer>();
-        int power = 0;
-        while (number >= Math.pow(10, power)) {
-            digitAmount++;
-            power++;
-        }
-        if (number == 0) {
-            digitAmount = 1;
-        }
-        int crunchNumber = number;
-        for (int i = digitAmount - 1; i >= 0; i--) {
-            digits.add((int) (crunchNumber / Math.pow(10, i)));
-            crunchNumber %= Math.pow(10, i);
-        }
-        int width = 0;
-        for (int i : digits) {
-            width += Res.tex_numbers[font][i].getRegionWidth() + 1;
-        }
-        width += tex_sign.getRegionWidth() + 2;
-        int textWidth = width;
-        width--;
-        int iWidth = 0;
-        batch.draw(tex_sign, pos.x - width / 2 + iWidth, pos.y + yDisposition);
-        iWidth += tex_sign.getRegionWidth() + 2;
-        batch.setShader(Res.shader_c);
-        Res.shader_c.setUniformf("c", c);
-
-        for (int i : digits) {
-            batch.draw(Res.tex_numbers[font][i], pos.x - width / 2 + iWidth, pos.y);
-            iWidth += Res.tex_numbers[font][i].getRegionWidth() + 1;
-        }
-        batch.setShader(null);
-        return textWidth;
-    }
-
-
-    public static int drawNumberSignAfter(SpriteBatch batch, int number, Vector2 pos, int font, TextureRegion tex_sign, int yDisposition) {
-        int digitAmount = 0;
-        ArrayList<Integer> digits = new ArrayList<Integer>();
-        int power = 0;
-        while (number >= Math.pow(10, power)) {
-            digitAmount++;
-            power++;
-        }
-        if (number == 0) {
-            digitAmount = 1;
-        }
-        int crunchNumber = number;
-        for (int i = digitAmount - 1; i >= 0; i--) {
-            digits.add((int) (crunchNumber / Math.pow(10, i)));
-            crunchNumber %= Math.pow(10, i);
-        }
-        int width = 0;
-        for (int i : digits) {
-            width += Res.tex_numbers[font][i].getRegionWidth() + 1;
-        }
-        width += tex_sign.getRegionWidth() + 2;
-        int textWidth = width;
-        width--;
-        int iWidth = 0;
-
-        for (int i : digits) {
-            batch.draw(Res.tex_numbers[font][i], pos.x - width / 2 + iWidth, pos.y);
-            iWidth += Res.tex_numbers[font][i].getRegionWidth() + 1;
-        }
-
-        iWidth += 2;
-        batch.draw(tex_sign, pos.x - width / 2 + iWidth, pos.y + yDisposition);
-
-        return textWidth;
-    }
-
-    public static ArrayList<Integer> getDigits(int number) {
-        int digitAmount = 0;
-        ArrayList<Integer> digits = new ArrayList<Integer>();
-        int power = 0;
-        while (number >= Math.pow(10, power)) {
-            digitAmount++;
-            power++;
-        }
-        if (number == 0) {
-            digitAmount = 1;
-        }
-        int crunchNumber = number;
-        for (int i = digitAmount - 1; i >= 0; i--) {
-            digits.add((int) (crunchNumber / Math.pow(10, i)));
-            crunchNumber %= Math.pow(10, i);
-        }
-        return digits;
-    }
-
-    public static ArrayList<TextureRegion> getDigitTextures(int number, int font) {
-        int digitAmount = 0;
-        ArrayList<Integer> digits = new ArrayList<Integer>();
-        int power = 0;
-        while (number >= Math.pow(10, power)) {
-            digitAmount++;
-            power++;
-        }
-        if (number == 0) {
-            digitAmount = 1;
-        }
-        int crunchNumber = number;
-        for (int i = digitAmount - 1; i >= 0; i--) {
-            digits.add((int) (crunchNumber / Math.pow(10, i)));
-            crunchNumber %= Math.pow(10, i);
-        }
-        ArrayList<TextureRegion> digitTextures = new ArrayList<TextureRegion>();
-        for (Integer i : digits) {
-            digitTextures.add(Res.tex_numbers[font][i]);
-        }
-        return digitTextures;
-    }
-
-    public static int getTextWidth(ArrayList<Integer> digits, int font) {
-        int width = 0;
-        for (int i : digits) {
-            width += Res.tex_numbers[font][i].getRegionWidth() + 1;
-        }
-        width--;
-        return width;
-    }
-
-    public static int getNumberWidth(ArrayList<TextureRegion> textures) {
-        int width = 0;
-        for (TextureRegion tex : textures) {
-            width += tex.getRegionWidth() + 1;
-        }
-        width--;
-        return width;
-    }
-
-    public static void drawNumberSign(SpriteBatch batch, ArrayList<Integer> digits, Vector2 pos, int font, Texture tex_sign, int yDisposition) {
-        int iWidth = 0;
-        batch.draw(tex_sign, pos.x + iWidth, pos.y + yDisposition);
-        iWidth += tex_sign.getWidth() + 2;
-        for (int i : digits) {
-            batch.draw(Res.tex_numbers[font][i], pos.x + iWidth, pos.y);
-            iWidth += Res.tex_numbers[font][i].getRegionWidth() + 1;
-        }
-    }
-
-    public static void drawNumber(SpriteBatch batch, ArrayList<Integer> digits, Vector2 pos, int font) {
-        int iWidth = 0;
-        for (int i : digits) {
-            batch.draw(Res.tex_numbers[font][i], pos.x + iWidth, pos.y);
-            iWidth += Res.tex_numbers[font][i].getRegionWidth() + 1;
-        }
-    }
-
-    public static void drawNumber(SpriteBatch batch, int number, Vector2 pos, int font) {
-        int digitAmount = 0;
-        ArrayList<Integer> digits = new ArrayList<Integer>();
-        int power = 0;
-        while (number >= Math.pow(10, power)) {
-            digitAmount++;
-            power++;
-        }
-        if (number == 0) {
-            digitAmount = 1;
-        }
-        int crunchNumber = number;
-        for (int i = digitAmount - 1; i >= 0; i--) {
-            digits.add((int) (crunchNumber / Math.pow(10, i)));
-            crunchNumber %= Math.pow(10, i);
-        }
-        int width = 0;
-        for (int i : digits) {
-            width += Res.tex_numbers[font][i].getRegionWidth() + 1;
-        }
-        width--;
-        int iWidth = 0;
-        for (int i : digits) {
-            batch.draw(Res.tex_numbers[font][i], pos.x - width / 2 + iWidth, pos.y);
-            iWidth += Res.tex_numbers[font][i].getRegionWidth() + 1;
-        }
+    public static void drawShadow(ShapeRenderer sr, float x, float y, float shadowWidth) {
+        sr.ellipse((int) ((int) x - shadowWidth / 2), (int) ((int) y - shadowWidth / 2 * Game.WIDTHTOHEIGHTRATIO), shadowWidth, shadowWidth * Game.WIDTHTOHEIGHTRATIO);
     }
 
     public static void drawShadow(ShapeRenderer sr, Vector2 pos, float shadowWidth) {
-        sr.ellipse((int) ((int) pos.x - shadowWidth / 2), (int) ((int) pos.y - shadowWidth * Game.WIDTHTOHEIGHTRATIO) - 1, shadowWidth, shadowWidth * Game.WIDTHTOHEIGHTRATIO);
+        drawShadow(sr, pos.x, pos.y, shadowWidth);
     }
 
     @Override
-    public void dispose() { // called on desktop
+    public void dispose() { // called on desktop // doesn't get called when restarting an instance of the game
         currentScene.hide();
         batch.dispose();
         if (isLoaded) {
@@ -1204,12 +960,12 @@ public class Main extends ApplicationAdapter {
         }
     }
 
-    public void onPause() { // refering to the android 'pause' when leaving the app // for android // called when starting the game up for some reason
+    public void onPause() { // refering to android onPause() when leaving the app // for android // called when starting the game up for some reason
         System.out.println("onPause()");
 
         if (farm != null) farm.onPause();
 
-        if (signedIn) {
+        if (isLoaded) {
             userData.timePlayed += (System.currentTimeMillis() - startTime) / 1000;
             startTime = System.currentTimeMillis();
             userData.adsClicked += amm.getAdsClicked();
@@ -1254,11 +1010,11 @@ public class Main extends ApplicationAdapter {
         if (userData == null)
             userData = new UserData();
 
-        Date date = Calendar.getInstance().getTime();
+        //Date date = Calendar.getInstance().getTime();
 
-        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
-        String formattedDate = df.format(date);
-        boolean isNewDate = true;
+        //SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        //String formattedDate = df.format(date);
+/*        boolean isNewDate = true;
         for (String s : userData.daysPlayed) {
             if (s.equals(formattedDate)) {
                 isNewDate = false;
@@ -1266,7 +1022,7 @@ public class Main extends ApplicationAdapter {
             }
         }
         if (isNewDate)
-            userData.daysPlayed.add(formattedDate);
+            userData.daysPlayed.add(formattedDate);*/
     }
 
     public static void onLoaded() {
@@ -1480,7 +1236,7 @@ public class Main extends ApplicationAdapter {
     }
 
     public static Body destroyBody(Body body) {
-        if (body != null && body.isActive()) {
+        if (body != null) { // WHY && isActive??????
             int max = body.getFixtureList().size;
             for (int i = 0; i < max; i++) {
                 body.destroyFixture(body.getFixtureList().get(0));
@@ -1592,11 +1348,6 @@ public class Main extends ApplicationAdapter {
     */
 
 
-    public Main setDevMode() {
-        noMusic = true;
-        return this;
-    }
-
     public static boolean isInScene(Class scene) {
         return Funcs.getClass(currentScene) == scene;
     }
@@ -1652,7 +1403,16 @@ public class Main extends ApplicationAdapter {
             }
         };
         Gdx.input.setInputProcessor(inputProcessor);
-
-
     }
+
+    public Main setDevMode() {
+        noMusic = true;
+        return this;
+    }
+
+    public Main setHTML() {
+        inHTML = true;
+        return this;
+    }
+
 }

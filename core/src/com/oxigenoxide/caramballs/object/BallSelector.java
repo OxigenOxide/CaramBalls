@@ -68,12 +68,12 @@ public class BallSelector {
             v2.set(c, 0);
             v2.rotateRad(ang - bang);
             v2.add(v0);
-            radius = radiusMax / (1 + (MathFuncs.distanceBetweenPoints(ball_selected.pos, tap[0])) / DISTANCEMAX);
+            radius = radiusMax / (1 + 1.5f*Math.min(DISTANCEMAX, MathFuncs.distanceBetweenPoints(ball_selected.pos, tap[0])) / DISTANCEMAX);
         }
     }
 
     public void onRelease() { // apparently onRelease sometimes is called after Gdx.input.isTouched is changed on android. This is always the contrary on desktop.
-        if (ball_selected != null) {
+        if (ball_selected != null && !ball_selected.isDisposed) {
             ball_selected.hit(cang, 15 * stretched);
             ball_selected = null;
         }

@@ -74,4 +74,17 @@ public class MathFuncs {
     public static float loopOne(float f, float add) {
         return (f + add) % 1;
     }
+
+    public static void translateVertices(float[] verts, float x, float y) {
+        for (int i = 0; i < verts.length / 2; i++) {
+            verts[i * 2] += x;
+            verts[i * 2 + 1] += y;
+        }
+    }
+
+    public static void negateVertices(float[] verts) {
+        for (int i = 0; i < verts.length; i++) {
+            verts[i] *= -1;
+        }
+    }
 }

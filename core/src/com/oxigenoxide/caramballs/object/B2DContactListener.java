@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.oxigenoxide.caramballs.Main;
 import com.oxigenoxide.caramballs.object.entity.BallCapsule;
@@ -19,6 +20,7 @@ import com.oxigenoxide.caramballs.object.entity.ball.Ball_Main;
 import com.oxigenoxide.caramballs.object.entity.collectable.Collectable;
 import com.oxigenoxide.caramballs.object.entity.draggable.Draggable;
 import com.oxigenoxide.caramballs.object.entity.orbContainer.OrbContainer;
+import com.oxigenoxide.caramballs.object.entity.scooper.Scooper;
 import com.oxigenoxide.caramballs.scene.Game;
 import com.oxigenoxide.caramballs.utils.MathFuncs;
 
@@ -27,6 +29,9 @@ public class B2DContactListener implements ContactListener {
     public void beginContact(Contact contact) {
         java.lang.Object udA = contact.getFixtureA().getBody().getUserData();
         java.lang.Object udB = contact.getFixtureB().getBody().getUserData();
+
+        Fixture fixA = contact.getFixtureA();
+        Fixture fixB = contact.getFixtureB();
 
         Class classA = getClass(udA);
         Class classB = getClass(udB);
@@ -87,6 +92,9 @@ public class B2DContactListener implements ContactListener {
                     } else if (classB == Eye.class) {
                         Eye eye = (Eye) udB;
                         eye.collision((Ball_Main) ball);
+                    } else if (udB instanceof Scooper) {
+                        if (fixB.getUserData() != null)
+                            ball.destroy(0, 1, ((Scooper) udB).pos);
                     } else if (udB instanceof Collectable) {
                         Collectable c = (Collectable) udB;
                         c.pickUp((Ball) udA);
@@ -114,6 +122,8 @@ public class B2DContactListener implements ContactListener {
             udB = contact.getFixtureA().getBody().getUserData();
             classA = getClass(udA);
             classB = getClass(udB);
+            fixA = contact.getFixtureB();
+            fixB = contact.getFixtureA();
         }
     }
 

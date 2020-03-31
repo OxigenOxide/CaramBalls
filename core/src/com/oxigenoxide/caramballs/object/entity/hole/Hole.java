@@ -1,5 +1,6 @@
 package com.oxigenoxide.caramballs.object.entity.hole;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.oxigenoxide.caramballs.scene.Game;
@@ -16,6 +17,7 @@ public class Hole extends Entity {
     boolean hasSpewed;
     public boolean isDisposed;
 
+
     Hole() {
         pos = new Vector2();
     }
@@ -31,6 +33,11 @@ public class Hole extends Entity {
     public void render(ShapeRenderer sr) {
         sr.setColor(0, 0, 0, 1);
         sr.circle(pos.x, pos.y, radius, 15);
+    }
+
+    @Override
+    public void render(SpriteBatch batch, ShapeRenderer sr) {
+
     }
 
     public void dispose() {

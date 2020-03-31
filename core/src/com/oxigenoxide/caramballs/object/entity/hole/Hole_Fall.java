@@ -14,6 +14,7 @@ public class Hole_Fall extends Hole {
     final float FALLINEASIER = 2;
     int lifeTime = 315;
     float breatheProgress;
+    boolean isPermanent;
 
     public Hole_Fall() {
         super();
@@ -28,6 +29,13 @@ public class Hole_Fall extends Hole {
         radius_spawn = radiusMax;
     }
 
+    public Hole_Fall(float x, float y, boolean isPermanent) {
+        super(x, y);
+        this.isPermanent = isPermanent;
+        radiusMax = 10;
+        radius_spawn = radiusMax;
+    }
+
     @Override
     public void update() {
         super.update();
@@ -36,31 +44,33 @@ public class Hole_Fall extends Hole {
             radius_base = count / (lifeTime * 2 / 5f) * radiusMax;
         }
 
-        if (count > lifeTime * 4 / 5f && count <= lifeTime) {
-            radius_base = radiusMax - (count - lifeTime * 4 / 5f) / (lifeTime-lifeTime * 4 / 5f) * radiusMax;
-        }
+        if (!isPermanent)
+            if (count > lifeTime * 4 / 5f && count <= lifeTime) {
+                radius_base = radiusMax - (count - lifeTime * 4 / 5f) / (lifeTime - lifeTime * 4 / 5f) * radiusMax;
+            }
 
         count_breathe = (float) ((count_breathe + .1f) % (2 * Math.PI));
         breathe = radius_base * .1f * (float) Math.sin(count_breathe);
-        breatheProgress=((float) Math.sin(count_breathe)+1)/2;
-        if(Main.noFX) {
+        breatheProgress = ((float) Math.sin(count_breathe) + 1) / 2;
+        if (Main.noFX) {
             breathe = 0;
-            breatheProgress=1;
+            breatheProgress = 1;
         }
         radius = radius_base + breathe;
 
-        if (count > lifeTime)
-            dispose();
+        if (!isPermanent)
+            if (count > lifeTime)
+                dispose();
 
         for (Ball ball : Main.balls) {
-            if (!ball.fall && !(ball.height>0)&& MathFuncs.distanceBetweenPoints(ball.pos, pos) + ball.radius < radius + FALLINEASIER)
+            if (!ball.fall && !(ball.height > 0) && MathFuncs.distanceBetweenPoints(ball.pos, pos) + ball.radius < radius + FALLINEASIER)
                 ball.fallInHole(this);
         }
     }
 
     @Override
     public void render(ShapeRenderer sr) {
-        sr.setColor(1,.5f+.5f*breatheProgress,.5f+.5f*breatheProgress, 1);
+        sr.setColor(1, .5f + .5f * breatheProgress, .5f + .5f * breatheProgress, 1);
         sr.circle(pos.x, pos.y, radius * 1.2f);
         super.render(sr);
     }

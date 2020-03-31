@@ -72,7 +72,7 @@ public class BallCapsule extends Entity {
     public void render(SpriteBatch batch) {
         batch.draw(tex, pos_capsule.x - tex.getRegionWidth() / 2, pos_capsule.y);
         batch.setShader(Res.shader_palette);
-        Main.setPalette(Res.ballPalette[level]);
+        Main.setPalette(Res.palette_mainBall[level]);
         batch.draw(tex_ball, pos_ball.x - tex_ball.getRegionWidth() / 2, pos_ball.y - tex_ball.getRegionHeight()/2);
         batch.setShader(null);
         batch.draw(tex_shine, pos_capsule.x - tex_shine.getRegionWidth() / 2, pos_capsule.y + 10);

@@ -1,5 +1,6 @@
 package com.oxigenoxide.caramballs.object.entity.orbContainer;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.oxigenoxide.caramballs.scene.Game;
 import com.oxigenoxide.caramballs.ID;
 import com.oxigenoxide.caramballs.Main;
@@ -17,6 +18,7 @@ public class OC_Egg extends OrbContainer {
     public OC_Egg(float x, float y, float height) {
         super(x, y, height);
         tex = Res.tex_blueEgg;
+        sprite=new Sprite(tex);
     }
 
     public void createBody() {

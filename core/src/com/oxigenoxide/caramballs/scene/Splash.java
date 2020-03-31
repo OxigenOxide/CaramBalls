@@ -15,6 +15,7 @@ import com.oxigenoxide.caramballs.Main;
 import com.oxigenoxide.caramballs.Res;
 import com.oxigenoxide.caramballs.utils.ActionListener;
 import com.oxigenoxide.caramballs.utils.Counter;
+import com.oxigenoxide.caramballs.utils.Funcs;
 import com.oxigenoxide.caramballs.utils.MathFuncs;
 
 import java.util.ArrayList;
@@ -74,11 +75,11 @@ public class Splash extends Scene {
         Main.assets.update();
         loadingProgress = Main.assets.getProgress();
         counter_dropBall.update();
-        if (Main.assets.isFinished() && Main.fbm.isSignedIn() && alpha == 0 && !Main.isLoaded && Main.fbm.isUpToDate()) {
+        if (Main.assets.isFinished() && Main.fbm.isSignedIn() /*&& alpha == 0*/ && !Main.isLoaded && Main.fbm.isUpToDate()) {
             if (Main.signedIn) { // done loading and everything
                 Main.initializeResources();
                 Main.onLoaded();
-                Main.setSceneMenu();
+                Main.setSceneGame();
             }
         }
         if (!Main.signedIn && !Main.fbm.isSignedIn()) {
@@ -308,7 +309,7 @@ public class Splash extends Scene {
                 batch.draw(tex_filling, (int) pos.x - radius_filling, (int) pos.y - radius_filling, radius_filling * 2, radius_filling * 2);
                 batch.setShader(Res.shader_c);
                 Res.shader_c.setUniformf("c", Res.COLOR_SPLASH_BLUE);
-                Main.drawNumberSignAfter(batch, (int) (loadingProgress * 100), pos_number, ID.Font.SMALL, Res.tex_number_small_percent, 0);
+                Funcs.drawNumberSignAfter(batch, (int) (loadingProgress * 100), pos_number, ID.Font.SMALL, Res.tex_number_small_percent, 0);
                 batch.setShader(null);
             }
 

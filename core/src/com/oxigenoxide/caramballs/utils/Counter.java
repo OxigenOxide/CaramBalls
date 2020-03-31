@@ -19,20 +19,24 @@ public class Counter {
 
     public Counter start() {
         count = time;
-        doCount=true;
+        doCount = true;
         return this;
     }
 
     public void update() {
-        if(doCount) {
+        if (doCount) {
             count -= Gdx.graphics.getDeltaTime();
             if (count < 0) {
                 count = 0;
-                doCount=false;
+                doCount = false;
                 if (listener != null)
                     listener.action(); // fix this before using listener
             }
         }
+    }
+
+    public void setTime(float time) {
+        this.time = time;
     }
 
     public float getCount() {

@@ -15,6 +15,7 @@ import com.oxigenoxide.caramballs.object.YouLost;
 import com.oxigenoxide.caramballs.object.button.Button;
 import com.oxigenoxide.caramballs.object.button.Button_LeaderBoards;
 import com.oxigenoxide.caramballs.object.button.Button_Replay;
+import com.oxigenoxide.caramballs.utils.Funcs;
 
 import java.util.ArrayList;
 
@@ -92,7 +93,6 @@ public class GameOver extends Scene {
         Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-
         batch.begin();
 
         // Buttons
@@ -105,20 +105,20 @@ public class GameOver extends Scene {
         // Numbers
         batch.setShader(Res.shader_palette);
         Main.setPalette(Res.PALETTE_SCORE[scoreLevel]);
-        Main.drawNumber(batch, Game.orbsCollected, pos_numScore, ID.Font.POP);
+        Funcs.drawNumber(batch, Game.orbsCollected, pos_numScore, ID.Font.POP);
         batch.setShader(null);
         batch.setShader(Res.shader_palette);
-        Main.setPalette(Res.PALETTE_SCORE[highscoreLevel + (int) (Main.test_float)]);
-        Main.drawNumber(batch, Main.gameData.highscore, new Vector2(Main.width / 2, yHighscore), ID.Font.POP_LARGE);
+        Main.setPalette(Res.PALETTE_SCORE[highscoreLevel]);
+        Funcs.drawNumber(batch, Main.gameData.highscore, new Vector2(Main.width / 2, yHighscore), ID.Font.POP_LARGE);
         batch.setShader(null);
 
         // Ball
         batch.draw(Res.tex_pedestal, pos_pedestal.x, pos_pedestal.y);
 
         // Rank
-        ArrayList<Integer> rank_digits = Main.getDigits((int) Main.gm.getRank());
-        int rank_width = Main.getTextWidth(rank_digits, 0) + 1 + Res.tex_text_youare.getRegionWidth();
-        Main.drawNumber(batch, rank_digits, new Vector2(Main.width / 2 - rank_width / 2 + Res.tex_text_youare.getRegionWidth() + 1, pos_rank.y), ID.Font.NORMAL);
+        ArrayList<Integer> rank_digits = Funcs.getDigits((int) Main.gm.getRank());
+        int rank_width = Funcs.getTextWidth(rank_digits, 0) + 1 + Res.tex_text_youare.getRegionWidth();
+        Funcs.drawNumber(batch, rank_digits, new Vector2(Main.width / 2 - rank_width / 2 + Res.tex_text_youare.getRegionWidth() + 1, pos_rank.y), ID.Font.NORMAL);
         batch.draw(Res.tex_text_youare, Main.width / 2 - rank_width / 2, pos_rank.y);
 
         // Highscore
@@ -148,7 +148,8 @@ public class GameOver extends Scene {
         batch.draw(tex_buffer, 0, Main.height, Main.width, -Main.height);
         batch.setShader(null);
 
-        Main.b2dr.render(Main.world, Main.cam.combined);
+        if (Main.DODEBUGRENDER)
+            Main.b2dr.render(Main.world, Main.cam.combined);
         batch.end();
         Main.setCamEffects();
     }

@@ -12,6 +12,7 @@ public class FR_Ball extends FloatingReward {
         this.level = level;
         tex= Res.tex_ball[0][0];
         sprite=new Sprite(tex);
+
     }
 
     @Override
@@ -22,7 +23,7 @@ public class FR_Ball extends FloatingReward {
     @Override
     public void render(SpriteBatch batch) {
         batch.setShader(Res.shader_palette);
-        Main.setPalette(Res.ballPalette[level]);
+        Main.setPalette(Res.palette_mainBall[level]);
         super.render(batch);
         batch.setShader(null);
     }

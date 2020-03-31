@@ -9,12 +9,11 @@ public class Entity {
     public float radius_spawn = 0; // the radius no other spawn radius should touch
     public Vector2 pos;
 
+
     // When creating a new entity:
     //   - add its ID to the class ID
-    //   - add its list to Main.clearEntities()
+    //   - add its list to Main.getEntityArray()
     //   - add its list to updates
-    //   - add its list to renders
-
 
     // Notes:
     //   - never re-declare the pos variable

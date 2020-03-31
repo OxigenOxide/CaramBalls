@@ -1,7 +1,5 @@
 package com.oxigenoxide.caramballs.object;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -9,9 +7,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.oxigenoxide.caramballs.ID;
 import com.oxigenoxide.caramballs.Main;
 import com.oxigenoxide.caramballs.Res;
+import com.oxigenoxide.caramballs.object.entity.ball.Ball;
 import com.oxigenoxide.caramballs.utils.Counter;
-
-import java.util.ArrayList;
+import com.oxigenoxide.caramballs.utils.Funcs;
 
 public class ComboBar {
     TextureRegion tex_bar;
@@ -21,7 +19,7 @@ public class ComboBar {
     Vector2 pos_num;
     float count;
     float count_idle;
-    float countMax_idle = 5;
+    float countMax_idle = 8;
     float ampFactor;
     float alwaysFilled = .1f;
     public static Vector2 pos_orb;
@@ -94,7 +92,7 @@ public class ComboBar {
             batch.draw(Res.tex_comboBar_end, Main.width / 2 - tex_bar.getRegionWidth() / 2 - 1, Main.height - 11);
             batch.draw(Res.tex_comboBar_end, Main.width / 2 + (int) Math.ceil(tex_bar.getRegionWidth() / 2f), Main.height - 11);
 
-            int width = Main.drawNumberSignWhiteText(batch, combo_visual, pos_num, ID.Font.SMALL, Res.tex_orb, -1);
+            int width = Funcs.drawNumberSignWhiteText(batch, combo_visual, pos_num, ID.Font.SMALL, Res.tex_orb, -1);
             pos_orb.x = Main.width / 2 - width / 2f + 3.5f;
         }
     }
@@ -102,6 +100,9 @@ public class ComboBar {
     void beginFlow() {
         Main.addSoundRequest(ID.Sound.SLOWDOWN);
         inFlow = true;
+        for(Ball ball: Main.mainBalls){
+            ball.setParticleTwinkle();
+        }
     }
 
     void endFlow() {

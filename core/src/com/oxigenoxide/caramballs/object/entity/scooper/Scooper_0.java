@@ -6,14 +6,13 @@ import com.oxigenoxide.caramballs.Res;
 
 public class Scooper_0 extends Scooper {
 
-    public Scooper_0(){
+    public Scooper_0() {
         super();
-        enableMotor=false;
-        tex= Res.tex_scooper_0;
-        tex_shine= Res.tex_scooperShine_0;
-        System.out.println("tex: "+tex);
+        enableMotor = false;
+        tex = Res.tex_scooper_0;
+        tex_shine = Res.tex_scooperShine_0;
         pos = new Vector2(Main.width / 2, Main.height / 2);
-        anchor = new Vector2(0,0);
+        anchor = new Vector2(0, 0);
         construct();
     }
 }

@@ -13,6 +13,7 @@ import com.oxigenoxide.caramballs.Res;
 import com.oxigenoxide.caramballs.object.button.Button;
 import com.oxigenoxide.caramballs.object.button.Button_Info;
 import com.oxigenoxide.caramballs.object.button.Button_ToGame;
+import com.oxigenoxide.caramballs.utils.Funcs;
 import com.oxigenoxide.caramballs.utils.MathFuncs;
 
 public class Welcome extends Scene {
@@ -67,7 +68,7 @@ public class Welcome extends Scene {
         //batch.draw(Res.tex_text_comingsoon,Main.width/2-Res.tex_text_comingsoon.getWidth()/2,y+42);
         button_toGame.render(batch);
         batch.draw(Res.tex_text_welcome, 0, Main.height - Res.tex_text_welcome.getRegionHeight() - 5 - y);
-        Main.drawNumberSign(batch, Main.testerID, new Vector2(Main.width / 2, Main.height - 35 - y), ID.Font.NORMAL, Res.tex_numberSign, 0);
+        Funcs.drawNumberSign(batch, Main.testerID, new Vector2(Main.width / 2, Main.height - 35 - y), ID.Font.NORMAL, Res.tex_numberSign, 0);
         batch.end();
 
     }

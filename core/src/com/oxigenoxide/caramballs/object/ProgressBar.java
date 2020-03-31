@@ -1,6 +1,5 @@
 package com.oxigenoxide.caramballs.object;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.oxigenoxide.caramballs.Main;
@@ -139,8 +138,8 @@ public class ProgressBar {
         public void render(SpriteBatch batch) {
             if (show) {
                 batch.setShader(Res.shader_palette);
-                Res.shader_palette.setUniformf("color1", Res.ballPalette[level][1].r, Res.ballPalette[level][1].g, Res.ballPalette[level][1].b, a_dot);
-                Res.shader_palette.setUniformf("color2", Res.ballPalette[level][2].r, Res.ballPalette[level][2].g, Res.ballPalette[level][2].b, a_dot);
+                Res.shader_palette.setUniformf("color1", Res.palette_mainBall[level][1].r, Res.palette_mainBall[level][1].g, Res.palette_mainBall[level][1].b, a_dot);
+                Res.shader_palette.setUniformf("color2", Res.palette_mainBall[level][2].r, Res.palette_mainBall[level][2].g, Res.palette_mainBall[level][2].b, a_dot);
                 batch.draw(Res.tex_progressBar_ball, pos.x + 1 + level * 9 - dis, pos.y + 3 - dis, width, width);
             }
         }

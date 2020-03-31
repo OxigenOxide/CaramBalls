@@ -3,7 +3,6 @@ package com.oxigenoxide.caramballs.scene;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -25,6 +24,7 @@ import com.oxigenoxide.caramballs.Res;
 import com.oxigenoxide.caramballs.object.B2DContactListener;
 import com.oxigenoxide.caramballs.object.ComboBar;
 import com.oxigenoxide.caramballs.object.Meter;
+import com.oxigenoxide.caramballs.object.OrbFountain;
 import com.oxigenoxide.caramballs.object.ProgressBar;
 import com.oxigenoxide.caramballs.object.Projection;
 import com.oxigenoxide.caramballs.object.RewardBall;
@@ -41,13 +41,13 @@ import com.oxigenoxide.caramballs.object.entity.Entity;
 import com.oxigenoxide.caramballs.object.entity.Eye;
 import com.oxigenoxide.caramballs.object.entity.JumpingPad;
 import com.oxigenoxide.caramballs.object.entity.ball.Ball_Obstacle;
+import com.oxigenoxide.caramballs.object.entity.orbContainer.OrbContainer;
 import com.oxigenoxide.caramballs.object.entity.scooper.Scooper;
 import com.oxigenoxide.caramballs.object.entity.ball.Ball_Break;
 import com.oxigenoxide.caramballs.object.entity.ball.Ball_Orb;
 import com.oxigenoxide.caramballs.object.entity.draggable.Draggable;
 import com.oxigenoxide.caramballs.object.entity.draggable.Plank;
 import com.oxigenoxide.caramballs.object.entity.draggable.Tire;
-import com.oxigenoxide.caramballs.object.entity.orbContainer.OC_Egg;
 import com.oxigenoxide.caramballs.object.entity.FloorButton;
 import com.oxigenoxide.caramballs.object.Orb;
 import com.oxigenoxide.caramballs.object.OrbCounter;
@@ -69,6 +69,8 @@ import com.oxigenoxide.caramballs.object.entity.particle.Particle_Ball;
 import com.oxigenoxide.caramballs.object.entity.particle.Particle_Confetti;
 import com.oxigenoxide.caramballs.object.entity.scooper.Scooper_0;
 import com.oxigenoxide.caramballs.object.entity.scooper.Scooper_1;
+import com.oxigenoxide.caramballs.object.entity.scooper.Scooper_2;
+import com.oxigenoxide.caramballs.object.entity.scooper.Scooper_3;
 import com.oxigenoxide.caramballs.object.floatingReward.FR_Eye;
 import com.oxigenoxide.caramballs.object.floatingReward.FloatingReward;
 import com.oxigenoxide.caramballs.object.place.Place;
@@ -251,13 +253,14 @@ public class Game extends Scene {
     BitmapFont font;
 
     ContactListener contactListener;
-    InputProcessor inputProcessor;
 
     static final boolean DODEBUGTOOLS = true;
     static boolean doSpawnObjects = true;
 
     public static Place[] places;
     public static Place place;
+
+    public OrbFountain orbFountain;
 
 
     public Game() {
@@ -489,6 +492,8 @@ public class Game extends Scene {
                 random1 = 1;
                 break;
         }
+
+        if (orbFountain != null) orbFountain.update();
 /*
         if (changeTableColor) {
 
@@ -871,6 +876,9 @@ public class Game extends Scene {
             sr.setColor(0, 0, 0, .8f); // reset, because ball shadow can become white
             for (BallCapsule bc : ballCapsules)
                 bc.renderShadow(sr);
+            for (OrbContainer oc : orbContainers)
+                oc.drawShadow(sr);
+            if (orbFountain != null) orbFountain.drawShadow(sr);
         }
         sr.setColor(0, 0, 0, 1);
         for (Hole hole : holes)
@@ -888,15 +896,19 @@ public class Game extends Scene {
         sr.end();
 
         batch.begin();
-        for (Entity entity : entities_sorted) {
+
+        if (orbFountain != null) orbFountain.render(batch);
+
+        for (Entity entity : entities_sorted)
             entity.render(batch, sr);
-        }
 
         for (Orb orb : orbs)
             orb.render(batch);
 
         for (RewardOrb ro : rewardOrbs)
             ro.render(batch);
+        for (Ball ball : balls)
+            ball.drawParticleEffect(batch);
 
         setCamNormal();
         for (Bumper bumper : bumpers)
@@ -1000,13 +1012,17 @@ public class Game extends Scene {
         Gdx.gl20.glEnable(GL20.GL_BLEND);
 
         Gdx.gl20.glLineWidth(1);
-        Main.b2dr.render(world, Main.cam.combined);
+        Main.cam.setToOrtho(false, Main.width * Main.MPP, Main.height * Main.MPP);
+        Main.cam.position.set(0, 0, 0);
+        if (Main.DODEBUGRENDER)
+            Main.b2dr.render(world, Main.cam.combined);
+        Main.cam.setToOrtho(false, Main.width, Main.height);
     }
 
     public void render_tutorial(SpriteBatch batch) {
 
         if (tutorialStage == ID.TutorialStage.SLOWDOWN) {
-            Main.drawNumber(batch, (int) count_catTutorial, new Vector2(Main.width / 2, Main.height / 2 + 37), ID.Font.FIELD);
+            Funcs.drawNumber(batch, (int) count_catTutorial, new Vector2(Main.width / 2, Main.height / 2 + 37), ID.Font.FIELD);
             batch.draw(Res.tex_gap, 26, 68 + Main.height / 2 - 192 / 2);
             batch.draw(Res.tex_text_slowdown, Main.width / 2 - Res.tex_text_slowdown.getRegionWidth() / 2, 50);
             if (Main.slowdown > 0) {
@@ -1460,102 +1476,150 @@ public class Game extends Scene {
         progressBar.show();
 
         bumpers.clear();
+
+        for (Ball ball : balls)
+            if (ball.getClass() != Ball_Main.class)
+                ball.shrink();
+
+        for (Draggable draggable : draggables)
+            draggable.disappear();
+
+        for (Cannon cannon: cannons)
+            cannon.disappear();
+
         doFloorButtons = false;
         doSpikes = false;
         doSpikePatches = false;
         doFallHoles = false;
         doCircularBumpers = false;
         doSpikeLines = false;
-        doSpawnOrbs = true;
+        doSpawnOrbs = false;
         countMax_nextOrb = 800;
 
-        for(Scooper scooper:scoopers)
+        for (Scooper scooper : scoopers)
             scooper.disappear();
-        for(Spike spike:spikes)
+        for (Spike spike : spikes)
             spike.disappear();
 
         float harderFactor = (1 + .5f * level);
 
-        /*
-            switch (level) {
-                case 0:
-                    initiateLevel_easy();
-                    break;
-                case 900:
-                    doSpikes = true;
-                    doSpikeLines = true;
-                    doCircularBumpers = true;
-                    countMax_nextSpike = 400;
-                    countMax_nextBallSpawnPeriod = 0;
-                    break;
-            }
-            */
-
-        if (level < 100) {
+        if (true) {
+            createLevel(ID.Level.CANNONBOX);
+            return;
+        }
+        if (level == 1) {
+            initiateLevel_intro();
+            return;
+        }
+        if (level <= 4) {
             initiateLevel_easy();
             return;
         }
-        if (level < 10) {
-            initiateLevel_medium();
+        if (level <= 7) {
+            initiateLevel_normal();
             return;
         }
-        initiateLevel_hard();
+        if (level <= 10) {
+            initiateLevel_hard();
+            return;
+        }
+        initiateLevel_insane();
     }
 
-    public static void initiateLevel_easy() { // collection of easy levels
-        int random = (int) (Math.random() * 6);
-        switch (random) {
-            case 0:
+    public static final int[] LEVELS_INTRO = new int[]{ID.Level.CIRCULARBUMPERS};
+    public static final int[] LEVELS_EASY = new int[]{ID.Level.CIRCULARBUMPERS};
+    public static final int[] LEVELS_NORMAL = new int[]{ID.Level.CIRCULARBUMPERS};
+    public static final int[] LEVELS_HARD = new int[]{ID.Level.CIRCULARBUMPERS};
+    public static final int[] LEVELS_INSANE = new int[]{ID.Level.CIRCULARBUMPERS};
+
+    public static void initiateLevel_intro() { // no to low danger
+        createLevel(selectRandomLevel(LEVELS_INTRO));
+    }
+
+    public static void initiateLevel_easy() { // danger
+        createLevel(selectRandomLevel(LEVELS_EASY));
+    }
+
+    public static void initiateLevel_normal() { // likely for a beginner to die
+        createLevel(selectRandomLevel(LEVELS_NORMAL));
+    }
+
+    public static void initiateLevel_hard() { // normal players have difficulty
+        createLevel(selectRandomLevel(LEVELS_HARD));
+    }
+
+    public static void initiateLevel_insane() { // normal players can barely finish these
+        createLevel(selectRandomLevel(LEVELS_INSANE));
+    }
+
+    public static int selectRandomLevel(int[] levels) {
+        int index_random = (int) (Math.random() * levels.length);
+        return levels[index_random];
+    }
+
+    public static void createLevel(int level) {
+        switch (level) {
+            case ID.Level.SPIKES:
                 doSpikes = true;
                 countMax_nextSpike = 300;
                 countMax_nextBallSpawnPeriod = 0;
-                break;
-            case 1:
+                return;
+
+            case ID.Level.CIRCULARBUMPERS:
                 doCircularBumpers = true;
                 countMax_nextCircularBumper = 50;
                 countMax_nextBallSpawnPeriod = 0;
-                break;
-            case 2:
+                return;
+
+            case ID.Level.SCOOPER_NORMAL:
                 scoopers.add(new Scooper_0());
-                break;
-            case 3:
+                return;
+
+            case ID.Level.OBSTACLEBALLS:
                 counter_dropObstacles.start();
                 for (int i = 0; i < 10; i++)
                     ballsToDrop.add(new Ball_Obstacle());
-                break;
-            case 4:
+                return;
+
+            case ID.Level.SPIKES_HORIZONTAL:
                 int amount_spikes = (int) (Main.width / 10);
                 for (int i = 0; i < amount_spikes; i++)
-                    spikes.add(new Spike(i*10,1,true));
+                    spikes.add(new Spike(i * 10, 1, true));
                 for (int i = 0; i < amount_spikes; i++)
-                    spikes.add(new Spike(i*10,Main.height-14,true));
-                break;
-            case 5:
+                    spikes.add(new Spike(i * 10, Main.height - 14, true));
+                return;
+
+            case ID.Level.SCOOPER_LEFT:
                 scoopers.add(new Scooper_1());
-                break;
-            //counter_dropObstacles.start();
-                /*
-                for (int i = 0; i < 10; i++)
-                    ballsToDrop.add(new Ball_Obstacle());
-                for (int i = 0; i < 10; i++)
-                    ballsToDrop.add(new Ball_Inflate());
-                for (int i = 0; i < 3; i++)
-                    ballsToDrop.add(new Ball_Bad());
-                    */
-        }
-    }
+                return;
 
-    public static void initiateLevel_medium() { // collection of medium-difficulty levels
-        int random = (int) (Math.random() * 2);
-        switch (random) {
+            case ID.Level.SCOOPER_CROSS:
+                scoopers.add(new Scooper_2());
+                return;
 
-        }
-    }
+            case ID.Level.SCOOPER_SPIKES:
+                scoopers.add(new Scooper_3());
+                return;
 
-    public static void initiateLevel_hard() { // collection of hard levels
-        int random = (int) (Math.random() * 2);
-        switch (random) {
+            case ID.Level.SCOOPERHOLES:
+                scoopers.add(new Scooper_0());
+                holes.add(new Hole_Fall(Main.width / 2, Main.height / 2 + 60, true));
+                holes.add(new Hole_Fall(Main.width / 2, Main.height / 2 - 60, true));
+                return;
 
+            case ID.Level.CANNONBOX:
+                draggables.add(new Plank());
+                cannons.add(new Cannon(Main.width / 4, 10));
+                cannons.add(new Cannon(Main.width / 4 * 2, 10));
+                cannons.add(new Cannon(Main.width / 4 * 3, 10));
+
+                cannons.add(new Cannon(Main.width / 2, Main.height - 20));
+                return;
+
+            case ID.Level.TIRE_REDBALL:
+                draggables.add(new Tire());
+                balls.add(new Ball_Bad());
+                return;
         }
     }
 
@@ -1735,6 +1799,10 @@ public class Game extends Scene {
         }
     }
 
+    public void giveTrickReward(float x, float y) {
+        if (orbFountain == null)
+            orbFountain = new OrbFountain(x, y);
+    }
 
     @Override
     public void dispose() {
@@ -1764,7 +1832,7 @@ public class Game extends Scene {
             case Input.Keys.D:
                 break;
             case Input.Keys.E:
-                orbContainers.add(new OC_Fruit());
+                orbContainers.add(new OC_Fruit(tap[0].x, tap[0].y));
                 break;
             case Input.Keys.F:
                 break;

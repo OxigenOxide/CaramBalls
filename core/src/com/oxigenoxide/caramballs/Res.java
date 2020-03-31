@@ -23,6 +23,7 @@ public class Res {
 
     public static TextureRegion[][] tex_ball;
     public static TextureRegion[][] tex_numbers;
+
     public static TextureRegion[] tex_ballShard;
     public static TextureRegion[] tex_title;
     public static TextureRegion[] tex_text_v;
@@ -34,37 +35,8 @@ public class Res {
     public static TextureRegion[] tex_hand;
     public static TextureRegion[] tex_eye;
     public static TextureRegion[] tex_meter_dot;
-    public static Texture[] tex_tabletop;
     public static TextureRegion[] tex_text_level;
     public static TextureRegion[] tex_particle_hit;
-
-    public static TextureRegion tex_meter_case;
-    public static TextureRegion tex_number_small_percent;
-    public static TextureRegion tex_progressBar;
-    public static TextureRegion tex_progressBar_ball;
-    public static TextureRegion tex_ball_bad;
-    public static TextureRegion tex_crown;
-    public static TextureRegion tex_meter_ball;
-    public static Texture tex_fade;
-    public static TextureRegion tex_ttptext;
-    public static TextureRegion tex_hleditie;
-    public static TextureRegion tex_text_slowdown;
-    public static TextureRegion tex_bumper;
-    public static Texture tex_tilt;
-    public static TextureRegion tex_bomb_white;
-    public static TextureRegion tex_text_player;
-    public static TextureRegion tex_tutorialMode;
-    public static Texture tex_random;
-    public static TextureRegion tex_gap;
-    public static TextureRegion tex_buttonPressed_balls;
-    public static TextureRegion tex_buttonPressed_leaderBoards;
-    public static TextureRegion tex_button_balls;
-    public static TextureRegion tex_meterDot;
-    public TextureRegion tex_watermark;
-    public static TextureRegion tex_text_welcome;
-    public static TextureRegion tex_text_highscore;
-    public static TextureRegion tex_shield;
-    public static TextureRegion tex_shield_shine;
 
     public static TextureRegion tex_buttonPressed_toGame;
     public static TextureRegion tex_button_toGame;
@@ -82,28 +54,6 @@ public class Res {
     public static TextureRegion tex_buttonPressed_return;
     public static TextureRegion tex_button_sell;
     public static TextureRegion tex_buttonPressed_sell;
-
-    public static TextureRegion tex_apple;
-    public static TextureRegion tex_lemon;
-    public static TextureRegion tex_strawberry;
-    public static TextureRegion tex_bomb;
-    public static TextureRegion tex_buttonPressed_cross;
-    public static TextureRegion tex_youlost;
-    public static TextureRegion tex_cannon_shine;
-    public static TextureRegion tex_darkLayer;
-    public static TextureRegion tex_orbCountBackground;
-    public static TextureRegion tex_floorButton_danger;
-    public static TextureRegion tex_floorButtonPressed_danger;
-    public static TextureRegion tex_statisticsBackground;
-    public static TextureRegion tex_numberSign;
-    public static TextureRegion tex_shopSpot;
-    public static TextureRegion tex_shopSpotEmpty;
-    public static TextureRegion tex_shopSpotPressed;
-    public static TextureRegion tex_underTitle;
-    public static TextureRegion tex_cannon_gun;
-    public static TextureRegion tex_cannon_base;
-    public static TextureRegion tex_orbCounter;
-    public static TextureRegion tex_orbCountBar;
     public static TextureRegion tex_button_pause;
     public static TextureRegion tex_buttonPressed_pause;
     public static TextureRegion tex_button_resume;
@@ -122,12 +72,60 @@ public class Res {
     public static TextureRegion tex_buttonPressed_musicMuted;
     public static TextureRegion tex_button_exit;
     public static TextureRegion tex_buttonPressed_exit;
+    public static TextureRegion tex_button_buy;
+    public static TextureRegion tex_buttonPressed_buy;
+
+    public static TextureRegion tex_meter_case;
+    public static TextureRegion tex_number_small_percent;
+    public static TextureRegion tex_progressBar;
+    public static TextureRegion tex_progressBar_ball;
+    public static TextureRegion tex_ball_bad;
+    public static TextureRegion tex_crown;
+    public static TextureRegion tex_meter_ball;
+    public static TextureRegion tex_ttptext;
+    public static TextureRegion tex_hleditie;
+    public static TextureRegion tex_text_slowdown;
+    public static TextureRegion tex_bumper;
+    public static TextureRegion tex_bomb_white;
+    public static TextureRegion tex_text_player;
+    public static TextureRegion tex_tutorialMode;
+    public static TextureRegion tex_gap;
+    public static TextureRegion tex_buttonPressed_balls;
+    public static TextureRegion tex_buttonPressed_leaderBoards;
+    public static TextureRegion tex_button_balls;
+    public static TextureRegion tex_meterDot;
+    public static TextureRegion tex_text_welcome;
+    public static TextureRegion tex_text_highscore;
+    public static TextureRegion tex_shield;
+    public static TextureRegion tex_shield_shine;
+    public TextureRegion tex_watermark;
+    public static TextureRegion tex_apple;
+    public static TextureRegion tex_lemon;
+    public static TextureRegion tex_strawberry;
+    public static TextureRegion tex_bomb;
+    public static TextureRegion tex_buttonPressed_cross;
+    public static TextureRegion tex_youlost;
+    public static TextureRegion tex_cannon_shine;
+    public static TextureRegion tex_darkLayer;
+    public static TextureRegion tex_orbCountBackground;
+    public static TextureRegion tex_floorButton_danger;
+    public static TextureRegion tex_floorButtonPressed_danger;
+    public static TextureRegion tex_statisticsBackground;
+    public static TextureRegion tex_numberSign;
+    public static TextureRegion[] tex_shopSpot;
+    public static TextureRegion[] tex_shopSpotEmpty;
+    public static TextureRegion[] tex_shopSpotPressed;
+    public static TextureRegion tex_underTitle;
+    public static TextureRegion tex_cannon_gun;
+    public static TextureRegion tex_cannon_base;
+    public static TextureRegion tex_orbCounter;
+    public static TextureRegion tex_orbCountBar;
+
     public static TextureRegion tex_text_paused;
     public static TextureRegion tex_lockedBall;
     public static TextureRegion tex_ballCapsule;
     public static TextureRegion tex_ballCapsule_shine;
     public static TextureRegion tex_blueEgg;
-    public static Texture tex_fullscreen;
     public static TextureRegion tex_symbolOrb;
     public static TextureRegion tex_oxigenoxide;
     public static TextureRegion tex_symbolSelected;
@@ -142,6 +140,9 @@ public class Res {
     public static TextureRegion tex_scooper;
     public static TextureRegion tex_scooper_0;
     public static TextureRegion tex_scooperShine_0;
+    public static TextureRegion tex_scooper_2;
+    public static TextureRegion tex_scooperShine_2;
+    public static TextureRegion tex_scooper_3;
     public static float[] ballRadius;
     public static TextureRegion tex_orb;
     public static TextureRegion tex_orb_big;
@@ -181,8 +182,19 @@ public class Res {
     public static TextureRegion tex_shopMarginBottom;
     public static TextureRegion tex_shopMarginTop;
     public static TextureRegion tex_ad;
+    public static TextureRegion tex_capsule_top;
+    public static TextureRegion tex_capsule_bottom;
+    public static TextureRegion tex_capsule;
+    public static TextureRegion tex_fountain;
+
 
     public static Texture tex_comboBar;
+    public static Texture tex_fade;
+    public static Texture tex_tilt;
+    public static Texture tex_fullscreen;
+    public static Texture tex_random;
+
+    public static Texture[] tex_tabletop;
 
     public Sprite sprite_watermark;
     public static BodyDef bodyDef_dynamic;
@@ -201,6 +213,8 @@ public class Res {
     public static ShaderProgram shader_floorFade;
     public static ShaderProgram shader_bend;
     public static ShaderProgram shader_circle;
+    public static ShaderProgram shader_c_over;
+    public static ShaderProgram shader_filledCircle;
 
     public static FixtureDef fixtureDef_border;
     public static FixtureDef fixtureDef_circle;
@@ -217,13 +231,15 @@ public class Res {
     public static FixtureDef fixtureDef_tire;
     public static FixtureDef fixtureDef_plank;
     public static FixtureDef fixtureDef_box;
+    public static FixtureDef fixtureDef_scooperSpike;
     public static FixtureDef[] fixtureDef_ball;
     public static FixtureDef[] fixtureDef_ball_passThrough;
-    public static Color[][] ballPalette;
+    public static Color[][] palette_mainBall;
     public static Color[][] tableTopPalette;
     public static Color[] ballBadPalette;
     public static Color[] eggPalette;
     public static Color[] palette_ballCapsule;
+
 
     public static CircleShape[] shape_ball;
 
@@ -237,6 +253,7 @@ public class Res {
     public static final Color COLOR_PLANK = new Color(152 / 255f, 51 / 255f, 22 / 255f, 1);
     public static final Color COLOR_SUNSHINE = new Color(1, 112 / 255f, 0, 3 / 5f);
     public static final Color COLOR_SPLASH_BLUE = new Color(88 / 255f, 179 / 255f, 194 / 255f, 1);
+    public static final Color COLOR_ORBNUMBER = new Color(0, 73 / 255f, 128 / 255f, 1);
 
     public static final Color[] COLOR_PROJECTION = new Color[]{COLOR_PROJECTION_RED, COLOR_PROJECTION_GREEN, COLOR_PROJECTION_YELLOW, COLOR_PROJECTION_PURPLE};
     public static final Color[] COLOR_OUTLINE = new Color[]{Color.BLACK, COLOR_PROJECTION_GREEN, COLOR_PROJECTION_YELLOW, COLOR_PROJECTION_PURPLE}; // test colors currently
@@ -248,8 +265,9 @@ public class Res {
             new Color[]{null, null, new Color(88 / 255f, 96 / 255f, 194 / 255f, 1), new Color(99 / 255f, 179 / 255f, 194 / 255f, 1)}, // light blue
             new Color[]{null, null, new Color(131 / 255f, 26 / 255f, 72 / 255f, 1), new Color(191 / 255f, 53 / 255f, 205 / 255f, 1)}, // purple
             new Color[]{null, null, new Color(213 / 255f, 109 / 255f, 0, 1), new Color(227 / 255f, 202 / 255f, 22 / 255f, 1)}, // gold
-            new Color[]{null, null, new Color(177 / 255f, 15 / 255f, 145/255f, 1), new Color(1, 28 / 255f, 161 / 255f, 1)}, // pink
+            new Color[]{null, null, new Color(177 / 255f, 15 / 255f, 145 / 255f, 1), new Color(1, 28 / 255f, 161 / 255f, 1)}, // pink
     };
+    public static Color[] PALETTE_WHITEBALL = new Color[]{Color.BLACK, new Color(62 / 255f, 180 / 255f, 227 / 255f, 1), Color.WHITE, Color.WHITE};
 
     public static Sound sound_ballHit;
     public static Sound sound_speedup;
@@ -308,16 +326,6 @@ public class Res {
         tex_comboBar = Main.assets.get("images/comboBar.png");
         tex_tabletop = new Texture[]{Main.assets.get("images/tabletop_0.png"), Main.assets.get("images/tabletop_1.png"), Main.assets.get("images/tabletop_2.png"), Main.assets.get("images/tabletop_3.png")};
 
-        shader_floorFade.setUniformf("screenSize", Main.width, Main.height);
-        /*
-        tex_ball = new TextureRegion[]{new TextureRegion("images/ball_small"), new TextureRegion("images/ball_medium"), new TextureRegion("images/ball_large")};
-        tex_ball_bad = new TextureRegion("images/ball_bad");
-        tex_crown = new TextureRegion("images/crown");
-        tex_bumper = new TextureRegion("images/bumper");
-        tex_tabletop = new TextureRegion("images/tabletop");
-        tex_ballShard = new TextureRegion[]{new TextureRegion("images/ballShard", 0), new TextureRegion("images/ballShard", 1), new TextureRegion("images/ballShard", 2)};
-        */
-
         tex_ball = new TextureRegion[25][];
         tex_ball[0] = new TextureRegion[]{atlas.findRegion("ball_small"), atlas.findRegion("ball_medium"), atlas.findRegion("ball_large"), atlas.findRegion("ball_huge")};
         tex_ball[1] = new TextureRegion[]{atlas.findRegion("ball_face_small"), atlas.findRegion("ball_face_medium"), atlas.findRegion("ball_face_large")};
@@ -370,6 +378,8 @@ public class Res {
         tex_buttonPressed_exit = atlas.findRegion("buttonPressed_exit");
         tex_button_sell = atlas.findRegion("button_sell");
         tex_buttonPressed_sell = atlas.findRegion("buttonPressed_sell");
+        tex_button_buy = atlas.findRegion("button_buy");
+        tex_buttonPressed_buy = atlas.findRegion("buttonPressed_buy");
 
         tex_text_welcome = atlas.findRegion("text_welcome");
         tex_symbolPlus = atlas.findRegion("symbol_plus");
@@ -415,9 +425,9 @@ public class Res {
         tex_buttonPressed_leaderBoards = atlas.findRegion("buttonPressed_leaderBoards");
         tex_youlost = atlas.findRegion("youlost");
         tex_symbolOrb = atlas.findRegion("symbol_orb");
-        tex_shopSpot = atlas.findRegion("shopSpot");
-        tex_shopSpotPressed = atlas.findRegion("shopSpotPressed");
-        tex_shopSpotEmpty = atlas.findRegion("shopSpotEmpty");
+        tex_shopSpot = new TextureRegion[]{atlas.findRegion("shopSpot"), atlas.findRegion("shopSpot_rare"), atlas.findRegion("shopSpot_legendary")};
+        tex_shopSpotPressed = new TextureRegion[]{atlas.findRegion("shopSpotPressed"), atlas.findRegion("shopSpotPressed_rare"), atlas.findRegion("shopSpotPressed_legendary")};
+        tex_shopSpotEmpty = new TextureRegion[]{atlas.findRegion("shopSpotEmpty"), atlas.findRegion("shopSpotEmpty_rare"), atlas.findRegion("shopSpotEmpty_legendary")};
         tex_symbolSelected = atlas.findRegion("symbol_selected");
         tex_pin = atlas.findRegion("pin");
         tex_jumpingPad = atlas.findRegion("jumpingPad");
@@ -483,9 +493,15 @@ public class Res {
         tex_shopMarginTop = atlas.findRegion("shopMarginTop");
         tex_ad = atlas.findRegion("ad");
         tex_scooper = atlas.findRegion("scooper");
-        tex_scooper_0 = atlas.findRegion("scooper",0);
-        tex_scooperShine_0 = atlas.findRegion("scooperShine",0);
-
+        tex_scooper_0 = atlas.findRegion("scooper", 0);
+        tex_scooperShine_0 = atlas.findRegion("scooperShine", 0);
+        tex_scooper_2 = atlas.findRegion("scooper", 2);
+        tex_scooperShine_2 = atlas.findRegion("scooperShine", 2);
+        tex_scooper_3 = atlas.findRegion("scooper", 3);
+        tex_capsule = atlas.findRegion("capsule");
+        tex_capsule_bottom = atlas.findRegion("capsule_bottom");
+        tex_capsule_top = atlas.findRegion("capsule_top");
+        tex_fountain = atlas.findRegion("fountain");
 
 
         tex_text_level = new TextureRegion[]{
@@ -611,6 +627,11 @@ public class Res {
         fixtureDef_circle_noWall.filter.maskBits = MASK_ZERO;
         fixtureDef_circle_noWall.filter.categoryBits = MASK_ZERO;
 
+        fixtureDef_scooperSpike = new FixtureDef();
+        fixtureDef_scooperSpike.density = 1;
+        fixtureDef_scooperSpike.restitution = 1;
+        fixtureDef_scooperSpike.filter.maskBits = (short) (MASK_ZERO | MASK_WALL);
+        fixtureDef_scooperSpike.filter.categoryBits = MASK_ZERO;
 
         fixtureDef_egg = new FixtureDef();
         fixtureDef_egg.density = 1;
@@ -686,7 +707,7 @@ public class Res {
         fixtureDef_plank.filter.categoryBits = MASK_ZERO;
 
         PolygonShape shape_box = new PolygonShape();
-        shape_box.setAsBox(1,1);
+        shape_box.setAsBox(1, 1);
         fixtureDef_box = new FixtureDef();
         fixtureDef_box.density = 1;
         fixtureDef_box.shape = shape_box;
@@ -758,77 +779,69 @@ public class Res {
                 new Color(1, 1, 1, 1),
         };
 
-        ballPalette = new Color[][]{
+        palette_mainBall = new Color[][]{
                 new Color[4], new Color[4], new Color[4], new Color[4], new Color[4], new Color[4], new Color[4], new Color[4], new Color[4]
         };
 
-        /*
-        ballPalette[0][0] = new Color(0, 0, 0, 1);
-        ballPalette[0][1] = new Color(62 / 255f, 180 / 255f, 227 / 255f, 1);
-        ballPalette[0][2] = new Color(1, 1, 1, 1);
-        ballPalette[0][3] = new Color(1, 1, 1, 1);
-        */
+        palette_mainBall[0][0] = new Color(0, 0, 0, 1);
+        palette_mainBall[0][1] = new Color(191 / 255f, 0, 0, 1);
+        palette_mainBall[0][2] = new Color(255 / 255f, 108 / 255f, 0, 1);
+        palette_mainBall[0][3] = new Color(255 / 255f, 108 / 255f, 0, 1);
 
+        palette_mainBall[1][0] = new Color(0, 0, 0, 1);
+        palette_mainBall[1][1] = new Color(16 / 255f, 148 / 255f, 63 / 255f, 1);
+        palette_mainBall[1][2] = new Color(173 / 255f, 247 / 255f, 41 / 255f, 1);
+        palette_mainBall[1][3] = new Color(173 / 255f, 247 / 255f, 41 / 255f, 1);
 
-        ballPalette[0][0] = new Color(0, 0, 0, 1);
-        ballPalette[0][1] = new Color(191 / 255f, 0, 0, 1);
-        ballPalette[0][2] = new Color(255 / 255f, 108 / 255f, 0, 1);
-        ballPalette[0][3] = new Color(255 / 255f, 108 / 255f, 0, 1);
+        palette_mainBall[2][0] = new Color(0, 0, 0, 1);
+        palette_mainBall[2][1] = new Color(24 / 255f, 13 / 255f, 157 / 255f, 1);
+        palette_mainBall[2][2] = new Color(146 / 255f, 71 / 255f, 221 / 255f, 1);
+        palette_mainBall[2][3] = new Color(146 / 255f, 71 / 255f, 221 / 255f, 1);
 
-        ballPalette[1][0] = new Color(0, 0, 0, 1);
-        ballPalette[1][1] = new Color(16 / 255f, 148 / 255f, 63 / 255f, 1);
-        ballPalette[1][2] = new Color(173 / 255f, 247 / 255f, 41 / 255f, 1);
-        ballPalette[1][3] = new Color(173 / 255f, 247 / 255f, 41 / 255f, 1);
+        palette_mainBall[3][0] = new Color(0, 0, 0, 1);
+        palette_mainBall[3][1] = new Color(19 / 255f, 123 / 255f, 202 / 255f, 1);
+        palette_mainBall[3][2] = new Color(52 / 255f, 187 / 255f, 209 / 255f, 1);
+        palette_mainBall[3][3] = new Color(1, 1, 1, 1);
 
-        ballPalette[2][0] = new Color(0, 0, 0, 1);
-        ballPalette[2][1] = new Color(24 / 255f, 13 / 255f, 157 / 255f, 1);
-        ballPalette[2][2] = new Color(146 / 255f, 71 / 255f, 221 / 255f, 1);
-        ballPalette[2][3] = new Color(146 / 255f, 71 / 255f, 221 / 255f, 1);
+        palette_mainBall[4][0] = new Color(0, 0, 0, 1);
+        palette_mainBall[4][1] = new Color(221 / 255f, 93 / 255f, 4 / 255f, 1);
+        palette_mainBall[4][2] = new Color(227 / 255f, 218 / 255f, 30 / 255f, 1);
+        palette_mainBall[4][3] = new Color(1, 1, 1, 1);
 
-        ballPalette[3][0] = new Color(0, 0, 0, 1);
-        ballPalette[3][1] = new Color(19 / 255f, 123 / 255f, 202 / 255f, 1);
-        ballPalette[3][2] = new Color(52 / 255f, 187 / 255f, 209 / 255f, 1);
-        ballPalette[3][3] = new Color(1, 1, 1, 1);
+        palette_mainBall[5][0] = new Color(0, 0, 0, 1);
+        palette_mainBall[5][1] = new Color(53 / 255f, 59 / 255f, 72 / 255f, 1);
+        palette_mainBall[5][2] = new Color(130 / 255f, 167 / 255f, 157 / 255f, 1);
+        palette_mainBall[5][3] = new Color(1, 1, 1, 1);
 
-        ballPalette[4][0] = new Color(0, 0, 0, 1);
-        ballPalette[4][1] = new Color(221 / 255f, 93 / 255f, 4 / 255f, 1);
-        ballPalette[4][2] = new Color(227 / 255f, 218 / 255f, 30 / 255f, 1);
-        ballPalette[4][3] = new Color(1, 1, 1, 1);
+        palette_mainBall[6][0] = new Color(0, 0, 0, 1);
+        palette_mainBall[6][1] = new Color(29 / 255f, 177 / 255f, 82 / 255f, 1);
+        palette_mainBall[6][2] = new Color(71 / 255f, 221 / 255f, 189 / 255f, 1);
+        palette_mainBall[6][3] = new Color(1, 1, 1, 1);
 
-        ballPalette[5][0] = new Color(0, 0, 0, 1);
-        ballPalette[5][1] = new Color(53 / 255f, 59 / 255f, 72 / 255f, 1);
-        ballPalette[5][2] = new Color(130 / 255f, 167 / 255f, 157 / 255f, 1);
-        ballPalette[5][3] = new Color(1, 1, 1, 1);
+        palette_mainBall[7][0] = new Color(0, 0, 0, 1);
+        palette_mainBall[7][1] = new Color(139 / 255f, 8 / 255f, 60 / 255f, 1);
+        palette_mainBall[7][2] = new Color(204 / 255f, 49 / 255f, 255 / 255f, 1);
+        palette_mainBall[7][3] = new Color(1, 1, 1, 1);
 
-        ballPalette[6][0] = new Color(0, 0, 0, 1);
-        ballPalette[6][1] = new Color(29 / 255f, 177 / 255f, 82 / 255f, 1);
-        ballPalette[6][2] = new Color(71 / 255f, 221 / 255f, 189 / 255f, 1);
-        ballPalette[6][3] = new Color(1, 1, 1, 1);
-
-        ballPalette[7][0] = new Color(0, 0, 0, 1);
-        ballPalette[7][1] = new Color(139 / 255f, 8 / 255f, 60 / 255f, 1);
-        ballPalette[7][2] = new Color(204 / 255f, 49 / 255f, 255 / 255f, 1);
-        ballPalette[7][3] = new Color(1, 1, 1, 1);
-
-        ballPalette[8][0] = new Color(0, 0, 0, 1);
-        ballPalette[8][1] = new Color(14 / 255f, 108 / 255f, 44 / 255f, 1);
-        ballPalette[8][2] = new Color(0 / 255f, 221 / 255f, 32 / 255f, 1);
-        ballPalette[8][3] = new Color(1, 1, 1, 1);
+        palette_mainBall[8][0] = new Color(0, 0, 0, 1);
+        palette_mainBall[8][1] = new Color(14 / 255f, 108 / 255f, 44 / 255f, 1);
+        palette_mainBall[8][2] = new Color(0 / 255f, 221 / 255f, 32 / 255f, 1);
+        palette_mainBall[8][3] = new Color(1, 1, 1, 1);
 
 
         /*
-        ballPalette[1][0] = new Color(0, 0, 0, 1);
-        ballPalette[1][1] = new Color(221 / 255f, 93 / 255f, 4 / 255f, 1);
-        ballPalette[1][2] = new Color(227 / 255f, 218 / 255f, 30 / 255f, 1);
-        ballPalette[1][3] = new Color(1, 1, 1, 1);
-        ballPalette[2][0] = new Color(0, 0, 0, 1);
-        ballPalette[2][1] = new Color(8 / 255f, 100 / 255f, 38 / 255f, 1);
-        ballPalette[2][2] = new Color(41 / 255f, 199 / 255f, 156 / 255f, 1);
-        ballPalette[2][3] = new Color(135 / 255f, 228 / 255f, 247 / 255f, 1);
-        ballPalette[3][0] = new Color(0, 0, 0, 1);
-        ballPalette[3][1] = new Color(139 / 255f, 8 / 255f, 60 / 255f, 1);
-        ballPalette[3][2] = new Color(208 / 255f, 8 / 255f, 251 / 255f, 1);
-        ballPalette[3][3] = new Color(229 / 255f, 192 / 255f, 1, 1);
+        palette_mainBall[1][0] = new Color(0, 0, 0, 1);
+        palette_mainBall[1][1] = new Color(221 / 255f, 93 / 255f, 4 / 255f, 1);
+        palette_mainBall[1][2] = new Color(227 / 255f, 218 / 255f, 30 / 255f, 1);
+        palette_mainBall[1][3] = new Color(1, 1, 1, 1);
+        palette_mainBall[2][0] = new Color(0, 0, 0, 1);
+        palette_mainBall[2][1] = new Color(8 / 255f, 100 / 255f, 38 / 255f, 1);
+        palette_mainBall[2][2] = new Color(41 / 255f, 199 / 255f, 156 / 255f, 1);
+        palette_mainBall[2][3] = new Color(135 / 255f, 228 / 255f, 247 / 255f, 1);
+        palette_mainBall[3][0] = new Color(0, 0, 0, 1);
+        palette_mainBall[3][1] = new Color(139 / 255f, 8 / 255f, 60 / 255f, 1);
+        palette_mainBall[3][2] = new Color(208 / 255f, 8 / 255f, 251 / 255f, 1);
+        palette_mainBall[3][3] = new Color(229 / 255f, 192 / 255f, 1, 1);
         */
 
         Pixmap pixmap_fullscreen = new Pixmap((int) Main.width, (int) Main.height + 3, Pixmap.Format.RGBA8888);
@@ -894,6 +907,8 @@ public class Res {
         shader_floorFade = new ShaderProgram(Gdx.files.internal("shaders/shader_floorFade.vert"), Gdx.files.internal("shaders/shader_floorFade.frag"));
         shader_bend = new ShaderProgram(Gdx.files.internal("shaders/shader_bend.vert"), Gdx.files.internal("shaders/shader_bend.frag"));
         shader_circle = new ShaderProgram(Gdx.files.internal("shaders/shader_circle.vert"), Gdx.files.internal("shaders/shader_circle.frag"));
+        shader_c_over = new ShaderProgram(Gdx.files.internal("shaders/shader_c_over.vert"), Gdx.files.internal("shaders/shader_c_over.frag"));
+        shader_filledCircle = new ShaderProgram(Gdx.files.internal("shaders/shader_filledCircle.vert"), Gdx.files.internal("shaders/shader_filledCircle.frag"));
     }
 
     public static void dispose() {

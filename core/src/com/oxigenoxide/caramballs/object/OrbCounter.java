@@ -1,6 +1,5 @@
 package com.oxigenoxide.caramballs.object;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -8,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.oxigenoxide.caramballs.ID;
 import com.oxigenoxide.caramballs.Main;
 import com.oxigenoxide.caramballs.Res;
+import com.oxigenoxide.caramballs.utils.Funcs;
 
 public class OrbCounter {
     Vector2 pos, pos_num;
@@ -62,7 +62,7 @@ public class OrbCounter {
         batch.draw(tex, pos.x, pos.y);
         batch.setShader(Res.shader_c);
         Res.shader_c.setUniformf("c", 1, 1, 1, 1);
-        Main.drawNumber(batch, Main.gameData.orbs, pos_num, ID.Font.SMALL);
+        Funcs.drawNumber(batch, Main.gameData.orbs, pos_num, ID.Font.SMALL);
         batch.setShader(null);
     }
 }

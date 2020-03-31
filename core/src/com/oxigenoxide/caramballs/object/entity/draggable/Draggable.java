@@ -15,17 +15,19 @@ public class Draggable extends Entity {
     boolean doDispose;
     public Vector2 pos_pivot;
     public Vector2 pos_pivot_visual;
+    float size;
+    boolean disappear;
+    boolean isDisposed;
 
     public Draggable(int radius_spawn) {
-        this.radius_spawn=radius_spawn;
-        pos= Game.getFreePosOnTable(radius_spawn);
-        pos_pivot=new Vector2();
-        pos_pivot_visual=new Vector2();
-        if(pos==null){
-            pos=new Vector2(-500,100);
-            doDispose=true;
+        this.radius_spawn = radius_spawn;
+        pos = Game.getFreePosOnTable(radius_spawn);
+        pos_pivot = new Vector2();
+        pos_pivot_visual = new Vector2();
+        if (pos == null) {
+            pos = new Vector2(-500, 100);
+            doDispose = true;
         }
-
     }
 
     void createBody(float radius) {
@@ -37,35 +39,49 @@ public class Draggable extends Entity {
     }
 
     public void update() {
-        if(doDispose) {
-            dispose();
-            return;
+
+        if (disappear) {
+            size = Math.max(0, size - .05f * Main.dt_one_slowed);
+            if (size == 0) {
+                dispose();
+                return;
+            }
+        } else if (size < 1) {
+            size = Math.min(1, size + .05f * Main.dt_one_slowed);
         }
+
+
         pos.set(body.getPosition());
         pos.scl(Main.PPM);
         setPivotPosition();
 
-        body.setAngularVelocity(body.getAngularVelocity()*.9f);
-        body.setLinearVelocity(body.getLinearVelocity().x*.9f,body.getLinearVelocity().y*.9f);
+        body.setAngularVelocity(body.getAngularVelocity() * .9f);
+        body.setLinearVelocity(body.getLinearVelocity().x * .9f, body.getLinearVelocity().y * .9f);
     }
 
-    public void setPivotPosition(){
-        pos_pivot.set(0,0);
-        pos_pivot_visual.set(0,0);
+    public void setPivotPosition() {
+        pos_pivot.set(0, 0);
+        pos_pivot_visual.set(0, 0);
     }
 
-    public void dispose(){
+    public void dispose() {
+        isDisposed = true;
         Main.draggablesToRemove.add(this);
-        Main.destroyBody(body);
+        body = Main.destroyBody(body);
     }
 
-    public void drag(float dx,float dy){
-        body.applyForce(dx,dy,pos_pivot.x*Main.MPP,pos_pivot.y*Main.MPP,true);
+    public void drag(float dx, float dy) {
+        if (!isDisposed)
+            body.applyForce(dx, dy, pos_pivot.x * Main.MPP, pos_pivot.y * Main.MPP, true);
         //body.applyForceToCenter(dx,dy,true);
     }
 
-    public void onCollision(){
+    public void onCollision() {
 
+    }
+
+    public void disappear() {
+        disappear = true;
     }
 
     public void render(SpriteBatch batch) {
@@ -73,7 +89,7 @@ public class Draggable extends Entity {
         drawPivot(batch);
     }
 
-    void drawPivot(SpriteBatch batch){
-        batch.draw(Res.tex_draggable_pivot,pos_pivot_visual.x-3,pos_pivot_visual.y-3);
+    void drawPivot(SpriteBatch batch) {
+        batch.draw(Res.tex_draggable_pivot, pos_pivot_visual.x - 3, pos_pivot_visual.y - 3);
     }
 }

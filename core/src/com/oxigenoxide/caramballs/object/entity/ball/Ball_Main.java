@@ -1,22 +1,28 @@
 package com.oxigenoxide.caramballs.object.entity.ball;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.utils.Array;
 import com.oxigenoxide.caramballs.object.Projection;
 import com.oxigenoxide.caramballs.object.RewardOrb;
 import com.oxigenoxide.caramballs.object.entity.hole.Hole_Sell;
+import com.oxigenoxide.caramballs.object.entity.orbContainer.OC_Fruit;
+import com.oxigenoxide.caramballs.object.entity.particle.Particle_BallExplosion;
 import com.oxigenoxide.caramballs.scene.Game;
 import com.oxigenoxide.caramballs.ID;
 import com.oxigenoxide.caramballs.Main;
 import com.oxigenoxide.caramballs.Res;
 import com.oxigenoxide.caramballs.object.entity.hole.Hole;
-import com.oxigenoxide.caramballs.object.entity.particle.Particle_Ball;
 import com.oxigenoxide.caramballs.utils.Funcs;
 import com.oxigenoxide.caramballs.utils.MathFuncs;
 
+import java.util.ArrayList;
+
+import static com.oxigenoxide.caramballs.Main.ballsToAdd;
+import static com.oxigenoxide.caramballs.Main.orbContainers;
 import static com.oxigenoxide.caramballs.scene.Game.ball_king;
 
 public class Ball_Main extends Ball {
@@ -37,13 +43,20 @@ public class Ball_Main extends Ball {
     static final float SPEECHBUBBLEAMP = 2;
     float count_speechBubble;
 
+    float count_alive;
+    final int COUNTMAX_ALIVE = 10;
+
+    boolean hasBeenCombined;
+
+    static final float SPLITVEL = 10;
+
     public Ball_Main(float x, float y, float height, int size, int level) {
         super(x, y, height, size);
 
         if (Main.inGame()) {
             if (Game.level < level) {
                 Game.nextLevel();
-                Game.throwConfetti(pos.x, pos.y);
+                //Game.throwConfetti(pos.x, pos.y);
                 for (Ball_Main ball_main : Main.mainBalls)
                     if (ball_main != this && !ball_main.doDispose)
                         ball_main.explode(0, 1);
@@ -74,6 +87,9 @@ public class Ball_Main extends Ball {
         super.update();
 
         if (!isDisposed) {
+            if (count_alive < COUNTMAX_ALIVE)
+                count_alive += Main.dt;
+
             if (ballmain_hit != null && !ballmain_hit.isDisposed) {
 
                 doDispose = true;
@@ -88,6 +104,7 @@ public class Ball_Main extends Ball {
                     projectionToPass = ballmain_hit.projection;
                 else if (projection != null)
                     projectionToPass = projection;
+
 
                 Ball_Main ball_new;
                 if (size + 1 < 3) { // stay in same level
@@ -110,17 +127,31 @@ public class Ball_Main extends Ball {
                         Main.projections.add(projectionToPass);
                     }
                 }
-
+                ball_new.hasBeenCombined = true;
                 ball_new.body.setLinearVelocity(body.getLinearVelocity().add(ballmain_hit.body.getLinearVelocity()).scl(.5f));
                 Main.ballsToAdd.add(ball_new);
-                if(Main.inGame())
+                if (Main.inGame())
                     Game.onBallCombined();
 
-                ballmain_hit = null;
+                if ((count_alive < 1 && hasBeenCombined) || (ballmain_hit.count_alive < 1 && ballmain_hit.hasBeenCombined))
+                    Main.game.giveTrickReward(ball_new.pos.x, ball_new.pos.y);
+
+                //reward
+                if (size == 2)
+                    orbContainers.add(new OC_Fruit(ball_new.pos.x, ball_new.pos.y));
+                else if (size == 1)
+                    ballsToAdd.add(new Ball_Orb(ball_new.pos.x, ball_new.pos.y, 1, true));
+                else
+                    ballsToAdd.add(new Ball_Orb(ball_new.pos.x, ball_new.pos.y, 0, true));
+
+                // effects
                 Main.shake();
                 Main.fbm.writeMerges();
                 Main.addSoundRequest(ID.Sound.PLOP, 6);
+
                 Game.onBallMerge();
+
+                ballmain_hit = null;
             }
 
             // gravitate to close balls
@@ -268,7 +299,7 @@ public class Ball_Main extends Ball {
 
     @Override
     public void destroy(float angle, float impact, Vector2 pos_danger) {
-        if (!Main.inScreenShotMode) {
+        if (!Main.INVINCIBLE) {
             if (!isShielded) {
                 if (!Game.inTutorialMode && size == 0) {
                     int ballsCounted = 0;
@@ -304,29 +335,41 @@ public class Ball_Main extends Ball {
         if (!hasExeploded) {
             hasExeploded = true;
             impact = Math.min(impact, 4);
-            throwParticles(angle, impact, pos, palette);
+            Main.particles.add(new Particle_BallExplosion(pos.x, pos.y, 20));
+            throwParticles(angle, impact, pos, palette, getParticleAmount());
+            pushBodies();
             super.explode(angle, impact);
-            if(Main.inGame())
+            if (Main.inGame())
                 Game.doOnMainBallDestroyed = true;
         }
     }
 
+    public void pushBodies() {
+        Array<Body> bodies = new Array<Body>();
+        Main.world.getBodies(bodies);
+        System.out.println("bodies: " + bodies.items);
+        float force;
+        float ang;
+        for (Body body : bodies) {
+            force = Math.min(75, 60 / (float) Math.pow(MathFuncs.distanceBetweenPoints(body.getPosition(), this.body.getPosition()), 2)); // inverse square law
+            ang = MathFuncs.angleBetweenPoints(this.body.getPosition(), body.getPosition());
+            body.applyForce(force * (float) Math.cos(ang), force * (float) Math.sin(ang), body.getPosition().x, body.getPosition().y, true);
+        }
+    }
 
     static final float SPLITANGLE = (float) Math.PI;
     //static final float SPLITANGLE=(float)Math.PI*1/2f;
     boolean isSplit;
 
     public void split(Vector2 pos_danger) {
-
         if (!isSplit) {
             isSplit = true;
-            //Vector2 vel = new Vector2(body.getLinearVelocity());
-            //float ang= (float)Math.atan2(vel.y,vel.x);
 
             float ang = MathFuncs.angleBetweenPoints(pos_danger, pos);
-            Vector2 vel = new Vector2((float) Math.cos(ang) * 5, (float) Math.sin(ang) * 5);
+            Vector2 vel = new Vector2((float) Math.cos(ang) * SPLITVEL, (float) Math.sin(ang) * SPLITVEL);
             int size = this.size - 1;
             float r = Res.ballRadius[size] + 2;
+
             Ball_Main ball_1 = new Ball_Main(pos.x + (float) Math.cos(ang + SPLITANGLE / 2) * r, pos.y + (float) Math.sin(ang + SPLITANGLE / 2) * r, 0, size, this.level);
             Ball_Main ball_2 = new Ball_Main(pos.x + (float) Math.cos(ang - SPLITANGLE / 2) * r, pos.y + (float) Math.sin(ang - SPLITANGLE / 2) * r, 0, size, this.level);
             ball_1.body.setLinearVelocity(vel.rotateRad(SPLITANGLE / 2));
@@ -428,7 +471,7 @@ public class Ball_Main extends Ball {
 
     public static Color[] getBallPalette(int level, int loop) {
 
-        Color[] palette_normal = Res.ballPalette[level % (Res.ballPalette.length)];
+        Color[] palette_normal = Res.palette_mainBall[level % (Res.palette_mainBall.length)];
 
         if (loop == 0)
             return palette_normal;
@@ -460,7 +503,7 @@ public class Ball_Main extends Ball {
     }
 
     public static Color[] getBallPalette(int level) {
-        return getBallPalette(level % (Res.ballPalette.length), (level / Res.ballPalette.length));
+        return getBallPalette(level % (Res.palette_mainBall.length), (level / Res.palette_mainBall.length));
     }
 
     static public class Ball_Main_Data {

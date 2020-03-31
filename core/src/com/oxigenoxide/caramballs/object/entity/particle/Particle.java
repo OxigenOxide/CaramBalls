@@ -63,9 +63,7 @@ public class Particle extends Entity {
         if (isVisible) sprite.draw(batch);
     }
 
-    public void render(ShapeRenderer sr) {
-
-    }
+    public void render(ShapeRenderer sr) { }
 
     @Override
     public void render(SpriteBatch batch, ShapeRenderer sr){ // only called when in particles_batch

@@ -7,21 +7,25 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.oxigenoxide.caramballs.Main;
+import com.oxigenoxide.caramballs.utils.Funcs;
+import com.oxigenoxide.caramballs.utils.MathFuncs;
+import com.oxigenoxide.caramballs.utils.Vector2Mod;
 
 public class FloatingReward {
 
     TextureRegion tex;
     Vector2 pos;
-    Vector2 pos_target;
+    Vector2Mod pos_target;
+    Vector2Mod pos_endTarget;
     Sprite sprite;
-    float scaleUp = 2f;
-    final Vector2 pos_middle = new Vector2(Main.width / 2, Main.height / 2);
-    float ang_shine;
-    float count_shineRadius;
-    float radiusOffset_shine;
+    float scaleUp_end = 1;
+    float scaleUp = 1;
+    final Vector2Mod pos_middle = new Vector2Mod(Main.width / 2, Main.height / 2);
     float radius_shine;
+    float radiusDest_shine = 25;
     float count;
     float startCount;
+    float count_shine;
     boolean doCount;
     int activity;
     float lerpAlpha;
@@ -29,20 +33,20 @@ public class FloatingReward {
     FloatingReward(float x, float y) {
         pos = new Vector2(x, y);
         doNextActivity();
+        pos_endTarget = new Vector2Mod(Main.width / 2, Main.height + 150);
     }
 
     public void update() {
         lerpAlpha = Math.min(.001f * (startCount - count), .1f);
-        pos.lerp(pos_target, lerpAlpha);
-        sprite.setPosition(pos.x - sprite.getRegionWidth() / 2, pos.y - sprite.getHeight() / 2);
-        sprite.setSize(sprite.getRegionWidth() + (sprite.getRegionWidth() * scaleUp - sprite.getRegionWidth()) * lerpAlpha, sprite.getHeight() + (sprite.getRegionHeight() * scaleUp - sprite.getHeight()) * lerpAlpha);
-        ang_shine += Main.dt_one;
-        count_shineRadius = (float) ((count_shineRadius + .1f * Main.dt_one) % (2 * Math.PI));
-        radiusOffset_shine = (float) Math.sin(count_shineRadius) * 2;
-        radius_shine += (25 - radius_shine) * lerpAlpha;
+        pos.lerp(pos_target.get(), lerpAlpha);
+        sprite.setSize(sprite.getWidth() + (sprite.getRegionWidth() * scaleUp - sprite.getWidth()) * lerpAlpha, sprite.getHeight() + (sprite.getRegionHeight() * scaleUp - sprite.getHeight()) * lerpAlpha);
+        sprite.setPosition(pos.x - sprite.getWidth() / 2, pos.y - sprite.getHeight() / 2);
+        count_shine = MathFuncs.loopOne(count_shine, Main.dt*.25f);
+        radius_shine += (radiusDest_shine - radius_shine) * lerpAlpha;
 
         if (doCount)
             count -= Main.dt_one;
+
         if (count < 0) {
             count = 0;
             doCount = false; // before doNextActivity();
@@ -57,7 +61,9 @@ public class FloatingReward {
                 setCounter(120);
                 break;
             case 1:
-                pos_target = new Vector2(Main.width / 2, Main.height + 150);
+                pos_target = pos_endTarget;
+                scaleUp = scaleUp_end;
+                radiusDest_shine = 0;
                 setCounter(120);
                 break;
             case 2:
@@ -81,14 +87,9 @@ public class FloatingReward {
     }
 
     public void drawShine(ShapeRenderer sr) {
+        Funcs.drawShine(sr, pos, radius_shine, count_shine);
+        /*
         sr.setColor(1, 1, 200 / 255f, 180 / 255f);
-        sr.arc(pos.x, pos.y, radius_shine + radiusOffset_shine, ang_shine, 30, 5);
-        sr.arc(pos.x, pos.y, radius_shine + radiusOffset_shine, ang_shine + 120, 30, 5);
-        sr.arc(pos.x, pos.y, radius_shine + radiusOffset_shine, ang_shine + 240, 30, 5);
-
-        sr.arc(pos.x, pos.y, radius_shine + radiusOffset_shine, ang_shine + 60, 30, 5);
-        sr.arc(pos.x, pos.y, radius_shine + radiusOffset_shine, ang_shine + 120 + 60, 30, 5);
-        sr.arc(pos.x, pos.y, radius_shine + radiusOffset_shine, ang_shine + 240 + 60, 30, 5);
-        //sr.cone(pos.x,pos.y,0,10,10);
+        */
     }
 }

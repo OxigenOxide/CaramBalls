@@ -20,6 +20,7 @@ public class RewardOrb {
     float size;
     int type;
     boolean spread;
+    boolean isReward;
 
 
     public RewardOrb(float x, float y, int type) {
@@ -34,6 +35,17 @@ public class RewardOrb {
             pos_target = Main.farm.pos_orb;
 
         Main.addSoundRequest(ID.Sound.COLLECT);
+
+        isReward = true;
+    }
+
+    public RewardOrb(float x, float y, Vector2 pos_target) { // for orbs moving from the bar to the object bought
+        type = 0;
+        tex = Res.getOrbTex(type);
+        pos = new Vector2(x, y);
+        size = tex.getRegionWidth();
+
+        this.pos_target = pos_target;
     }
 
     public void update() {
@@ -41,19 +53,20 @@ public class RewardOrb {
             counter_spread.update();
             pos.add(vel);
             vel.scl((float) Math.pow(.95, Main.dt_one));
-        }
-        else {
+        } else {
             pos.lerp(pos_target, .1f);
             size += (7 - size) * .1f;
         }
         if (MathFuncs.distanceBetweenPoints(pos, pos_target) < .8f) {
             dispose();
-            Main.gameData.orbs++;
+            if (isReward) {
+                Main.gameData.orbs++;
 
-            Main.userData.orbsCollected++;
-            if(Main.inGame()) {
-                Game.comboBar.collectOrb(RewardOrb.getValue(type));
-                Game.orbsCollected++;
+                Main.userData.orbsCollected++;
+                if (Main.inGame()) {
+                    Game.comboBar.collectOrb(RewardOrb.getValue(type));
+                    Game.orbsCollected++;
+                }
             }
         }
     }
@@ -89,7 +102,7 @@ public class RewardOrb {
         batch.draw(tex, pos.x - size / 2, pos.y - size / 2, size, size);
     }
 
-    public void dispose(){
+    public void dispose() {
         Main.rewardOrbsToRemove.add(this);
     }
 

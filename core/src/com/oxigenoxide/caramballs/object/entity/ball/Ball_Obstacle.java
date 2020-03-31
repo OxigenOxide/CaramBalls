@@ -41,7 +41,7 @@ public class Ball_Obstacle extends Ball {
     private void construct() {
         setSpriteTexture(Res.tex_ball[0][size]);
         palette = Res.PALETTE_BASICBALL;
-        lock();
+        //lock();
     }
 
     @Override

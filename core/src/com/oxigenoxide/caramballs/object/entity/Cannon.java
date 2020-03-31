@@ -19,16 +19,18 @@ public class Cannon extends Entity {
     float count_nextBullet;
     float size = 0;
     Body body;
+    boolean disappear;
 
     public Cannon(float x, float y) {
         x = (int) x;
         y = (int) y;
         pos = new Vector2(x, y);
+        pos_center = new Vector2(pos.x, pos.y + 10.5f);
         gun = new Sprite(Res.tex_cannon_gun);
         gun.setOrigin(6.5f, 6.5f);
         gun.setPosition(x - 6, y - 6.5f + 4);
         createBody();
-        body.setTransform(pos.x*Main.MPP,(pos.y+4.5f)*Main.MPP,0);
+        body.setTransform(pos.x * Main.MPP, (pos.y + 4.5f) * Main.MPP, 0);
         radius_spawn = 10; // not perfect
     }
 
@@ -39,20 +41,27 @@ public class Cannon extends Entity {
         gun.setOrigin(6.5f, 6.5f);
         gun.setPosition(pos.x - 6, pos.y + 4);
         createBody();
-        body.setTransform(pos.x*Main.MPP,(pos.y+4.5f)*Main.MPP,0);
+        body.setTransform(pos.x * Main.MPP, (pos.y + 4.5f) * Main.MPP, 0);
         radius_spawn = 10; // not perfect
     }
+
     public void createBody() {
         body = Main.world.createBody(Res.bodyDef_static);
-        Res.fixtureDef_circle.shape.setRadius(4.5f*Main.MPP);
+        Res.fixtureDef_circle.shape.setRadius(4.5f * Main.MPP);
         body.createFixture(Res.fixtureDef_circle);
         body.setUserData(this);
     }
+
     public void update() {
 
-        if (size < 1) {
+        if (disappear) {
+            size = Math.max(0, size - .05f * Main.dt_one_slowed);
+            gun.setSize(gun.getRegionWidth() * size, gun.getRegionHeight() * size);
+            gun.setPosition(pos.x - 6 * size, pos.y + 4 * size);
+            if (size == 0) dispose();
+        } else if (size < 1) {
             size = Math.min(1, size + .05f * Main.dt_one_slowed);
-            gun.setSize(gun.getTexture().getWidth() * size, gun.getTexture().getHeight() * size);
+            gun.setSize(gun.getRegionWidth() * size, gun.getRegionHeight() * size);
             gun.setPosition(pos.x - 6 * size, pos.y + 4 * size);
         }
 
@@ -82,6 +91,10 @@ public class Cannon extends Entity {
         batch.draw(Res.tex_cannon_base, pos.x - Res.tex_cannon_base.getRegionWidth() / 2 * size, pos.y, size * Res.tex_cannon_base.getRegionWidth(), size * Res.tex_cannon_base.getRegionWidth());
         gun.draw(batch);
         batch.draw(Res.tex_cannon_shine, pos.x - Res.tex_cannon_shine.getRegionWidth() / 2 * size, pos.y + 11 * size, size * Res.tex_cannon_shine.getRegionWidth(), size * Res.tex_cannon_shine.getRegionWidth());
+    }
+
+    public void disappear() {
+        disappear = true;
     }
 
     public void dispose() {

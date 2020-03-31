@@ -19,6 +19,7 @@ public class Scooper extends Entity {
     Sprite sprite_shine;
     float ang;
     Body body;
+    Body body_pivot;
     RevoluteJoint revJoint;
     Vector2 anchor;
 
@@ -32,7 +33,6 @@ public class Scooper extends Entity {
     boolean shrink;
 
     boolean isDisposed;
-
     /*
     Idea for avoiding clipping:
         While the texture is glowing make the body a sensor and make in push the objects away that are inside it.
@@ -46,7 +46,7 @@ public class Scooper extends Entity {
     void construct() {
         sprite = new Sprite(tex);
         sprite_shine = new Sprite(tex_shine);
-        createBoxBody();
+        createBody();
         sprite.setPosition(body.getPosition().x * Main.PPM - sprite.getWidth() / 2, body.getPosition().y * Main.PPM - sprite.getHeight() / 2);
         sprite_shine.setPosition(body.getPosition().x * Main.PPM - sprite_shine.getWidth() / 2, body.getPosition().y * Main.PPM - sprite_shine.getHeight() / 2 + 3);
     }
@@ -57,8 +57,15 @@ public class Scooper extends Entity {
         body.createFixture(Res.fixtureDef_box);
         body.setUserData(this);
         body.setTransform(pos.x * Main.MPP, pos.y * Main.MPP, 0);
+        createJoint();
+    }
 
-        Body body_pivot = Main.world.createBody(Res.bodyDef_static);
+    void createBody() {
+        createBoxBody();
+    }
+
+    void createJoint(){
+        body_pivot = Main.world.createBody(Res.bodyDef_static);
         body_pivot.setTransform(pos.x * Main.MPP + anchor.x, pos.y * Main.MPP + anchor.y, 0); // at the position of the pivot
 
         RevoluteJointDef revoluteJointDef = new RevoluteJointDef();

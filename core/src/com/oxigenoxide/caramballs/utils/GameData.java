@@ -22,4 +22,7 @@ public class GameData {
         unlocks[0]=true;
         farmBalls=new ArrayList<Ball_Main.Ball_Main_Data>();
     }
+    public void setTestValues(){
+        orbs=1000;
+    }
 }

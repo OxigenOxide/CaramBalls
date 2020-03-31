@@ -246,11 +246,11 @@ manager
 -add new skins: cd, scales, virus, ring
 -add top and bottom margins to shop
 -add scrolling to shop
-[11-mar.-20] s: 113h10m e:114h5m t: 0h55m
+[11-mar.-20] s:113h10m e:114h5m t: 0h55m
 -fix top margin height in the shop
 -put option button at the bottom right corner
 -remove HL ball
-[12-mar.-20] s: 114h05m e:~117h10m t:3h5m
+[12-mar.-20] s:114h05m e:~117h10m t:3h5m
 -fix: orbs out of broken orb containers went the opposite direction
 -make slow shader depend on flow
 -change combo mechanics
@@ -260,12 +260,12 @@ manager
 -make hits harder when in flow
 -make balls not jump on hit
 -fix, finally: sometimes the ball wouldn't get hit on Android
-[14-mar.-20] s: ~117h10m e:118h8m t:0h58m
+[14-mar.-20] s:~117h10m e:118h8m t:0h58m
 -make the combo bar's amplitude and speed peak very shortly every time the combo gets increased.
 -small optimisation in the gravitation section of Ball_Main
-[15-mar.-20] s: 118h8m e:118h34m t:0h26m
+[15-mar.-20] s:118h8m e:118h34m t:0h26m
 -create Scooper class
-[16-mar.-20] s: 118h34m e: t:
+[16-mar.-20] s:118h34m e:122h27m t:3h53m
 -complete scooper fully functional
 -make scooper compatible with torque
 -create subclasses of Scooper
@@ -274,30 +274,75 @@ manager
 -make scoopers and spikes disappear on next level
 -add a few levels
 -remove shake from the farm screen
+[17-mar.-20] s:122h27m e:124h20m t:1h53m
+-fix: balls could get hit for one frame after the body had already been disposed
+-fix: loading the unlocked state of balls was wrong
+-add shader shader_c_over for drawing colors over the sprite, not instead of the sprite
+-orb containers now grow when spawned
+-orb containers spawn where balls are combined
+-orb containers ascend before dropping when spawned by a combination
+[18-mar.-20] s:124h20m e:125h30m t:1h10m
+-make orbs ascend when spawned
+[19-mar.-20] s:125h30m e:126h25m t:0h55m
+-don't throw confetti when a new level begins
+[21-mar.-20] s:126h25m e:126h32m t:0h7m
+-add juicier strawberry texture
+[22-mar.-20] s:126h32m e:129h06m t:2h34m
+-place the orb display bar in the top right in the shop
+-add function to set the time of a counter after creation
+-add inner class SkinBox
+-make skinBox bob
+[23-mar.-20] s:129h06m e:132h43m t:3h37m
+-add SkinBox opening cue
+-set scroll in the shop in such a way that the reward floats to its shopSpot
+-add class Vector2Mod for vectors that get updated, but also have a translation or multiplication
+-make SkinBox fully functional
+[25-mar.-20] s:132h45m e:135h17m t:2h32m
+-add particle effect of the capsule halves
+-add color to the number on the buy button
+-add effect that orbs get sent to the bought object
+-make orb counter gradually rise and lower when the amount changes
+-remove possibility to buy a skinbox when there are no skins left to unlock
+-ballSelector won't get thinner when stretching past the max
+[28-mar.-20] s:135h17m
+-fix the game so it can be built for HTML5
+-set the count until combo loss from 5 to 8 seconds
+-fix resize event
+-obstacle balls shrink away when a level ends
+[29-mar.-20] s:141h20m e:145h10m
+-fix ghost bodies of balls that got combined
+-add orb fountain
+-spawn orb fountain when two combinations are done in one second;
+-fix particle amount of destroyed mainBall
+-add spiky scooper
+[30-mar.-20] s:145h10m e:146h2m
+-make orbs blink and dispose them after some time
+[31-mar.-20] s:146h2m e:
+-add new level generation system
+-make cannons and draggables disappear
+-fix cannon and tire sprite dimensions
+-increased the split velocity to 10
+-push balls away from a main ball that explodes
 
-deadline: 20 march 2020
+deadline: april 15 2020
 (set at 11 februari)
 
-LIST 16 march
-TODO: create some levels and think of a level system.
-TODO: design lootbox system. Do research on legality. Does the tank game still use?
-TODO: new reward system. Fruits drop from air etc.
+march 30
+TODO: ???
+TODO: orbs disappear after some time
 
-TODO: fade sound
-TODO: split sound
+TODO: hitboxes smaller
+TODO: fix when music should play and shouldnt
+TODO: rewards reflected in the ball meter. Will the player still be able to see the state even when he loses balls? Will there be overlapping?
 TODO: fix multiple pulse particles when combining
 TODO: ball duplication glitch
 TODO: target circle at finger?
-TODO: choose good outline colors
-TODO: choose good ball colors
-TODO: choose good background colors
-TODO: optimize all entities
-TODO: growing hitboxes?
-TODO: add capsules to levels
+TODO: can I fix that balls will sometimes not bounce back from a wall when they don't have enough perpendicular velocity?
 TODO: force update
 TODO: glow in the dark?
 TODO: only 0.1% will reach pink color
 TODO: particle pool for optimization
-TODO: powerful hit animation
-TODO: Box2D iterations might dramatically improve performance
+TODO: ad capsule
 TODO: virus balls
+TODO: rainbowballs changing color
+TODO: progress tracker of skins (8 / 12 skins unlocked)

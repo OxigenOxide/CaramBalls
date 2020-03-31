@@ -1,7 +1,9 @@
 package com.oxigenoxide.caramballs.object.entity.orbContainer;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Filter;
@@ -16,6 +18,7 @@ import com.oxigenoxide.caramballs.utils.ActionListener;
 public class OrbContainer extends Entity {
     float height;
     TextureRegion tex;
+    Sprite sprite;
     Body body;
     float velY;
     boolean doDispose;
@@ -23,14 +26,21 @@ public class OrbContainer extends Entity {
     ActionListener destroy_delayed;
     Ball ball_hitBy;
 
-    int orbAmount = 10;
+    int orbAmount = 5;
+    float size;
+
+
+    final static float ASCENDHEIGHT = 40;
+
+    boolean ascend;
 
     public OrbContainer(TextureRegion tex) {
         this.tex = tex;
+        sprite = new Sprite(tex);
         pos = Game.getRandomPosOnTable(tex.getRegionWidth(), tex.getRegionHeight());
         height = Main.height;
         createBody();
-        body.setTransform(pos.x * Main.MPP, (pos.y + 3) * Main.MPP, 0);
+        body.setTransform(pos.x * Main.MPP, pos.y * Main.MPP, 0);
         setPassthrough(true);
         radius_spawn = 7;
     }
@@ -39,33 +49,56 @@ public class OrbContainer extends Entity {
         pos = new Vector2(x, y);
         this.height = height;
         createBody();
-        body.setTransform(pos.x * Main.MPP, (pos.y + 3) * Main.MPP, 0);
+        body.setTransform(pos.x * Main.MPP, pos.y * Main.MPP, 0);
         setPassthrough(true);
         radius_spawn = 7;
     }
 
-    public void createBody() {
+    public OrbContainer(float x, float y) {
+        pos = new Vector2(x, y);
+        height = 0;
+        createBody();
+        body.setTransform(pos.x * Main.MPP, pos.y * Main.MPP, 0);
+        setPassthrough(true);
+        radius_spawn = 7;
+        ascend = true;
+    }
 
+    public void createBody() {
     }
 
     public void update() {
-        height += velY;
-        height = Math.max(0, height);
-        if (height == 0) {
-            if (velY < 0) {
-                velY = -velY * .5f;
-                if (velY < 3) {
-                    velY = 0;
+
+        if (ascend) {
+            height = size * ASCENDHEIGHT;
+            if (size == 1) { // then drop
+                ascend = false;
+                velY = 0;
+            }
+        } else {
+            height += velY;
+            height = Math.max(0, height);
+            if (height == 0) {
+                if (velY < 0) {
+                    velY = -velY * .5f;
+                    if (velY < 3) {
+                        velY = 0;
+                    }
                     setPassthrough(false);
                 }
-            }
-        } else
-            velY += Game.GRAVITY_PIXELS * .2f;
-
+            } else
+                velY += Game.GRAVITY_PIXELS * .2f;
+        }
         if (destroy_delayed != null) {
             destroy_delayed.action();
             destroy_delayed = null;
         }
+
+
+        sprite.setSize(sprite.getRegionWidth() * (.7f + .3f * size), sprite.getRegionHeight() * (.7f + .3f * size));
+        sprite.setPosition((int) (pos.x - sprite.getWidth() / 2), (int) (pos.y - sprite.getHeight() / 2 + height));
+
+        size = Math.min(size + Main.dt * 2, 1);
 
         if (doDispose)
             dispose();
@@ -101,8 +134,18 @@ public class OrbContainer extends Entity {
     }
 
     public void render(SpriteBatch batch) {
-        batch.draw(tex, (int) (pos.x - tex.getRegionWidth() / 2), (int) (pos.y - 3 + height));
+        if (size != 1) {
+            batch.setShader(Res.shader_c_over);
+            Res.shader_c_over.setUniformf("c", 1, 1, 1, (1 - size));
+        }
+        sprite.draw(batch);
+        batch.setShader(null);
     }
+
+    public void drawShadow(ShapeRenderer sr) {
+        Main.drawShadow(sr, pos.x, pos.y - Main.test_float, sprite.getWidth());
+    }
+
 
     public void dispose() {
         body = Main.destroyBody(body);
@@ -111,13 +154,13 @@ public class OrbContainer extends Entity {
     }
 
     public void setPassthrough(boolean b) {
-        if (b) {
+        if (b && !isPassthrough) {
             isPassthrough = true;
             Filter filter = new Filter();
             filter.maskBits = Res.MASK_ZERO;
             filter.categoryBits = (Res.MASK_PASSTHROUGH);
             body.getFixtureList().first().setFilterData(filter);
-        } else {
+        } else if(isPassthrough) {
             isPassthrough = false;
             Filter filter = new Filter();
             filter.maskBits = Res.MASK_ZERO;

@@ -28,7 +28,6 @@ public class Orb extends Entity {
         vel = Math.max(0, vel - .1f);
         pos.add((float) Math.cos(ang) * vel, (float) Math.sin(ang) * vel);
         if (!isFollowing && vel == 0) {
-
             float closestDistance = -1;
             Ball closestBall=null;
             for (Ball ball : Main.balls) {

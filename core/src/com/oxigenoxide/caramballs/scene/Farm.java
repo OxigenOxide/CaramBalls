@@ -2,7 +2,6 @@ package com.oxigenoxide.caramballs.scene;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -27,6 +26,7 @@ import com.oxigenoxide.caramballs.object.entity.hole.Hole;
 import com.oxigenoxide.caramballs.object.entity.hole.Hole_Reward;
 import com.oxigenoxide.caramballs.object.entity.hole.Hole_Sell;
 import com.oxigenoxide.caramballs.utils.ActionListener;
+import com.oxigenoxide.caramballs.utils.Funcs;
 import com.oxigenoxide.caramballs.utils.RepeatCounter;
 
 import static com.oxigenoxide.caramballs.Main.balls;
@@ -50,9 +50,7 @@ public class Farm extends Scene {
     boolean isSpawningBalls;
     RepeatCounter counter_save;
     static boolean hasBeenInFarm;
-    static final Color COLOR_ORBNUMBER = new Color(0, 73 / 255f, 128 / 255f, 1);
     Hole_Sell hole_sell;
-
 
     public static final int FIELDWIDTH = 100;
 
@@ -139,8 +137,9 @@ public class Farm extends Scene {
         for (Entity e : Main.entities_sorted)
             e.render(batch);
 
+        // orb display
         batch.draw(Res.tex_orbCountBar, pos_orbs.x - Res.tex_orbCountBar.getRegionWidth() / 2, pos_orbs.y - 2);
-        int width = Main.drawNumberSignColor(batch, Main.gameData.orbs, pos_orbs, ID.Font.SMALL, Res.tex_orb, -1, COLOR_ORBNUMBER);
+        int width = Funcs.drawNumberSignColor(batch, Main.gameData.orbs, pos_orbs, ID.Font.SMALL, Res.tex_orb, -1, Res.COLOR_ORBNUMBER);
         pos_orb.x = pos_orbs.x - width / 2 + 3.5f;
 
         for (RewardOrb ro : rewardOrbs)
@@ -159,8 +158,8 @@ public class Farm extends Scene {
 
         batch.draw(tex_buffer, 0, Main.height, Main.width, -Main.height);
         batch.setShader(null);
-
-        Main.b2dr.render(Main.world, Main.cam.combined);
+        if (Main.DODEBUGRENDER)
+            Main.b2dr.render(Main.world, Main.cam.combined);
         batch.end();
         Main.setCamEffects();
     }
