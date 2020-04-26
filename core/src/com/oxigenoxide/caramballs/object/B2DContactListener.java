@@ -13,10 +13,12 @@ import com.oxigenoxide.caramballs.object.entity.Bullet;
 import com.oxigenoxide.caramballs.object.entity.CircularBumper;
 import com.oxigenoxide.caramballs.object.entity.Eye;
 import com.oxigenoxide.caramballs.object.entity.JumpingPad;
+import com.oxigenoxide.caramballs.object.entity.PowerOrbEntity;
 import com.oxigenoxide.caramballs.object.entity.Spike;
 import com.oxigenoxide.caramballs.object.entity.ball.Ball;
 import com.oxigenoxide.caramballs.object.entity.ball.Ball_Bad;
 import com.oxigenoxide.caramballs.object.entity.ball.Ball_Main;
+import com.oxigenoxide.caramballs.object.entity.ball.Ball_PowerOrb;
 import com.oxigenoxide.caramballs.object.entity.collectable.Collectable;
 import com.oxigenoxide.caramballs.object.entity.draggable.Draggable;
 import com.oxigenoxide.caramballs.object.entity.orbContainer.OrbContainer;
@@ -160,6 +162,8 @@ public class B2DContactListener implements ContactListener {
                     if (udB instanceof OrbContainer) {
                         OrbContainer oc = (OrbContainer) udB;
                         oc.destroy(ball);
+                    } else if (udB instanceof Ball_PowerOrb) {
+                        ((Ball_Main) ball).collectPowerOrb((Ball_PowerOrb) udB);
                     }
                 }
             }

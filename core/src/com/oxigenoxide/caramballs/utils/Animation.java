@@ -2,9 +2,10 @@ package com.oxigenoxide.caramballs.utils;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.oxigenoxide.caramballs.Main;
 
 public class Animation {
-    public int count;
+    public float count;
     public int countMax;
     int indices;
     public boolean isContinuous;
@@ -19,32 +20,32 @@ public class Animation {
         this.isContinuous = isContinuous;
         indices = textures.length;
         float totDur = 0;
-        for (float f : durations) {
+        for (float f : durations)
             totDur += f;
-        }
         this.durations = new float[durations.length];
-        for (int i = 0; i < durations.length; i++) {
+        for (int i = 0; i < durations.length; i++)
             this.durations[i] = durations[i] / totDur;
-        }
     }
 
-    public void update() {
-        count++;
+    public void update(float dt) {
+        count += dt;
         if (count >= countMax) {
             if (isContinuous || doLoop) {
                 count = 0;
                 doLoop = false;
-            } else {
+            } else
                 ended = true;
-            }
         } else
             ended = false;
     }
 
-    public void doLoop() {
-        if (count >= countMax) {
+    public void update() {
+        update(Main.dt_one);
+    }
+
+    public void loop() {
+        if (count >= countMax)
             doLoop = true;
-        }
     }
 
     float duration;
@@ -55,9 +56,8 @@ public class Animation {
             duration = 0;
             countPart = count / (float) countMax;
             for (int i = 0; i < durations.length; i++) {
-                if (countPart >= duration && countPart <= duration + durations[i]) {
+                if (countPart >= duration && countPart <= duration + durations[i])
                     return textures[i];
-                }
                 duration += durations[i];
             }
         }

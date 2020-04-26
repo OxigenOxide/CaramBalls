@@ -19,6 +19,12 @@ public class Ball_Bomb extends Ball {
         setSpriteTexture(Res.tex_bomb);
     }
 
+    public Ball_Bomb() {
+        super(1);
+        setSpriteTexture(Res.tex_bomb);
+    }
+
+
     @Override
     public void update() {
         super.update();

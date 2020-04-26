@@ -27,7 +27,7 @@ public class OrbFountain {
                 if (orbsToThrow > 0) {
                     orbsToThrow--;
                     counter_nextOrb.start();
-                    Ball_Orb ball_orb = new Ball_Orb(pos.x, pos.y, 0, height);
+                    Ball_Orb ball_orb = new Ball_Orb(pos.x, pos.y, height);
                     float ang = (float) (Math.random() * Math.PI * 2);
                     ball_orb.setVelocity((float) Math.cos(ang) * 2, (float) Math.sin(ang) * 2);
                     ball_orb.velY = 4;

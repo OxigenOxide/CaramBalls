@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.oxigenoxide.caramballs.Main;
 import com.oxigenoxide.caramballs.Res;
 import com.oxigenoxide.caramballs.utils.Animation;
+import com.oxigenoxide.caramballs.utils.Funcs;
 
 public class Particle_Hit extends Particle {
 
@@ -19,11 +20,11 @@ public class Particle_Hit extends Particle {
         Main.particles_batch.add(this);
 
         sprite = new Sprite(Res.tex_particle_hit[0]);
-        sprite.setPosition(x + radius_ball + 1, y-sprite.getHeight()/2);
+        sprite.setPosition(x + radius_ball + 1, y - sprite.getHeight() / 2);
         sprite.setOrigin(-radius_ball - 1, sprite.getHeight() / 2);
         sprite.setRotation((float) Math.toDegrees(angle));
 
-        animation=new Animation(10,Res.tex_particle_hit,new float[]{1,1,1,1,1,1},false);
+        animation = new Animation(15, Res.tex_particle_hit, new float[]{1, 1, 1, 1, 1, 1, 1}, false);
         //countMax*=size/10;
     }
 
@@ -35,6 +36,7 @@ public class Particle_Hit extends Particle {
     }
 
     public void render(SpriteBatch batch) {
+        Funcs.setShaderNull(batch);
         sprite.draw(batch);
     }
 }

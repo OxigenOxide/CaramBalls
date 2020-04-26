@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.oxigenoxide.caramballs.Main;
 import com.oxigenoxide.caramballs.Res;
 import com.oxigenoxide.caramballs.object.entity.Entity;
+import com.oxigenoxide.caramballs.utils.Funcs;
 
 public class Scooper extends Entity {
     Sprite sprite;
@@ -40,7 +41,7 @@ public class Scooper extends Entity {
 
     public Scooper() {
         super();
-        radius_spawn = 10;
+        radius_spawn = 45;
     }
 
     void construct() {
@@ -117,7 +118,7 @@ public class Scooper extends Entity {
 
     @Override
     public void render(SpriteBatch batch) {
-        super.render(batch);
+        Funcs.setShaderNull(batch);
         sprite.draw(batch);
         sprite_shine.draw(batch);
     }

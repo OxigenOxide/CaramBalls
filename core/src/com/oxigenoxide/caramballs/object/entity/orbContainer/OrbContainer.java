@@ -14,6 +14,7 @@ import com.oxigenoxide.caramballs.Res;
 import com.oxigenoxide.caramballs.object.entity.ball.Ball;
 import com.oxigenoxide.caramballs.object.entity.Entity;
 import com.oxigenoxide.caramballs.utils.ActionListener;
+import com.oxigenoxide.caramballs.utils.Funcs;
 
 public class OrbContainer extends Entity {
     float height;
@@ -29,7 +30,6 @@ public class OrbContainer extends Entity {
     int orbAmount = 5;
     float size;
 
-
     final static float ASCENDHEIGHT = 40;
 
     boolean ascend;
@@ -42,25 +42,33 @@ public class OrbContainer extends Entity {
         createBody();
         body.setTransform(pos.x * Main.MPP, pos.y * Main.MPP, 0);
         setPassthrough(true);
-        radius_spawn = 7;
+        radius_spawn = 6;
     }
 
     public OrbContainer(float x, float y, float height) {
         pos = new Vector2(x, y);
+        radius_spawn = 6;
+//        if (!Game.isPosFree(pos, radius_spawn)) {
+//            doDispose = true;
+//            pos.set(1000, -400);
+//        }
         this.height = height;
         createBody();
         body.setTransform(pos.x * Main.MPP, pos.y * Main.MPP, 0);
         setPassthrough(true);
-        radius_spawn = 7;
     }
 
     public OrbContainer(float x, float y) {
         pos = new Vector2(x, y);
+        radius_spawn = 6;
+//        if (!Game.isPosFree(pos, radius_spawn)) {
+//            doDispose = true;
+//            pos.set(1000, -400);
+//        }
         height = 0;
         createBody();
         body.setTransform(pos.x * Main.MPP, pos.y * Main.MPP, 0);
         setPassthrough(true);
-        radius_spawn = 7;
         ascend = true;
     }
 
@@ -76,7 +84,7 @@ public class OrbContainer extends Entity {
                 velY = 0;
             }
         } else {
-            height += velY;
+            height += velY * Main.dt_one;
             height = Math.max(0, height);
             if (height == 0) {
                 if (velY < 0) {
@@ -87,7 +95,7 @@ public class OrbContainer extends Entity {
                     setPassthrough(false);
                 }
             } else
-                velY += Game.GRAVITY_PIXELS * .2f;
+                velY += Game.GRAVITY_PIXELS * .2f * Main.dt_one;
         }
         if (destroy_delayed != null) {
             destroy_delayed.action();
@@ -123,7 +131,7 @@ public class OrbContainer extends Entity {
                 @Override
                 public void action() {
                     for (int i = 0; i < orbAmount; i++) {
-                        Ball_Orb ball_new = new Ball_Orb(pos.x, pos.y, 0);
+                        Ball_Orb ball_new = new Ball_Orb(pos.x, pos.y);
                         ball_new.setVelocity(hitImpact * (float) Math.cos(hitAngle + Math.random() * SPREADORBS - SPREADORBS / 2), hitImpact * (float) Math.sin(hitAngle + Math.random() * SPREADORBS - SPREADORBS / 2));
                         Main.balls.add(ball_new);
                     }
@@ -134,10 +142,14 @@ public class OrbContainer extends Entity {
     }
 
     public void render(SpriteBatch batch) {
+
         if (size != 1) {
             batch.setShader(Res.shader_c_over);
             Res.shader_c_over.setUniformf("c", 1, 1, 1, (1 - size));
         }
+        else
+            Funcs.setShaderNull(batch);
+
         sprite.draw(batch);
         batch.setShader(null);
     }
@@ -160,7 +172,7 @@ public class OrbContainer extends Entity {
             filter.maskBits = Res.MASK_ZERO;
             filter.categoryBits = (Res.MASK_PASSTHROUGH);
             body.getFixtureList().first().setFilterData(filter);
-        } else if(isPassthrough) {
+        } else if (isPassthrough) {
             isPassthrough = false;
             Filter filter = new Filter();
             filter.maskBits = Res.MASK_ZERO;

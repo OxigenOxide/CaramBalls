@@ -13,6 +13,8 @@ public class Scooper_3 extends Scooper {
     public Scooper_3() {
         super();
         enableMotor = true;
+        maxMotorTorque = 2;
+        motorSpeed = -2;
         tex = Res.tex_scooper_3;
         tex_shine = Res.tex_scooperShine_0;
         pos = new Vector2(Main.width / 2, Main.height / 2);

@@ -61,8 +61,6 @@ public class OrbCounter {
     public void render(SpriteBatch batch) {
         batch.draw(tex, pos.x, pos.y);
         batch.setShader(Res.shader_c);
-        Res.shader_c.setUniformf("c", 1, 1, 1, 1);
         Funcs.drawNumber(batch, Main.gameData.orbs, pos_num, ID.Font.SMALL);
-        batch.setShader(null);
     }
 }

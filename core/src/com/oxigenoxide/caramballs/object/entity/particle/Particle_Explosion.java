@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.oxigenoxide.caramballs.Main;
 import com.oxigenoxide.caramballs.Res;
 import com.oxigenoxide.caramballs.utils.Animation;
+import com.oxigenoxide.caramballs.utils.Funcs;
 
 public class Particle_Explosion extends Particle {
     Animation animation;
@@ -21,14 +22,16 @@ public class Particle_Explosion extends Particle {
     public void update() {
         super.update();
         animation.update();
-        sprite.setRegion(animation.getTexture());
+
         if(animation.ended)
             dispose();
+
+        sprite.setRegion(animation.getTexture());
     }
 
     @Override
     public void render(SpriteBatch batch) {
-        super.render(batch);
+        Funcs.setShaderNull(batch);
         sprite.draw(batch);
     }
 }

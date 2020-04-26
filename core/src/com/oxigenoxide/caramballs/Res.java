@@ -37,6 +37,18 @@ public class Res {
     public static TextureRegion[] tex_meter_dot;
     public static TextureRegion[] tex_text_level;
     public static TextureRegion[] tex_particle_hit;
+    public static TextureRegion[] tex_particle_megaHit;
+    public static TextureRegion[] tex_clock;
+    public static TextureRegion[] tex_powerOrb;
+    public static TextureRegion[] tex_smallFruit;
+    public static TextureRegion[] tex_fruit;
+    public static TextureRegion[] tex_plusMessage;
+    public static TextureRegion[] tex_bulletExplosion;
+    public static TextureRegion[] tex_ballExplosion;
+    public static TextureRegion[] tex_mediumSplit;
+    public static TextureRegion[] tex_largeSplit;
+    public static TextureRegion[] tex_orbPickup;
+    public static TextureRegion[] tex_pulse;
 
     public static TextureRegion tex_buttonPressed_toGame;
     public static TextureRegion tex_button_toGame;
@@ -76,6 +88,7 @@ public class Res {
     public static TextureRegion tex_buttonPressed_buy;
 
     public static TextureRegion tex_meter_case;
+    public static TextureRegion tex_meter_fruit;
     public static TextureRegion tex_number_small_percent;
     public static TextureRegion tex_progressBar;
     public static TextureRegion tex_progressBar_ball;
@@ -132,7 +145,7 @@ public class Res {
     public static TextureRegion tex_text_comingsoon;
     public static TextureRegion tex_collectable_shield;
     public static TextureRegion tex_goldenEgg;
-    public static TextureRegion tex_bullet;
+    public static TextureRegion[] tex_bullet;
     public static TextureRegion tex_cat;
     public static TextureRegion tex_honey;
     public static TextureRegion tex_tutorialHole;
@@ -146,6 +159,8 @@ public class Res {
     public static float[] ballRadius;
     public static TextureRegion tex_orb;
     public static TextureRegion tex_orb_big;
+    public static TextureRegion tex_orb_crystal;
+    public static TextureRegion tex_orb_bigCrystal;
     public static TextureRegion tex_text_orbs;
     public static TextureRegion tex_text_youare;
     public static TextureRegion tex_symbolPlus;
@@ -186,6 +201,12 @@ public class Res {
     public static TextureRegion tex_capsule_bottom;
     public static TextureRegion tex_capsule;
     public static TextureRegion tex_fountain;
+    public static TextureRegion tex_ballDepot_ball;
+    public static TextureRegion tex_ballDepot_back;
+    public static TextureRegion tex_ballDepot_bar;
+    public static TextureRegion tex_ballDepot_frame;
+    public static TextureRegion tex_ballDepot_line;
+    public static TextureRegion tex_orbDisplay;
 
 
     public static Texture tex_comboBar;
@@ -215,6 +236,8 @@ public class Res {
     public static ShaderProgram shader_circle;
     public static ShaderProgram shader_c_over;
     public static ShaderProgram shader_filledCircle;
+    public static ShaderProgram shader_clock;
+    public static ShaderProgram defaultShader;
 
     public static FixtureDef fixtureDef_border;
     public static FixtureDef fixtureDef_circle;
@@ -232,10 +255,11 @@ public class Res {
     public static FixtureDef fixtureDef_plank;
     public static FixtureDef fixtureDef_box;
     public static FixtureDef fixtureDef_scooperSpike;
+    public static FixtureDef fixtureDef_powerOrb;
     public static FixtureDef[] fixtureDef_ball;
     public static FixtureDef[] fixtureDef_ball_passThrough;
     public static Color[][] palette_mainBall;
-    public static Color[][] tableTopPalette;
+    public static Color[][] palette_table;
     public static Color[] ballBadPalette;
     public static Color[] eggPalette;
     public static Color[] palette_ballCapsule;
@@ -256,18 +280,21 @@ public class Res {
     public static final Color COLOR_ORBNUMBER = new Color(0, 73 / 255f, 128 / 255f, 1);
 
     public static final Color[] COLOR_PROJECTION = new Color[]{COLOR_PROJECTION_RED, COLOR_PROJECTION_GREEN, COLOR_PROJECTION_YELLOW, COLOR_PROJECTION_PURPLE};
-    public static final Color[] COLOR_OUTLINE = new Color[]{Color.BLACK, COLOR_PROJECTION_GREEN, COLOR_PROJECTION_YELLOW, COLOR_PROJECTION_PURPLE}; // test colors currently
+    public static final Color[] COLOR_OUTLINE = new Color[]{Color.BLACK, Color.RED, Color.GREEN, Color.BLUE, Color.PURPLE, Color.GOLD}; // test colors currently
     public static final Color[] PALETTE_BASICBALL = new Color[]{new Color(0, 0, 0, 1), new Color(62 / 255f, 180 / 255f, 227 / 255f, 1), new Color(1, 1, 1, 1), new Color(1, 1, 1, 1)};
     public static final Color[][] PALETTE_SCORE = new Color[][]{
-            new Color[]{null, null, new Color(162 / 255f, 162 / 255f, 162 / 255f, 1), Color.WHITE}, // white
-            new Color[]{null, null, new Color(51 / 255f, 174 / 255f, 58 / 255f, 1), new Color(95 / 255f, 205 / 255f, 111 / 255f, 1)}, // light green
-            new Color[]{null, null, new Color(27 / 255f, 131 / 255f, 33 / 255f, 1), new Color(51 / 255f, 174 / 255f, 58 / 255f, 1)}, // dark green
-            new Color[]{null, null, new Color(88 / 255f, 96 / 255f, 194 / 255f, 1), new Color(99 / 255f, 179 / 255f, 194 / 255f, 1)}, // light blue
-            new Color[]{null, null, new Color(131 / 255f, 26 / 255f, 72 / 255f, 1), new Color(191 / 255f, 53 / 255f, 205 / 255f, 1)}, // purple
-            new Color[]{null, null, new Color(213 / 255f, 109 / 255f, 0, 1), new Color(227 / 255f, 202 / 255f, 22 / 255f, 1)}, // gold
-            new Color[]{null, null, new Color(177 / 255f, 15 / 255f, 145 / 255f, 1), new Color(1, 28 / 255f, 161 / 255f, 1)}, // pink
+            new Color[]{Color.CLEAR, Color.CLEAR, new Color(162 / 255f, 162 / 255f, 162 / 255f, 1), Color.WHITE}, // white
+            new Color[]{Color.CLEAR, Color.CLEAR, new Color(51 / 255f, 174 / 255f, 58 / 255f, 1), new Color(95 / 255f, 205 / 255f, 111 / 255f, 1)}, // light green
+            new Color[]{Color.CLEAR, Color.CLEAR, new Color(27 / 255f, 131 / 255f, 33 / 255f, 1), new Color(51 / 255f, 174 / 255f, 58 / 255f, 1)}, // dark green
+            new Color[]{Color.CLEAR, Color.CLEAR, new Color(88 / 255f, 96 / 255f, 194 / 255f, 1), new Color(99 / 255f, 179 / 255f, 194 / 255f, 1)}, // light blue
+            new Color[]{Color.CLEAR, Color.CLEAR, new Color(131 / 255f, 26 / 255f, 72 / 255f, 1), new Color(191 / 255f, 53 / 255f, 205 / 255f, 1)}, // purple
+            new Color[]{Color.CLEAR, Color.CLEAR, new Color(213 / 255f, 109 / 255f, 0, 1), new Color(227 / 255f, 202 / 255f, 22 / 255f, 1)}, // gold
+            new Color[]{Color.CLEAR, Color.CLEAR, new Color(177 / 255f, 15 / 255f, 145 / 255f, 1), new Color(1, 28 / 255f, 161 / 255f, 1)}, // pink
     };
     public static Color[] PALETTE_WHITEBALL = new Color[]{Color.BLACK, new Color(62 / 255f, 180 / 255f, 227 / 255f, 1), Color.WHITE, Color.WHITE};
+    public static Color[] PALETTE_WHITE = new Color[]{Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE};
+    public static Color[] PALETTE_POWERORB_0 = new Color[]{Color.BLACK, new Color(64 / 255f, 9 / 255f, 150 / 255f, 1), new Color(44 / 255f, 116 / 255f, 1, 1), Color.WHITE};
+    public static Color[] PALETTE_POWERORB_1 = new Color[]{Color.BLACK, new Color(9 / 255f, 150 / 255f, 109 / 255f, 1), new Color(65 / 255f, 1, 44 / 255f, 1), Color.WHITE};
 
     public static Sound sound_ballHit;
     public static Sound sound_speedup;
@@ -278,7 +305,15 @@ public class Res {
     public static Sound sound_glassBreak;
     public static Sound sound_plop;
     public static Sound sound_splat;
+    public static Sound sound_success;
     public static Sound sound_bounce;
+    public static Sound sound_punch;
+    public static Sound sound_correct;
+    public static Sound sound_split;
+    public static Sound sound_pop;
+    public static Sound sound_fail;
+    public static Sound sound_tap;
+    public static Sound sound_alarm;
 
     public static Music[] music;
 
@@ -292,7 +327,7 @@ public class Res {
     public static final short MASK_PASSTHROUGH = 0x0002;
     public static final short MASK_BORDER = 0x0004;
     public static final short MASK_ZERO = 0x0001;
-    public static final short MASK_BAD_BAD = 0x0008;
+    public static final short MASK_BAD_BALL = 0x0008;
     public static final short MASK_MAINBALL = 0x0016;
     public static final short MASK_CAT = 0x0064;
     public static final short MASK_GAP = 0x0032;
@@ -304,16 +339,27 @@ public class Res {
     }
 
     public Res() {
-        sound_ballHit = Main.assets.get("sounds/ballHit.wav");
-        sound_speedup = Main.assets.get("sounds/speedup.wav");
-        sound_slowdown = Main.assets.get("sounds/slowdown.wav");
-        sound_glassBreak = Main.assets.get("sounds/glassBreak.wav");
-        sound_buttonClick1 = Main.assets.get("sounds/buttonClick.wav");
+        Main.batch.setShader(null);
+        defaultShader = Main.batch.getShader();
+
+        sound_ballHit = Main.assets.get("sounds/ballHit.mp3");
+        sound_speedup = Main.assets.get("sounds/speedup.mp3");
+        sound_slowdown = Main.assets.get("sounds/slowdown.mp3");
+        sound_glassBreak = Main.assets.get("sounds/glassBreak.mp3");
+        sound_buttonClick1 = Main.assets.get("sounds/buttonClick.mp3");
         sound_plop = Main.assets.get("sounds/plop.mp3");
-        sound_buttonClick2 = Main.assets.get("sounds/buttonClick2.wav");
-        sound_collect = Main.assets.get("sounds/collect.wav");
+        sound_buttonClick2 = Main.assets.get("sounds/buttonClick2.mp3");
+        sound_collect = Main.assets.get("sounds/collect.mp3");
         sound_splat = Main.assets.get("sounds/splat.mp3");
+        sound_success = Main.assets.get("sounds/success.mp3");
         sound_bounce = Main.assets.get("sounds/bounce.mp3");
+        sound_punch = Main.assets.get("sounds/punch.mp3");
+        sound_correct = Main.assets.get("sounds/correct.mp3");
+        sound_split = Main.assets.get("sounds/split.mp3");
+        sound_pop = Main.assets.get("sounds/pop.mp3");
+        sound_fail = Main.assets.get("sounds/fail.mp3");
+        sound_tap = Main.assets.get("sounds/tap.mp3");
+        sound_alarm = Main.assets.get("sounds/alarm.mp3");
 
         music = new Music[]{
                 Main.assets.get("music/1.mp3"),
@@ -435,6 +481,7 @@ public class Res {
         tex_meterDot = atlas.findRegion("meterDot");
         tex_meter_case = atlas.findRegion("meter_case");
         tex_meter_ball = atlas.findRegion("meter_ball");
+        tex_meter_fruit = atlas.findRegion("meter_fruit");
         tex_meter_dot = new TextureRegion[]{atlas.findRegion("meter_dot", 0), atlas.findRegion("meter_dot", 1), atlas.findRegion("meter_dot", 2)};
         tex_oxigenoxide = atlas.findRegion("oxigenoxide");
         tex_orbCountBackground = atlas.findRegion("orbCountBackground");
@@ -444,10 +491,11 @@ public class Res {
         tex_ballCapsule_shine = atlas.findRegion("ballCapsule_shine");
         tex_orb = atlas.findRegion("orb");
         tex_orb_big = atlas.findRegion("orb_big");
+        tex_orb_crystal = atlas.findRegion("orb_crystal");
+        tex_orb_bigCrystal = atlas.findRegion("orb_bigCrystal");
         tex_text_comingsoon = atlas.findRegion("text_comingsoon");
         tex_orbCounter = atlas.findRegion("orbCounter");
         tex_text_orbs = atlas.findRegion("text_orbs");
-        tex_bullet = atlas.findRegion("bullet");
         tex_symbol_checkmark = atlas.findRegion("symbol_checkmark");
         tex_symbol_cross = atlas.findRegion("symbol_cross");
         tex_tutorialMode = atlas.findRegion("tutorialMode");
@@ -502,7 +550,12 @@ public class Res {
         tex_capsule_bottom = atlas.findRegion("capsule_bottom");
         tex_capsule_top = atlas.findRegion("capsule_top");
         tex_fountain = atlas.findRegion("fountain");
-
+        tex_ballDepot_ball = atlas.findRegion("ballDepot_ball");
+        tex_ballDepot_frame = atlas.findRegion("ballDepot_frame");
+        tex_ballDepot_line = atlas.findRegion("ballDepot_line");
+        tex_ballDepot_back = atlas.findRegion("ballDepot_back");
+        tex_ballDepot_bar = atlas.findRegion("ballDepot_bar");
+        tex_orbDisplay = atlas.findRegion("orbDisplay");
 
         tex_text_level = new TextureRegion[]{
                 atlas.findRegion("text_level_home"),
@@ -547,9 +600,9 @@ public class Res {
                 atlas.findRegion("explosion", 7),
                 atlas.findRegion("explosion", 8),
                 atlas.findRegion("explosion", 9),
-                atlas.findRegion("explosion_10"),
-                atlas.findRegion("explosion_11"),
-                atlas.findRegion("explosion_12"),
+                atlas.findRegion("explosion", 10),
+                atlas.findRegion("explosion", 11),
+                atlas.findRegion("explosion", 12),
         };
         tex_text_v = new TextureRegion[]{
                 atlas.findRegion("text_v_standard"),
@@ -562,6 +615,12 @@ public class Res {
                 atlas.findRegion("text_v_hard"),
         };
 
+        tex_clock = new TextureRegion[]{
+                atlas.findRegion("clock_small"),
+                atlas.findRegion("clock_medium"),
+                atlas.findRegion("clock_large"),
+        };
+
         tex_particle_hit = new TextureRegion[]{
                 atlas.findRegion("particle_hit", 1),
                 atlas.findRegion("particle_hit", 2),
@@ -569,8 +628,119 @@ public class Res {
                 atlas.findRegion("particle_hit", 4),
                 atlas.findRegion("particle_hit", 5),
                 atlas.findRegion("particle_hit", 6),
+                atlas.findRegion("particle_hit", 7),
         };
 
+        tex_particle_megaHit = new TextureRegion[]{
+                atlas.findRegion("megaHit", 1),
+                atlas.findRegion("megaHit", 2),
+                atlas.findRegion("megaHit", 3),
+                atlas.findRegion("megaHit", 4),
+                atlas.findRegion("megaHit", 5),
+                atlas.findRegion("megaHit", 6),
+                atlas.findRegion("megaHit", 7),
+                atlas.findRegion("megaHit", 8),
+                atlas.findRegion("megaHit", 9),
+        };
+
+        tex_powerOrb = new TextureRegion[]{
+                atlas.findRegion("powerOrb", 0),
+                atlas.findRegion("powerOrb", 1),
+        };
+
+        tex_smallFruit = new TextureRegion[]{
+                atlas.findRegion("apple_small"),
+                atlas.findRegion("lemon_small"),
+                atlas.findRegion("strawberry_small"),
+        };
+
+        tex_plusMessage = new TextureRegion[]{
+                atlas.findRegion("plusMessage", 1),
+                atlas.findRegion("plusMessage", 2),
+                atlas.findRegion("plusMessage", 5),
+                atlas.findRegion("plusMessage", 10),
+        };
+
+        tex_bullet = new TextureRegion[]{
+                atlas.findRegion("bullet", 1),
+                atlas.findRegion("bullet", 2),
+        };
+
+        tex_bulletExplosion = new TextureRegion[]{
+                atlas.findRegion("bulletExplosion", 1),
+                atlas.findRegion("bulletExplosion", 2),
+                atlas.findRegion("bulletExplosion", 3),
+                atlas.findRegion("bulletExplosion", 4),
+                atlas.findRegion("bulletExplosion", 5),
+        };
+
+        tex_ballExplosion = new TextureRegion[]{
+                atlas.findRegion("ballExplosion", 1),
+                atlas.findRegion("ballExplosion", 2),
+                atlas.findRegion("ballExplosion", 3),
+                atlas.findRegion("ballExplosion", 4),
+                atlas.findRegion("ballExplosion", 5),
+                atlas.findRegion("ballExplosion", 6),
+        };
+
+
+        tex_mediumSplit = new TextureRegion[]{
+                atlas.findRegion("mediumSplit", 1),
+                atlas.findRegion("mediumSplit", 2),
+                atlas.findRegion("mediumSplit", 3),
+                atlas.findRegion("mediumSplit", 4),
+                atlas.findRegion("mediumSplit", 5),
+                atlas.findRegion("mediumSplit", 6),
+                atlas.findRegion("mediumSplit", 7),
+        };
+
+        tex_largeSplit = new TextureRegion[]{
+                atlas.findRegion("largeSplit", 1),
+                atlas.findRegion("largeSplit", 2),
+                atlas.findRegion("largeSplit", 3),
+                atlas.findRegion("largeSplit", 4),
+                atlas.findRegion("largeSplit", 5),
+                atlas.findRegion("largeSplit", 6),
+                atlas.findRegion("largeSplit", 7),
+                atlas.findRegion("largeSplit", 8),
+        };
+
+        tex_orbPickup = new TextureRegion[]{
+                atlas.findRegion("orbPickup", 1),
+                atlas.findRegion("orbPickup", 2),
+                atlas.findRegion("orbPickup", 3),
+                atlas.findRegion("orbPickup", 4),
+                atlas.findRegion("orbPickup", 5),
+                atlas.findRegion("orbPickup", 6),
+                atlas.findRegion("orbPickup", 7),
+                atlas.findRegion("orbPickup", 8),
+                atlas.findRegion("orbPickup", 9),
+                atlas.findRegion("orbPickup", 10),
+                atlas.findRegion("orbPickup", 11),
+        };
+
+        tex_pulse = new TextureRegion[]{
+                atlas.findRegion("pulse", 1),
+                atlas.findRegion("pulse", 2),
+                atlas.findRegion("pulse", 3),
+                atlas.findRegion("pulse", 4),
+                atlas.findRegion("pulse", 5),
+                atlas.findRegion("pulse", 6),
+                atlas.findRegion("pulse", 7),
+                atlas.findRegion("pulse", 8),
+                atlas.findRegion("pulse", 9),
+                atlas.findRegion("pulse", 10),
+                atlas.findRegion("pulse", 11),
+                atlas.findRegion("pulse", 12),
+                atlas.findRegion("pulse", 13),
+                atlas.findRegion("pulse", 14),
+                atlas.findRegion("pulse", 15),
+                atlas.findRegion("pulse", 16),
+        };
+
+        tex_fruit = new TextureRegion[]{
+                tex_apple, tex_lemon, tex_strawberry
+        };
 
         sprite_watermark = new Sprite(tex_watermark);
         sprite_watermark.setAlpha(.5f);
@@ -644,7 +814,8 @@ public class Res {
         fixtureDef_badBall_opponents = new FixtureDef();
         fixtureDef_badBall_opponents.density = 1;
         fixtureDef_badBall_opponents.shape = new CircleShape();
-        fixtureDef_badBall_opponents.shape.setRadius(2 * Main.MPP);
+        fixtureDef_badBall_opponents.shape.setRadius(4 * Main.MPP);
+        fixtureDef_badBall_opponents.restitution = 1;
         fixtureDef_badBall_opponents.filter.maskBits = (short) (MASK_ZERO);
         fixtureDef_badBall_opponents.filter.categoryBits = MASK_ZERO;
 
@@ -652,8 +823,9 @@ public class Res {
         fixtureDef_badBall_normal.density = 1;
         fixtureDef_badBall_normal.shape = new CircleShape();
         fixtureDef_badBall_normal.shape.setRadius(7 * Main.MPP);
-        fixtureDef_badBall_normal.filter.maskBits = (MASK_ZERO);
-        fixtureDef_badBall_normal.filter.categoryBits = MASK_ZERO;
+        fixtureDef_badBall_normal.restitution = 1;
+        fixtureDef_badBall_normal.filter.maskBits = MASK_BAD_BALL;
+        fixtureDef_badBall_normal.filter.categoryBits = MASK_BAD_BALL;
 
         fixtureDef_collectable = new FixtureDef();
         fixtureDef_collectable.density = 1;
@@ -670,6 +842,14 @@ public class Res {
         fixtureDef_jumpingPad.filter.maskBits = MASK_ZERO;
         fixtureDef_jumpingPad.filter.categoryBits = MASK_ZERO;
 
+        fixtureDef_powerOrb = new FixtureDef();
+        fixtureDef_powerOrb.shape = new CircleShape();
+        fixtureDef_powerOrb.shape.setRadius(3.5f * Main.MPP);
+        fixtureDef_powerOrb.density = 1;
+        fixtureDef_powerOrb.filter.maskBits = (short) (MASK_ZERO | MASK_WALL);
+        fixtureDef_powerOrb.filter.categoryBits = MASK_ZERO;
+
+
         ChainShape chainShape_gap = new ChainShape();
         chainShape_gap.createLoop(new float[]{Main.MPP * 29, Main.MPP * 71, Main.MPP * 29, Main.MPP * 121, Main.MPP * 79, Main.MPP * 121, Main.MPP * 79, Main.MPP * 71});
         fixtureDef_gap = new FixtureDef();
@@ -679,7 +859,7 @@ public class Res {
         fixtureDef_gap.filter.categoryBits = MASK_WALL;
 
         shape_spike = new CircleShape();
-        shape_spike.setRadius(3.5f * Main.MPP);
+        shape_spike.setRadius(1f * Main.MPP);
 
         fixtureDef_spike = new FixtureDef();
         fixtureDef_spike.density = 1;
@@ -741,23 +921,53 @@ public class Res {
         fixtureDef_cage.filter.maskBits = (short) (MASK_ZERO);
         fixtureDef_cage.filter.categoryBits = MASK_ZERO;
 
+        palette_table = new Color[8][4]; // update the length when adding or removing a palette !
 
-        tableTopPalette = new Color[][]{
-                new Color[4], new Color[4], new Color[4], new Color[4]
-        };
+        palette_table[0][0] = new Color(75 / 255f, 142 / 255f, 108 / 255f, 1); //clasic
+        palette_table[0][1] = new Color(98 / 255f, 158 / 255f, 118 / 255f, 1);
+        palette_table[0][2] = new Color(98 / 255f, 158 / 255f, 118 / 255f, 1);
+        palette_table[0][3] = new Color(75 / 255f, 142 / 255f, 108 / 255f, 1);
 
-        tableTopPalette[0][0] = new Color(75 / 255f, 142 / 255f, 108 / 255f, 1);
-        tableTopPalette[0][1] = new Color(98 / 255f, 158 / 255f, 128 / 255f, 1);
-        tableTopPalette[0][2] = new Color(98 / 255f, 158 / 255f, 128 / 255f, 1);
-        tableTopPalette[0][3] = new Color(75 / 255f, 142 / 255f, 108 / 255f, 1);
-        tableTopPalette[1][0] = new Color(142 / 255f, 94 / 255f, 75 / 255f, 1);
-        tableTopPalette[1][1] = new Color(158 / 255f, 124 / 255f, 98 / 255f, 1);
-        tableTopPalette[1][2] = new Color(158 / 255f, 124 / 255f, 98 / 255f, 1);
-        tableTopPalette[1][3] = new Color(142 / 255f, 94 / 255f, 75 / 255f, 1);
-        tableTopPalette[2][0] = new Color(75 / 255f, 89 / 255f, 142 / 255f, 1);
-        tableTopPalette[2][1] = new Color(75 / 255f, 128 / 255f, 142 / 255f, 1);
-        tableTopPalette[2][2] = new Color(75 / 255f, 128 / 255f, 142 / 255f, 1);
-        tableTopPalette[2][3] = new Color(75 / 255f, 89 / 255f, 142 / 255f, 1);
+        palette_table[1][0] = new Color(193 / 255f, 71 / 255f, 89 / 255f, 1); // red/pink
+        palette_table[1][1] = new Color(204 / 255f, 87 / 255f, 129 / 255f, 1);
+        palette_table[1][2] = new Color(204 / 255f, 87 / 255f, 129 / 255f, 1);
+        palette_table[1][3] = new Color(193 / 255f, 71 / 255f, 89 / 255f, 1);
+
+        palette_table[2][0] = new Color(200 / 255f, 36 / 255f, 36 / 255f, 1); // red
+        palette_table[2][1] = new Color(213 / 255f, 77 / 255f, 40 / 255f, 1);
+        palette_table[2][2] = new Color(213 / 255f, 77 / 255f, 40 / 255f, 1);
+        palette_table[2][3] = new Color(200 / 255f, 36 / 255f, 36 / 255f, 1);
+
+        palette_table[3][0] = new Color(196 / 255f, 116 / 255f, 56 / 255f, 1); // orange
+        palette_table[3][1] = new Color(211 / 255f, 158 / 255f, 60 / 255f, 1);
+        palette_table[3][2] = new Color(211 / 255f, 158 / 255f, 60 / 255f, 1);
+        palette_table[3][3] = new Color(196 / 255f, 116 / 255f, 56 / 255f, 1);
+
+        palette_table[4][0] = new Color(153 / 255f, 191 / 255f, 57 / 255f, 1); // yellow/green
+        palette_table[4][1] = new Color(178 / 255f, 204 / 255f, 80 / 255f, 1);
+        palette_table[4][2] = new Color(178 / 255f, 204 / 255f, 80 / 255f, 1);
+        palette_table[4][3] = new Color(153 / 255f, 191 / 255f, 57 / 255f, 1);
+
+        /*
+        palette_table[5][0] = new Color(6 / 255f, 181 / 255f, 94 / 255f, 1); // bright green
+        palette_table[5][1] = new Color(14 / 255f, 202 / 255f, 81 / 255f, 1);
+        palette_table[5][2] = new Color(14 / 255f, 202 / 255f, 81 / 255f, 1);
+        palette_table[5][3] = new Color(6 / 255f, 181 / 255f, 94 / 255f, 1);
+*/
+        palette_table[5][0] = new Color(13 / 255f, 185 / 255f, 125 / 255f, 1); // aqua
+        palette_table[5][1] = new Color(14 / 255f, 202 / 255f, 148 / 255f, 1);
+        palette_table[5][2] = new Color(14 / 255f, 202 / 255f, 148 / 255f, 1);
+        palette_table[5][3] = new Color(13 / 255f, 185 / 255f, 125 / 255f, 1);
+
+        palette_table[6][0] = new Color(1801892607); //blue
+        palette_table[6][1] = new Color(2139284223);
+        palette_table[6][2] = new Color(1801892607);
+        palette_table[6][3] = new Color(1801892607);
+
+        palette_table[7][0] = new Color(111 / 255f, 69 / 255f, 152 / 255f, 1); // purple
+        palette_table[7][1] = new Color(170 / 255f, 92 / 255f, 183 / 255f, 1);
+        palette_table[7][2] = new Color(170 / 255f, 92 / 255f, 183 / 255f, 1);
+        palette_table[7][3] = new Color(111 / 255f, 69 / 255f, 152 / 255f, 1);
 
         ballBadPalette = new Color[]{
                 new Color(0, 0, 0, 1),
@@ -783,10 +993,11 @@ public class Res {
                 new Color[4], new Color[4], new Color[4], new Color[4], new Color[4], new Color[4], new Color[4], new Color[4], new Color[4]
         };
 
+/*
         palette_mainBall[0][0] = new Color(0, 0, 0, 1);
         palette_mainBall[0][1] = new Color(191 / 255f, 0, 0, 1);
         palette_mainBall[0][2] = new Color(255 / 255f, 108 / 255f, 0, 1);
-        palette_mainBall[0][3] = new Color(255 / 255f, 108 / 255f, 0, 1);
+        palette_mainBall[0][3] = palette_mainBall[0][2];
 
         palette_mainBall[1][0] = new Color(0, 0, 0, 1);
         palette_mainBall[1][1] = new Color(16 / 255f, 148 / 255f, 63 / 255f, 1);
@@ -827,7 +1038,52 @@ public class Res {
         palette_mainBall[8][1] = new Color(14 / 255f, 108 / 255f, 44 / 255f, 1);
         palette_mainBall[8][2] = new Color(0 / 255f, 221 / 255f, 32 / 255f, 1);
         palette_mainBall[8][3] = new Color(1, 1, 1, 1);
+*/
 
+        palette_mainBall[0][0] = Color.BLACK;
+        palette_mainBall[0][1] = new Color(0 / 255f, 193 / 255f, 124 / 255f, 1);
+        palette_mainBall[0][2] = new Color(173 / 255f, 247 / 255f, 41 / 255f, 1);
+        palette_mainBall[0][3] = palette_mainBall[0][2];
+
+        palette_mainBall[1][0] = Color.BLACK;
+        palette_mainBall[1][1] = new Color(255 / 255f, 18 / 255f, 18 / 255f, 1);
+        palette_mainBall[1][2] = new Color(255 / 255f, 128 / 255f, 0 / 255f, 1);
+        palette_mainBall[1][3] = palette_mainBall[1][2];
+
+        palette_mainBall[2][0] = Color.BLACK;
+        palette_mainBall[2][1] = new Color(236 / 255f, 1 / 255f, 96 / 255f, 1);
+        palette_mainBall[2][2] = new Color(255 / 255f, 39 / 255f, 240 / 255f, 1);
+        palette_mainBall[2][3] = palette_mainBall[2][2];
+
+        palette_mainBall[3][0] = Color.BLACK;
+        palette_mainBall[3][1] = new Color(230 / 255f, 117 / 255f, 0 / 255f, 1);
+        palette_mainBall[3][2] = new Color(240 / 255f, 231 / 255f, 26 / 255f, 1);
+        palette_mainBall[3][3] = Color.WHITE;
+
+        palette_mainBall[4][0] = Color.BLACK;
+        palette_mainBall[4][1] = new Color(0 / 255f, 193 / 255f, 83 / 255f, 1);
+        palette_mainBall[4][2] = new Color(64 / 255f, 225 / 255f, 241 / 255f, 1);
+        palette_mainBall[4][3] = Color.WHITE;
+
+        palette_mainBall[5][0] = Color.BLACK;
+        palette_mainBall[5][1] = new Color(126 / 255f, 0 / 255f, 221 / 255f, 1);
+        palette_mainBall[5][2] = new Color(222 / 255f, 21 / 255f, 255 / 255f, 1);
+        palette_mainBall[5][3] = new Color(1, 155 / 255f, 198 / 255f, 1);
+
+        palette_mainBall[6][0] = Color.BLACK;
+        palette_mainBall[6][1] = new Color(0 / 255f, 162 / 255f, 92 / 255f, 1);
+        palette_mainBall[6][2] = new Color(0 / 255f, 255 / 255f, 0 / 255f, 1);
+        palette_mainBall[6][3] = new Color(229 / 255f, 1, 182 / 255f, 1);
+
+        palette_mainBall[7][0] = Color.BLACK;
+        palette_mainBall[7][1] = new Color(75 / 255f, 91 / 255f, 125 / 255f, 1);
+        palette_mainBall[7][2] = new Color(128 / 255f, 195 / 255f, 177 / 255f, 1);
+        palette_mainBall[7][3] = new Color(1, 1, 1, 1);
+
+        palette_mainBall[8][0] = Color.BLACK;
+        palette_mainBall[8][1] = new Color(30 / 255f, 0 / 255f, 208 / 255f, 1);
+        palette_mainBall[8][2] = new Color(101 / 255f, 39 / 255f, 255 / 255f, 1);
+        palette_mainBall[8][3] = new Color(137 / 255f, 162 / 255f, 255 / 255f, 1);
 
         /*
         palette_mainBall[1][0] = new Color(0, 0, 0, 1);
@@ -863,17 +1119,24 @@ public class Res {
         Main.assets.load("music/4.mp3", Music.class);
         Main.assets.load("music/5.mp3", Music.class);
 
-        Main.assets.load("sounds/ballHit.wav", Sound.class);
-        Main.assets.load("sounds/speedup.wav", Sound.class);
-        Main.assets.load("sounds/slowdown.wav", Sound.class);
-        Main.assets.load("sounds/glassBreak.wav", Sound.class);
-        Main.assets.load("sounds/buttonClick.wav", Sound.class);
-        Main.assets.load("sounds/buttonClick2.wav", Sound.class);
-        Main.assets.load("sounds/collect.wav", Sound.class);
-
+        Main.assets.load("sounds/ballHit.mp3", Sound.class);
+        Main.assets.load("sounds/speedup.mp3", Sound.class);
+        Main.assets.load("sounds/slowdown.mp3", Sound.class);
+        Main.assets.load("sounds/glassBreak.mp3", Sound.class);
+        Main.assets.load("sounds/buttonClick.mp3", Sound.class);
+        Main.assets.load("sounds/buttonClick2.mp3", Sound.class);
+        Main.assets.load("sounds/collect.mp3", Sound.class);
+        Main.assets.load("sounds/success.mp3", Sound.class);
         Main.assets.load("sounds/plop.mp3", Sound.class);
         Main.assets.load("sounds/splat.mp3", Sound.class);
         Main.assets.load("sounds/bounce.mp3", Sound.class);
+        Main.assets.load("sounds/punch.mp3", Sound.class);
+        Main.assets.load("sounds/correct.mp3", Sound.class);
+        Main.assets.load("sounds/split.mp3", Sound.class);
+        Main.assets.load("sounds/pop.mp3", Sound.class);
+        Main.assets.load("sounds/fail.mp3", Sound.class);
+        Main.assets.load("sounds/tap.mp3", Sound.class);
+        Main.assets.load("sounds/alarm.mp3", Sound.class);
 
         Main.assets.load("images/comboBar.png", Texture.class);
         Main.assets.load("images/tabletop_0.png", Texture.class);
@@ -895,7 +1158,7 @@ public class Res {
         tex_number_small_percent = atlas.findRegion("numbers/number_m_percent");
         shader_c = new ShaderProgram(Gdx.files.internal("shaders/shader_c.vert"), Gdx.files.internal("shaders/shader_c.frag"));
         sound_bounce = Gdx.audio.newSound(Gdx.files.internal("sounds/bounce.mp3"));
-        sound_ballHit = Gdx.audio.newSound(Gdx.files.internal("sounds/ballHit.wav"));
+        sound_ballHit = Gdx.audio.newSound(Gdx.files.internal("sounds/ballHit.mp3"));
         shader_palette = new ShaderProgram(Gdx.files.internal("shaders/shader_palette.vert"), Gdx.files.internal("shaders/shader_palette.frag"));
         shader_slow = new ShaderProgram(Gdx.files.internal("shaders/shader_slow.vert"), Gdx.files.internal("shaders/shader_slow.frag"));
         shader_trailFade = new ShaderProgram(Gdx.files.internal("shaders/shader_trailFade.vert"), Gdx.files.internal("shaders/shader_trailFade.frag"));
@@ -909,14 +1172,32 @@ public class Res {
         shader_circle = new ShaderProgram(Gdx.files.internal("shaders/shader_circle.vert"), Gdx.files.internal("shaders/shader_circle.frag"));
         shader_c_over = new ShaderProgram(Gdx.files.internal("shaders/shader_c_over.vert"), Gdx.files.internal("shaders/shader_c_over.frag"));
         shader_filledCircle = new ShaderProgram(Gdx.files.internal("shaders/shader_filledCircle.vert"), Gdx.files.internal("shaders/shader_filledCircle.frag"));
+        shader_clock = new ShaderProgram(Gdx.files.internal("shaders/shader_clock.vert"), Gdx.files.internal("shaders/shader_clock.frag"));
     }
 
     public static void dispose() {
         atlas.dispose();
 
-        shader_c.dispose();
         sound_bounce.dispose();
         sound_ballHit.dispose();
+        sound_collect.dispose();
+        sound_buttonClick1.dispose();
+        sound_buttonClick2.dispose();
+        sound_glassBreak.dispose();
+        sound_plop.dispose();
+        sound_slowdown.dispose();
+        sound_speedup.dispose();
+        sound_splat.dispose();
+        sound_success.dispose();
+        sound_punch.dispose();
+        sound_correct.dispose();
+        sound_split.dispose();
+        sound_pop.dispose();
+        sound_fail.dispose();
+        sound_tap.dispose();
+        sound_alarm.dispose();
+
+        shader_c.dispose();
         shader_palette.dispose();
         shader_slow.dispose();
         shader_trailFade.dispose();
@@ -948,6 +1229,10 @@ public class Res {
                 return Res.tex_orb;
             case 1:
                 return Res.tex_orb_big;
+            case 2:
+                return Res.tex_orb_crystal;
+            case 3:
+                return Res.tex_orb_bigCrystal;
         }
         return null;
     }

@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 public class Entity {
 
     public float radius_spawn = 0; // the radius no other spawn radius should touch
+    public float radius_spawn_danger = 0; // the radius no main ball radius should touch
     public Vector2 pos;
 
 
@@ -18,23 +19,28 @@ public class Entity {
     // Notes:
     //   - never re-declare the pos variable
 
-    public Entity(){
+    public Entity() {
 
     }
-    public void update(){
+
+    public void update() {
 
     }
-    public void render(SpriteBatch batch){
+
+    public void render(SpriteBatch batch) {
 
     }
-    public void render(ShapeRenderer sr){
+
+    public void render(ShapeRenderer sr) {
 
     }
-    public void render(SpriteBatch batch, ShapeRenderer sr){
+
+    public void render(SpriteBatch batch, ShapeRenderer sr) {
         render(sr);
         render(batch);
     }
-    public void dispose(){
+
+    public void dispose() {
 
     }
 }

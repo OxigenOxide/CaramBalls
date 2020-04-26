@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.oxigenoxide.caramballs.Main;
 import com.oxigenoxide.caramballs.Res;
+import com.oxigenoxide.caramballs.utils.Funcs;
 
 public class Particle_Cross extends Particle {
 
@@ -31,6 +32,7 @@ public class Particle_Cross extends Particle {
     }
 
     public void render(SpriteBatch batch) {
+        Funcs.setShaderNull(batch);
         super.render(batch);
     }
 }

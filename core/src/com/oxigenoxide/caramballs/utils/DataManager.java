@@ -41,7 +41,8 @@ public class DataManager {
         if (gameData != null) {
             fileHandle.writeString(Base64Coder.encodeString(json.prettyPrint(gameData)),
                     false);
-            Gdx.files.local("gameData.json").writeString(json.prettyPrint(gameData), false);
+            if(Main.DODEBUG)
+                Gdx.files.local("gamedata.json").writeString(json.prettyPrint(gameData), false);
         }
     }
 

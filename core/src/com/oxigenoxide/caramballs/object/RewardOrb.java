@@ -2,6 +2,7 @@ package com.oxigenoxide.caramballs.object;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.oxigenoxide.caramballs.ID;
 import com.oxigenoxide.caramballs.Main;
@@ -22,6 +23,12 @@ public class RewardOrb {
     boolean spread;
     boolean isReward;
 
+    boolean toComboBar;
+    boolean toOrbDisplay;
+    boolean isEmpty;
+
+    static final float LERP = 0.999999f;
+
 
     public RewardOrb(float x, float y, int type) {
         this.type = type;
@@ -34,7 +41,7 @@ public class RewardOrb {
         else
             pos_target = Main.farm.pos_orb;
 
-        Main.addSoundRequest(ID.Sound.COLLECT);
+        Main.addSoundRequest(ID.Sound.COLLECT, 1, 1, MathUtils.random(.8f, 1.2f));
 
         isReward = true;
     }
@@ -54,20 +61,26 @@ public class RewardOrb {
             pos.add(vel);
             vel.scl((float) Math.pow(.95, Main.dt_one));
         } else {
-            pos.lerp(pos_target, .1f);
-            size += (7 - size) * .1f;
+            pos.lerp(pos_target, (1 - (float) Math.pow(1 - LERP, Main.dt)));
+            size += (7 - size) * (1 - (float) Math.pow(1 - LERP, Main.dt));
         }
-        if (MathFuncs.distanceBetweenPoints(pos, pos_target) < .8f) {
-            dispose();
-            if (isReward) {
-                Main.gameData.orbs++;
+        if (MathFuncs.distanceBetweenPoints(pos, pos_target) < .8f)
+            onReachedTarget();
+    }
 
-                Main.userData.orbsCollected++;
-                if (Main.inGame()) {
-                    Game.comboBar.collectOrb(RewardOrb.getValue(type));
-                    Game.orbsCollected++;
-                }
-            }
+    public void onReachedTarget() {
+        dispose();
+        if (isReward) {
+
+            if (isEmpty)
+                return;
+
+            Game.addOrbs(getValue(type));
+
+            if (toComboBar) {
+                Game.comboBar.collectOrb(getValue(type));
+            } else if (toOrbDisplay)
+                Game.orbDisplay.collectOrb(getValue(type));
         }
     }
 
@@ -76,9 +89,36 @@ public class RewardOrb {
             case 0:
                 return 1;
             case 1:
-                return 3;
+                return 2;
+            case 2:
+                return 5;
+            case 3:
+                return 10;
         }
-        return 0;
+        return 1;
+    }
+
+    public RewardOrb goToComboBar() {
+        toComboBar = true;
+        pos_target = ComboBar.pos_orb;
+        return this;
+    }
+
+    public RewardOrb goToOrbDisplay() {
+        toOrbDisplay = true;
+        pos_target = OrbDisplay.pos_orb;
+        return this;
+    }
+
+    public RewardOrb goToFarmBar() {
+        pos_target = Main.farm.pos_orb;
+        return this;
+    }
+
+
+    public RewardOrb setEmpty() {
+        isEmpty = true;
+        return this;
     }
 
     public RewardOrb spread() {

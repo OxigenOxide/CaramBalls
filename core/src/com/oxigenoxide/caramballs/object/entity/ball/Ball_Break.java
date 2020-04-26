@@ -45,10 +45,7 @@ public class Ball_Break extends Ball {
         batch.setShader(null);
         super.render(batch);
         batch.setShader(Res.shader_palette);
-        Res.shader_palette.setUniformf("color0", palette[0].r, palette[0].g, palette[0].b, 1);
-        Res.shader_palette.setUniformf("color1", palette[1].r, palette[1].g, palette[1].b, 1);
-        Res.shader_palette.setUniformf("color2", palette[2].r, palette[2].g, palette[2].b, 1);
-        Res.shader_palette.setUniformf("color3", palette[3].r, palette[3].g, palette[3].b, 1);
+        Main.setPalette(palette);
         sprite.draw(batch);
         batch.setShader(null);
         render_shield_shine(batch);
@@ -61,7 +58,7 @@ public class Ball_Break extends Ball {
 
     @Override
     public void onCollision(Vector2 p, float impact, Object object_hit) {
-        super.onCollision(p, impact);
+        super.onCollision(p,impact,object_hit);
         if (Funcs.getClass(object_hit) == Ball_Main.class)
             if (counter_crackCooldown.getProgress() == 1) {
                 if (phase < 1) {

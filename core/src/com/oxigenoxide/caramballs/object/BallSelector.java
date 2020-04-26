@@ -21,9 +21,16 @@ public class BallSelector {
     Ball ball_selected;
     boolean active;
     float cang;
-    final float DISTANCEMAX = 50;
-    float distanceToSelect = 40;
     float stretched;
+    float count_enoughStretched;
+
+    boolean doTriangle;
+
+    final float DISTANCEMAX = 50;
+    final float MAXSPEED = 12;
+    final float MINSPEED = 1;
+    //final float MINSPEED = 15;
+    final float MINSTRETCH = .2f;
 
     public BallSelector() {
         v0 = new Vector2();
@@ -38,7 +45,6 @@ public class BallSelector {
             Game.slowdown_effect = Math.max(Game.slowdown_effect - Main.dt_one * .05f, 0);
         }
         if (active) {
-
             if (Main.isInScene(Game.class)) {
                 Game.slowdown_effect = Math.min(Game.slowdown_effect + Main.dt_one * .05f, .9f);
                 Main.slowdown = Game.slowdown_effect;
@@ -50,7 +56,9 @@ public class BallSelector {
             v0.add(ball_selected.pos);
 
             float distanceToPointer = MathFuncs.distanceBetweenPoints(ball_selected.pos, tap[0]);
+            doTriangle = distanceToPointer >= ball_selected.radius + 2;
             stretched = Math.min(DISTANCEMAX, distanceToPointer) / DISTANCEMAX;
+
             if (distanceToPointer < DISTANCEMAX) {
                 v_pointer.set(tap[0]);
             } else {
@@ -68,30 +76,48 @@ public class BallSelector {
             v2.set(c, 0);
             v2.rotateRad(ang - bang);
             v2.add(v0);
-            radius = radiusMax / (1 + 1.5f*Math.min(DISTANCEMAX, MathFuncs.distanceBetweenPoints(ball_selected.pos, tap[0])) / DISTANCEMAX);
+
+            if (enoughStretched())
+                count_enoughStretched = Math.min(count_enoughStretched + Main.dt * 5, 1);
+            else
+                count_enoughStretched = Math.max(count_enoughStretched - Main.dt * 5, 0);
+
+            radius = count_enoughStretched * radiusMax / (1 + 1.5f * Math.min(DISTANCEMAX, MathFuncs.distanceBetweenPoints(ball_selected.pos, tap[0])) / DISTANCEMAX);
         }
     }
 
     public void onRelease() { // apparently onRelease sometimes is called after Gdx.input.isTouched is changed on android. This is always the contrary on desktop.
-        if (ball_selected != null && !ball_selected.isDisposed) {
-            ball_selected.hit(cang, 15 * stretched);
-            ball_selected = null;
+        if (enoughStretched() && ball_selected != null && !ball_selected.isDisposed) {
+            ball_selected.hit(cang, MINSPEED + (MAXSPEED - MINSPEED) * (stretched - MINSTRETCH) / (1 - MINSTRETCH)); // stretch mapped to [MINSPEED, MAXSPEED]
         }
+        ball_selected = null;
+        Main.game.onBallRelease();
+    }
+
+    boolean enoughStretched() {
+        return stretched > MINSTRETCH * Main.test_float;
     }
 
     public void setSelected(Ball ball) {
         ball_selected = ball;
         ball_selected.onSelect();
+        count_enoughStretched = 0;
     }
 
     public void render(ShapeRenderer sr) {
 
-        if (active) {
+        //if (enoughStretched())
+        if (active && radius > 0) {
             sr.setColor(1, 1, 1, 1);
             sr.circle(v_pointer.x, v_pointer.y, radius);
-            sr.triangle(v0.x, v0.y, v1.x, v1.y, v2.x, v2.y);
+            if (doTriangle)
+                sr.triangle(v0.x, v0.y, v1.x, v1.y, v2.x, v2.y);
         }
         //sr.triangle(0,0,0,20,20,0);
+    }
+
+    public Ball getSelectedBall() {
+        return ball_selected;
     }
 
     public boolean isBallSelected(Ball ball) {

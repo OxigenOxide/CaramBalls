@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -31,6 +32,7 @@ import com.oxigenoxide.caramballs.utils.RepeatCounter;
 
 import static com.oxigenoxide.caramballs.Main.balls;
 import static com.oxigenoxide.caramballs.Main.holes;
+import static com.oxigenoxide.caramballs.Main.mainBalls;
 import static com.oxigenoxide.caramballs.Main.rewardOrbs;
 import static com.oxigenoxide.caramballs.Main.scrHD;
 import static com.oxigenoxide.caramballs.Main.tap;
@@ -112,16 +114,20 @@ public class Farm extends Scene {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         buffer.begin();
+
         Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        //batch.setBlendFunction(GL20.GL_ONE, GL20.GL_ONE_MINUS_SRC_ALPHA);
         batch.begin();
+
         batch.draw(Res.tex_farmField, 2, pos_field.y - 6);
         button_play.render(batch);
         button_shop.render(batch);
         button_return.render(batch);
         button_sell.render(batch);
         batch.draw(Res.tex_text_yourBalls, 17, pos_field.y + 104);
+
         batch.end();
 
         sr.begin(ShapeRenderer.ShapeType.Filled);
@@ -134,8 +140,15 @@ public class Farm extends Scene {
         sr.end();
 
         batch.begin();
+
         for (Entity e : Main.entities_sorted)
             e.render(batch);
+
+        Funcs.setShaderNull(batch);
+
+        // speech bubbles
+        for (Ball_Main ball_main : mainBalls)
+            ball_main.render_farm(batch);
 
         // orb display
         batch.draw(Res.tex_orbCountBar, pos_orbs.x - Res.tex_orbCountBar.getRegionWidth() / 2, pos_orbs.y - 2);
@@ -145,23 +158,32 @@ public class Farm extends Scene {
         for (RewardOrb ro : rewardOrbs)
             ro.render(batch);
 
+        if(!Main.inHTML)
+        drawClocks(batch);
         batch.end();
-        buffer.end();
+
+        buffer.end(); // BUFFER END
+
+        batch.disableBlending();
 
         tex_buffer = buffer.getColorBufferTexture();
         tex_buffer.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         Main.setNoCamEffects();
         batch.begin();
+
         batch.setShader(Res.shader_pixelate);
         Res.shader_pixelate.setUniformf("texDim", Main.dim_screen);
 
         batch.draw(tex_buffer, 0, Main.height, Main.width, -Main.height);
         batch.setShader(null);
-        if (Main.DODEBUGRENDER)
+        if (Main.DOBOX2DRENDER)
             Main.b2dr.render(Main.world, Main.cam.combined);
+
         batch.end();
         Main.setCamEffects();
+
+        batch.enableBlending();
     }
 
     @Override
@@ -195,19 +217,17 @@ public class Farm extends Scene {
 
         //add elapsed time to farm balls
         for (Ball_Main.Ball_Main_Data ball_main_data : Main.gameData.farmBalls) {
-            System.out.println(ball_main_data.timeElapsed + " : " + System.currentTimeMillis() + " - " + Main.gameData.time_leftFarm);
             if (Main.gameData.time_leftFarm != 0)
-                ball_main_data.timeElapsed += System.currentTimeMillis() - Main.gameData.time_leftFarm;
+                ball_main_data.timeElapsed_milk += System.currentTimeMillis() - Main.gameData.time_leftFarm;
         }
 
         //spawn farm balls
         int i = 0;
         for (Ball_Main.Ball_Main_Data ball_data : Main.gameData.farmBalls) {
-            System.out.println("timelapsed: " + ball_data.timeElapsed);
             if (!hasBeenInFarm)
-                balls.add(new Ball_Main(ball_data.x, ball_data.y, Main.height * 2 + i * 25, ball_data.size, ball_data.level).setTimeElapsed(ball_data.timeElapsed));
+                balls.add(new Ball_Main(ball_data.x, ball_data.y, Main.height * 2 + i * 25, ball_data.size, ball_data.level).setTimeElapsed_milk(ball_data.timeElapsed_milk));
             else
-                balls.add(new Ball_Main(ball_data.x, ball_data.y, 0, ball_data.size, ball_data.level).setTimeElapsed(ball_data.timeElapsed));
+                balls.add(new Ball_Main(ball_data.x, ball_data.y, 0, ball_data.size, ball_data.level).setTimeElapsed_milk(ball_data.timeElapsed_milk));
             i++;
         }
 
@@ -217,13 +237,15 @@ public class Farm extends Scene {
 
         hole_sell = new Hole_Sell(85, 80 + scrHD);
         holes.add(hole_sell);
+
+        Ball_Main.commonColor = false;
     }
 
     public void saveBalls() {
         Main.gameData.farmBalls.clear();
         for (Ball_Main bm : Main.mainBalls) {
-            System.out.println(" save: " + bm.timeElapsed);
-            Main.gameData.farmBalls.add(new Ball_Main.Ball_Main_Data(bm.pos.x, bm.pos.y, bm.size, bm.level, bm.timeElapsed));
+            //System.out.println(" save: " + bm.timeElapsed_milk);
+            Main.gameData.farmBalls.add(new Ball_Main.Ball_Main_Data(bm.pos.x, bm.pos.y, bm.size, bm.level, (long)bm.timeElapsed_milk));
         }
         // Lesson learned, again, most variables you shouldn't just set to an object
         // Second lesson learned, clear a list before adding objects again if you want to copy
@@ -249,5 +271,26 @@ public class Farm extends Scene {
         cage = Main.destroyBody(cage);
         Main.clearEntities();
         Main.gameData.time_leftFarm = System.currentTimeMillis();
+    }
+
+    void drawClocks(SpriteBatch batch) {
+
+        float progress;
+        TextureRegion textureRegion;
+        batch.setShader(Res.shader_clock);
+        for (Ball_Main ball : mainBalls) {
+            progress = ball.getProgressMilk();
+            if (progress == 1 || ball.height < 0) continue;
+            textureRegion = Res.tex_clock[ball.size];
+
+            Res.shader_clock.setUniformf("progress", progress);
+            Res.shader_clock.setUniformf("uv", (textureRegion.getU() + textureRegion.getU2()) / 2, (textureRegion.getV() + textureRegion.getV2()) / 2);
+
+            batch.draw(textureRegion, (int) (ball.pos.x - textureRegion.getRegionWidth() / 2f), (int) (ball.pos.y - textureRegion.getRegionHeight() / 2f));
+
+            batch.flush();
+        }
+        batch.setShader(null);
+
     }
 }

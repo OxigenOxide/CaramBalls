@@ -7,8 +7,10 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -19,9 +21,13 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.oxigenoxide.caramballs.object.BallSelector;
 import com.oxigenoxide.caramballs.object.DragSelector;
+import com.oxigenoxide.caramballs.object.PlusMessage;
 import com.oxigenoxide.caramballs.object.Projection;
+import com.oxigenoxide.caramballs.object.PulseEffect;
 import com.oxigenoxide.caramballs.object.RewardBall;
 import com.oxigenoxide.caramballs.object.RewardOrb;
+import com.oxigenoxide.caramballs.object.Trail;
+import com.oxigenoxide.caramballs.object.effect.Effect;
 import com.oxigenoxide.caramballs.object.entity.BallCapsule;
 import com.oxigenoxide.caramballs.object.entity.Bullet;
 import com.oxigenoxide.caramballs.object.Bumper;
@@ -31,6 +37,9 @@ import com.oxigenoxide.caramballs.object.entity.CircularBumper;
 import com.oxigenoxide.caramballs.object.entity.Entity;
 import com.oxigenoxide.caramballs.object.entity.Eye;
 import com.oxigenoxide.caramballs.object.entity.JumpingPad;
+import com.oxigenoxide.caramballs.object.entity.PowerOrbEntity;
+import com.oxigenoxide.caramballs.object.entity.ball.Ball_Bad;
+import com.oxigenoxide.caramballs.object.entity.particle.Particle_Pulse;
 import com.oxigenoxide.caramballs.object.entity.scooper.Scooper;
 import com.oxigenoxide.caramballs.object.entity.draggable.Draggable;
 import com.oxigenoxide.caramballs.object.entity.orbContainer.OC_Egg;
@@ -106,6 +115,7 @@ public class Main extends ApplicationAdapter {
 
     public static ArrayList<Ball> balls;
     public static ArrayList<Ball_Main> mainBalls;
+    public static ArrayList<Ball_Bad> badBalls = new ArrayList<Ball_Bad>();
     public static ArrayList<Ball> ballsToAdd;
     public static ArrayList<Ball> ballsToRemove;
     public static ArrayList<Integer> rewardBalls = new ArrayList<Integer>();
@@ -160,6 +170,18 @@ public class Main extends ApplicationAdapter {
     public static ArrayList<RewardOrb> rewardOrbsToRemove = new ArrayList<RewardOrb>();
     public static ArrayList<Scooper> scoopers = new ArrayList<Scooper>();
     public static ArrayList<Scooper> scoopersToRemove = new ArrayList<Scooper>();
+    public static ArrayList<PowerOrbEntity> powerOrbEntities = new ArrayList<PowerOrbEntity>();
+    public static ArrayList<PowerOrbEntity> powerOrbEntitiesToRemove = new ArrayList<PowerOrbEntity>();
+    public static ArrayList<Trail> trails = new ArrayList<Trail>();
+    public static ArrayList<Trail> trailsToRemove = new ArrayList<Trail>();
+    public static ArrayList<PlusMessage> plusMessages = new ArrayList<PlusMessage>();
+    public static ArrayList<PlusMessage> plusMessagesToRemove = new ArrayList<PlusMessage>();
+    public static ArrayList<PulseEffect> pulseEffects = new ArrayList<PulseEffect>();
+    public static ArrayList<PulseEffect> pulseEffectsToRemove = new ArrayList<PulseEffect>();
+    public static ArrayList<Effect> effects = new ArrayList<Effect>();
+    public static ArrayList<Effect> effectsToRemove = new ArrayList<Effect>();
+    public static ArrayList<Effect> effects_front = new ArrayList<Effect>();
+    public static ArrayList<Effect> effects_back = new ArrayList<Effect>();
 
     public static BallSelector ballSelector;
     public static DragSelector dragSelector;
@@ -183,7 +205,6 @@ public class Main extends ApplicationAdapter {
     public static final int adHeight = 13;
     public static RewardBall rewardBall;
 
-
     public static boolean noAds = false; // DONE
     public static boolean noFX = false; // DONE
     public static boolean noMusic = true; // DONE
@@ -199,7 +220,7 @@ public class Main extends ApplicationAdapter {
 
     public static float shakeAng;
     public static float fadeDir;
-    static float fade;
+    public static float fade;
 
     public static float dt_slowed;
     public static float dt_one_slowed;
@@ -218,6 +239,11 @@ public class Main extends ApplicationAdapter {
 
     public static World world;
     public static WorldProperties worldProperties;
+
+    BitmapFont font;
+
+    float elapsedTime;
+    long cutFrameID;
 
     public static float test_float = 1;
     public static boolean isButtonPressed;
@@ -239,6 +265,7 @@ public class Main extends ApplicationAdapter {
         - RESEARCHMODE should be false
         - DOSCREENSHOTMODE should be false
         - Check for crashes when you remove bin/gamedata.json
+        - Remove gamedata files
 */
 
     // GET RELEASE KEY: keytool -list -v -keystore ‪C:\Keys\googlekeys.jks -alias key_ball (Release key is pretty useless)
@@ -247,12 +274,13 @@ public class Main extends ApplicationAdapter {
 
     // CONFIG //
     boolean doReportFPS = false;
-    public static final int SOUNDCAP = 4;
+    public static final int SOUNDCAP = 2;
     public static final boolean RESEARCHMODE = false;
     public static final boolean DOSCREENSHOTMODE = false;
-    static final boolean DODEBUG = false;
-    public static final boolean DODEBUGRENDER = true;
+    public static final boolean DODEBUG = false; // corner event triggers, readable gamedata.json
+    public static final boolean DOBOX2DRENDER = false;
     public static final boolean INVINCIBLE = false;
+    public static final boolean DODEBUGTOOLS = false;
     // CONFIG //
 
     public Main(FirebaseInterface fbm, AdMobInterface amm, GameInterface gm) {
@@ -274,6 +302,9 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void create() {
+        batch = new SpriteBatch();
+        font = new BitmapFont();
+
         fbm.signIn();
         assets = new AssetManager();
         Res.createAtlas();
@@ -287,7 +318,6 @@ public class Main extends ApplicationAdapter {
         pointsPerPixel = Gdx.graphics.getWidth() / width;
         pixelsPerPoint = 1 / pointsPerPixel;
 
-        batch = new SpriteBatch();
 
         scrHD = (int) ((Main.height - 192) / 2);
 
@@ -296,6 +326,7 @@ public class Main extends ApplicationAdapter {
         b2dr = new Box2DDebugRenderer();
         sr = new ShapeRenderer();
         sr.setAutoShapeType(true);
+
 
         //game = new Game();
         menu = new Menu();
@@ -334,6 +365,7 @@ public class Main extends ApplicationAdapter {
         testerID = gameData.testerID;
 
         rank = gm.getRank();
+
 
         ballSelector = new BallSelector();
         dragSelector = new DragSelector();
@@ -376,6 +408,7 @@ public class Main extends ApplicationAdapter {
         orbContainersToRemove = new ArrayList<OrbContainer>();
         circularBumpers = new ArrayList<CircularBumper>();
         circularBumpersToRemove = new ArrayList<CircularBumper>();
+        pulseEffects = new ArrayList<PulseEffect>();
 
         createInputProcessor();
     }
@@ -390,11 +423,19 @@ public class Main extends ApplicationAdapter {
     }
 
     public void update() {
+
         dt = Math.min(Gdx.graphics.getDeltaTime(), frameDuration * 5);
         dt_one = dt * 60;
 
         dt_slowed = dt * (1 - slowdown);
         dt_one_slowed = dt_slowed * 60;
+
+        if (Gdx.input.isKeyPressed(Input.Keys.SLASH)) {
+            elapsedTime = 0;
+            cutFrameID = Gdx.graphics.getFrameId();
+        }
+        elapsedTime += Gdx.graphics.getDeltaTime();
+
 
         if (doReportFPS)
             System.out.println("FPS: " + Gdx.graphics.getFramesPerSecond());
@@ -451,11 +492,12 @@ public class Main extends ApplicationAdapter {
             signedIn = false;
         }
 
-        shakeIntensity = Math.max(0, shakeIntensity - .1f);
+        shakeIntensity = Math.max(0, shakeIntensity - .1f * dt_one);
 
         if (doFade) {
-            fade += fadeDir * .03f;
+            fade += fadeDir * .03f * dt_one;
             //fade += fadeDir * .0005f;
+            fade = Math.max(0, fade);
             if (fade >= 2.2f) {
                 fadeDir = -1;
                 onFadePeak();
@@ -464,7 +506,9 @@ public class Main extends ApplicationAdapter {
                 doFade = false;
         }
 
+
         // objects
+
         balls.addAll(ballsToAdd);
         ballsToAdd.clear();
         for (Ball ball : balls)
@@ -593,6 +637,33 @@ public class Main extends ApplicationAdapter {
         scoopers.removeAll(scoopersToRemove);
         scoopersToRemove.clear();
 
+        for (PowerOrbEntity poe : powerOrbEntities)
+            poe.update();
+        powerOrbEntities.removeAll(powerOrbEntitiesToRemove);
+        powerOrbEntitiesToRemove.clear();
+
+        for (PlusMessage pm : plusMessages)
+            pm.update();
+        plusMessages.removeAll(plusMessagesToRemove);
+        plusMessagesToRemove.clear();
+
+        for (Trail trail : trails)
+            trail.update();
+        trails.removeAll(trailsToRemove);
+        trailsToRemove.clear();
+
+        for (PulseEffect pe : pulseEffects)
+            pe.update();
+        pulseEffects.removeAll(pulseEffectsToRemove);
+        pulseEffectsToRemove.clear();
+
+        for (Effect effect : effects)
+            effect.update();
+        effects.removeAll(effectsToRemove);
+        effectsToRemove.clear();
+
+        Ball_Main.glowLoop = MathFuncs.loopRadians(Ball_Main.glowLoop, dt_slowed * 5);
+
         // detect a selection of a ball or a draggable
         if (Funcs.justTouched() && (!Game.isGameOver && !Game.isPaused || Main.inFarm()) && !Main.isButtonPressed) {
             float distance;
@@ -637,13 +708,15 @@ public class Main extends ApplicationAdapter {
             rewardBall.update();
 
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT_BRACKET))
-            test_float += .01f;
+            test_float += .01f * dt_one;
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT_BRACKET))
-            test_float -= .01f;
+            test_float -= .01f * dt_one;
         if (Gdx.input.isKeyPressed(Input.Keys.BACKSLASH))
             System.out.println("TEST_FLOAT: " + test_float);
 
+
         if (!isSoundMuted) {
+            /*
             int index = 0;
             for (SoundRequest sr : soundRequests) { // add as many soundrequests to soundRequestsToPlay as allowed
                 soundRequestsToPlay[index] = sr;
@@ -664,14 +737,23 @@ public class Main extends ApplicationAdapter {
                 }
             }
             for (SoundRequest sr : soundRequestsToPlay) { // play soundRequestsToPlay
-                if (sr != null)
+                if (sr != null) {
                     playSound(sr.soundID, sr.volume, sr.pitch);
+                }
             }
+
             for (int i = 0; i < SOUNDCAP; i++) {
                 soundRequestsToPlay[i] = null;
             }
+            */
+            if (soundRequests.size() > 0) {
+                SoundRequest sr = soundRequests.get(0);
+                playSound(sr.soundID, sr.volume, sr.pitch);
+                soundRequests.remove(0);
+            }
         }
-        soundRequests.clear(); // also clear when sound is muted
+        //soundRequests.clear(); // also clear when sound is muted
+
 
         if (nextScene_delayed != null && !doFade) {
             startFade(nextScene_delayed);
@@ -781,7 +863,8 @@ public class Main extends ApplicationAdapter {
         Object arrayList = null;
         switch (id) {
             case ID.Entity.BALL:
-                arrayList = balls;
+                arrayList = balls; // NO BALLS: 2100 fps
+                //arrayList = new ArrayList<Entity>();
                 break;
             case ID.Entity.COLLECTABLE:
                 arrayList = collectables;
@@ -831,6 +914,9 @@ public class Main extends ApplicationAdapter {
             case ID.Entity.SCOOPER:
                 arrayList = scoopers;
                 break;
+            case ID.Entity.POWERORBENTITY:
+                arrayList = powerOrbEntities;
+                break;
         }
         return (ArrayList<Entity>) arrayList; // going against the laws of java
     }
@@ -843,6 +929,7 @@ public class Main extends ApplicationAdapter {
         entities_sorted.clear();
 
         for (int i = 0; i < ID.Entity.AMOUNT; i++) entities.addAll(getEntityArrayList(i));
+        //entities.addAll(mainBalls);
 
         if (entities.size() > 0) {
             entities_sorted.add(entities.get(0));
@@ -865,11 +952,13 @@ public class Main extends ApplicationAdapter {
             }
         }
 
+        //draw scene
         setCamEffects();
         currentScene.render(batch, sr);
         if (overlayScene != null)
             overlayScene.render(batch, sr);
         setNoCamEffects();
+
         if (resourcesLoaded) {
             batch.begin();
             if (fade > 0) {
@@ -881,16 +970,16 @@ public class Main extends ApplicationAdapter {
                 batch.setShader(null);
             }
 
-            if (rewardBall != null) {
-                batch.end();
-                //TODO: f
-                batch.begin();
+            if (rewardBall != null)
                 rewardBall.render(batch);
-            }
 
             if (amm.isBannerVisible()) {
                 batch.draw(Res.tex_ad, 0, height - Res.tex_ad.getRegionHeight());
             }
+
+            //Gdx.gl.glClearColor(0, 0, 0, 0);
+            //Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
 
             batch.end();
 
@@ -901,6 +990,19 @@ public class Main extends ApplicationAdapter {
                 sr.end();
             }
         }
+
+        //Gdx.gl.glClearColor(0, 0, 0, 0);
+        //Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        batch.begin();
+
+        //font.draw(batch, String.valueOf((int) ((Gdx.graphics.getFrameId() - cutFrameID) / elapsedTime)), 0, 10);
+        font.draw(batch, String.valueOf((int) (Gdx.graphics.getFramesPerSecond())), 0, 10);
+
+        batch.end();
+    }
+
+    public static boolean canBodyBePushed(Object object) {
+        return object != null && object.getClass() != Bullet.class;
     }
 
     public static void setCamEffects() {
@@ -1141,11 +1243,37 @@ public class Main extends ApplicationAdapter {
         Game.onFadePeak();
     }
 
+
+    /*
     public static void setPalette(Color[] colors) {
-        if (colors[0] != null) Res.shader_palette.setUniformf("color0", colors[0]);
-        if (colors[1] != null) Res.shader_palette.setUniformf("color1", colors[1]);
-        if (colors[2] != null) Res.shader_palette.setUniformf("color2", colors[2]);
-        if (colors[3] != null) Res.shader_palette.setUniformf("color3", colors[3]);
+        Res.shader_palette.setUniform4fv("colors", new float[]{
+                colors[0].r, colors[0].g, colors[0].b, colors[0].a,
+                colors[1].r, colors[1].g, colors[1].b, colors[1].a,
+                colors[2].r, colors[2].g, colors[2].b, colors[2].a,
+                colors[3].r, colors[3].g, colors[3].b, colors[3].a,
+        }, 0, 16);
+    }
+
+    public static void setPalette(Color color0, Color color1, Color color2, Color color3) {
+        if (color0 == null) color0 = Color.CLEAR;
+        if (color1 == null) color1 = Color.CLEAR;
+        if (color2 == null) color2 = Color.CLEAR;
+        if (color3 == null) color3 = Color.CLEAR;
+
+        Res.shader_palette.setUniform4fv("colors", new float[]{
+                color0.r, color0.g, color0.b, color0.a,
+                color1.r, color1.g, color1.b, color1.a,
+                color2.r, color2.g, color2.b, color2.a,
+                color3.r, color3.g, color3.b, color3.a,
+        }, 0, 16);
+    }
+*/
+
+    public static void setPalette(Color[] colors) {
+        if (colors[0] != null) Res.shader_palette.setUniformf("color_0", colors[0]);
+        if (colors[1] != null) Res.shader_palette.setUniformf("color_1", colors[1]);
+        if (colors[2] != null) Res.shader_palette.setUniformf("color_2", colors[2]);
+        if (colors[3] != null) Res.shader_palette.setUniformf("color_3", colors[3]);
     }
 
     public static void setFloorFade(Color[] colors, Vector2 center, float radius) {
@@ -1281,7 +1409,6 @@ public class Main extends ApplicationAdapter {
         return currentScene == farm;
     }
 
-
     static void playSound(int soundID, float volume, float pitch) {
         switch (soundID) {
             case ID.Sound.PLOP:
@@ -1312,7 +1439,31 @@ public class Main extends ApplicationAdapter {
                 Res.sound_buttonClick2.play(volume);
                 break;
             case ID.Sound.COLLECT:
-                Res.sound_collect.play(volume, pitch, 1);
+                System.out.println("soundID: " + Res.sound_collect.play(volume, pitch, 0));
+                break;
+            case ID.Sound.SUCCESS:
+                Res.sound_success.play(volume, pitch, 0);
+                break;
+            case ID.Sound.PUNCH:
+                Res.sound_punch.play(volume, (float) Math.random() * .6f + .7f, 0);
+                break;
+            case ID.Sound.CORRECT:
+                Res.sound_correct.play(volume, pitch, 0);
+                break;
+            case ID.Sound.SPLIT:
+                Res.sound_split.play(volume, pitch, 0);
+                break;
+            case ID.Sound.POP:
+                Res.sound_pop.play(volume, pitch, 0);
+                break;
+            case ID.Sound.FAIL:
+                Res.sound_fail.play(volume, pitch, 0);
+                break;
+            case ID.Sound.TAP:
+                Res.sound_tap.play(2, pitch, 0);
+                break;
+            case ID.Sound.ALARM:
+                Res.sound_alarm.play(1, pitch, 0);
                 break;
         }
     }

@@ -16,9 +16,18 @@ public class DesktopLauncher {
         TexturePacker.Settings settings = new TexturePacker.Settings();
         settings.maxWidth = 1024;
         settings.maxHeight = 1024;
+        settings.combineSubdirectories=true;
         TexturePacker.process(settings, "C:\\CaramBalls\\desktop\\images", "../assets", "images");
 
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+
+        config.vSyncEnabled = false;
+        //config.backgroundFPS = 120;
+        //config.foregroundFPS = 120;
+        config.backgroundFPS = 0;
+        config.foregroundFPS = 0;
+        config.backgroundFPS = 60;
+        config.foregroundFPS = 60;
 
         // Default
         config.width = 108 * 5;

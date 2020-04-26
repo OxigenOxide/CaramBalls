@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.oxigenoxide.caramballs.scene.Game;
 import com.oxigenoxide.caramballs.Main;
 import com.oxigenoxide.caramballs.Res;
@@ -25,20 +26,24 @@ public class Ball_Bad extends Ball {
 
     public Ball_Bad(float x, float y, float height, int size) {
         super(x, y, height, size);
+        Main.badBalls.add(this);
         setSpriteTexture(Res.tex_ball_bad);
         radius = Res.tex_ball_bad.getRegionWidth() / 2;
         maxSpeedMinimum = 4;
         if (height > 30)
             giveSpeedAfterFall = true;
+        friction = .01f;
     }
 
     public Ball_Bad() {
         super(Main.height, 1);
+        Main.badBalls.add(this);
         setSpriteTexture(Res.tex_ball_bad);
         radius = Res.tex_ball_bad.getRegionWidth() / 2;
         maxSpeedMinimum = 4;
         if (height > 30)
             giveSpeedAfterFall = true;
+        friction = .01f;
     }
 
     @Override
@@ -70,6 +75,7 @@ public class Ball_Bad extends Ball {
     @Override
     public void render(SpriteBatch batch) {
         //batch.setShader(null);
+        Funcs.setShaderNull(batch);
         sprite.draw(batch);
         if (tex_smile != null)
             batch.draw(tex_smile, sprite.getX(), sprite.getY());
@@ -113,8 +119,8 @@ public class Ball_Bad extends Ball {
 
     public void contactBallBad(Ball_Bad ball_bad) {
         super.contactBall(ball_bad);
-        Vector2 force = new Vector2(ball_bad.body.getLinearVelocity().x + body.getLinearVelocity().x, ball_bad.body.getLinearVelocity().y + body.getLinearVelocity().y);
-        destroy((float) Math.atan2(force.y, force.x), MathFuncs.getHypothenuse(force.x, force.y), pos);
+        //Vector2 force = new Vector2(ball_bad.body.getLinearVelocity().x + body.getLinearVelocity().x, ball_bad.body.getLinearVelocity().y + body.getLinearVelocity().y);
+        //destroy((float) Math.atan2(force.y, force.x), MathFuncs.getHypothenuse(force.x, force.y), pos);
     }
 
     @Override
@@ -128,10 +134,16 @@ public class Ball_Bad extends Ball {
     }
 
     @Override
+    public void drawSelectionRing(SpriteBatch batch) {
+
+    }
+
+    @Override
     public void drawTrail(ShapeRenderer sr) {
         sr.setColor(Res.COLOR_RED);
         super.drawTrail(sr);
     }
+
 
     @Override
     public void destroy(float angle, float impact, Vector2 pos_danger) {
@@ -154,14 +166,15 @@ public class Ball_Bad extends Ball {
     @Override
     public void createBody() {
         body = Main.world.createBody(Res.bodyDef_dynamic);
-        //body.createFixture(Res.fixtureDef_badBall_opponents);
-        body.createFixture(Res.fixtureDef_ball[0]);
+        body.createFixture(Res.fixtureDef_badBall_opponents);
+        body.createFixture(Res.fixtureDef_badBall_normal);
         body.setUserData(this);
     }
 
     @Override
     public void dispose() {
         super.dispose();
+        Main.badBalls.remove(this);
     }
 
 }

@@ -21,7 +21,8 @@ public class OC_Fruit extends OrbContainer {
 
     public OC_Fruit(float x, float y) {
         super(x, y);
-        tex = Res.getRandomFruitTex();
+        tex = Res.tex_fruit[Game.nextFruit];
+        Game.nextFruit = (int) (Math.random() * 3);
         sprite=new Sprite(tex);
     }
 

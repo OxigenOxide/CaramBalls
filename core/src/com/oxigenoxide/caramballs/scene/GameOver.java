@@ -42,6 +42,9 @@ public class GameOver extends Scene {
     Texture tex_buffer;
     int scoreLevel;
     int highscoreLevel;
+    float score_visual;
+
+    static final float LERP = 0.05f;
 
     public GameOver() {
         buffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getHeight(), Gdx.graphics.getHeight(), true);
@@ -73,15 +76,17 @@ public class GameOver extends Scene {
             if (button_leaderBoards.isTouching())
                 button_leaderBoards.update();
 
-        if (visible) {
-            alpha = Math.min(1, alpha + .025f);
-        } else {
-            //alpha = Math.max(0, alpha - .05f);
+        if (visible)
+            alpha = Math.min(1, alpha + .025f * Main.dt_one);
+        else
             alpha = 0;
-        }
 
         count_highscoreColor = (float) ((count_highscoreColor + Main.dt_one * .1f) % (Math.PI * 2));
         a_highscoreColor = .50f + .10f * (float) Math.sin(count_highscoreColor);
+
+        if (Main.fade == 0)
+            score_visual += (Game.orbsCollected - score_visual) * (1 - (float) Math.pow(LERP, Main.dt));
+
     }
 
     @Override
@@ -105,7 +110,7 @@ public class GameOver extends Scene {
         // Numbers
         batch.setShader(Res.shader_palette);
         Main.setPalette(Res.PALETTE_SCORE[scoreLevel]);
-        Funcs.drawNumber(batch, Game.orbsCollected, pos_numScore, ID.Font.POP);
+        Funcs.drawNumber(batch, Math.round(score_visual), pos_numScore, ID.Font.POP);
         batch.setShader(null);
         batch.setShader(Res.shader_palette);
         Main.setPalette(Res.PALETTE_SCORE[highscoreLevel]);
@@ -148,7 +153,7 @@ public class GameOver extends Scene {
         batch.draw(tex_buffer, 0, Main.height, Main.width, -Main.height);
         batch.setShader(null);
 
-        if (Main.DODEBUGRENDER)
+        if (Main.DOBOX2DRENDER)
             Main.b2dr.render(Main.world, Main.cam.combined);
         batch.end();
         Main.setCamEffects();
@@ -164,11 +169,12 @@ public class GameOver extends Scene {
             if (!Main.noScore)
                 Main.gm.submitScore(Game.orbsCollected);
         }
-        Main.setAdVisibility(true);
+        //Main.setAdVisibility(true);
         Main.setNoMusic();
 
         scoreLevel = getScoreLevel(Game.orbsCollected);
         highscoreLevel = getScoreLevel(Main.gameData.highscore);
+        score_visual = 0;
     }
 
     public void hide() {
@@ -177,12 +183,12 @@ public class GameOver extends Scene {
     }
 
     int getScoreLevel(float score) {
-        if (score > 10000) return 6;
-        if (score > 5000) return 5;
-        if (score > 1000) return 4;
-        if (score > 500) return 3;
-        if (score > 100) return 2;
-        if (score > 50) return 1;
+        if (score >= 10000) return 6;
+        if (score >= 5000) return 5;
+        if (score >= 1000) return 4;
+        if (score >= 500) return 3;
+        if (score >= 100) return 2;
+        if (score >= 50) return 1;
         return 0;
     }
 

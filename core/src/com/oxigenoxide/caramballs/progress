@@ -317,32 +317,173 @@ manager
 -add spiky scooper
 [30-mar.-20] s:145h10m e:146h2m
 -make orbs blink and dispose them after some time
-[31-mar.-20] s:146h2m e:
+[31-mar.-20] s:146h2m e:149h20m
 -add new level generation system
 -make cannons and draggables disappear
 -fix cannon and tire sprite dimensions
 -increased the split velocity to 10
 -push balls away from a main ball that explodes
+[1-apr.-20] s:149h20m e:154h22m t:5h2m
+-main balls get spawned in at one place and 'ascend'
+-use more friendly palette in the first level for the background
+-fix: cannon bodies wouldn't get removed
+-orbs gravitate to main balls. Subtle, but influential.
+-fix: when calling getFreePosOnTable() it would return null if it got a free pos on the last try
+-add method getSafePosOnTable() for balls so they aren't spawned in a danger zone
+-delay level generation so creations of objects don't get canceled by objects that are already disappearing
+[2-apr.-20] s:154h22m e:159h33m t:5h11m
+-add textures for more precious orbs
+-add a variable to track the game difficulty
+-determine orb type based on the current difficulty
+-fix: level value would get set back to 0 shortly after
+-fix shaperenderer blending in farm: grayish transparency
+[3-apr.-20] s:159h33m e:163h54m t:4h21m
+-add clocks in the farm that show how long it takes until a ball can be milked
+-add class PowerOrb
+-add class PowerOrbEntity
+-give main balls invincibility frames when they have been saved
+[5-apr.-20] s:163h54m e: t:
+-give apples and lemons a full black outline
+[7-apr.-20] s:166h30m e: t:
+-fine-tuned ball wiggle on collision
+-fix meter reset after going to the next level
+-add tutorial for hitting balls
+[8-apr.-20] s:167h45m e: t:
+-show a small fruit above the meter when the last reward of the level is pending
+-add success sound to play at the end of every level
+-dispose sounds
+[9-apr.-20] s:169h0m e:172h46m t:3h46m
+-slight improvement in hit effect animation
+-add new particle Particle_MegaHit
+-add new sound that adds punch to the hit when in flow
+-other balls get punched back when hitting a ball when in flow
+-add circle trail
+-make outline of hand black
+-add plus message on collect
+[10-apr.-20] s:172h46m e: t:
+-remove flow particles
+-make pulse particle slightly thicker
+-make bullets unable to be pushed
+-give bullets an animation and new look
+-give bullets an impact animation/particle
+-add explosion particle when a ball gets destroyed
+-add split particle effect
+-give plus message a shadow
+[11-apr.-20] s:175h30m e: t:4h35m
+-fix dt scaling for ball movement, fading, the tutorial and animations
+-optimise setting the palette: one variable 'colors' instead of four 'color0/1/2/3'
+-add function to set shaders that first checks if a shader is already in use
+-check if the batch is using the default shader before resetting it
+-optimised the pulse effect: uses no shaders, instead an animation
+[12-apr.-20] s:180h5m e: t:2h4m
+-fix: the default shader was actually shader_palette
+-scale particles to dt
+-fine-tuned confetti speed
+[13-apr.-20] s:182h9m e: t:2h53m
+-optimise shop and shopSpots
+-use natural pixelation in shop and game (no shader)
+-fix screen shake: scale to dt
+-fix particle velocity dt scaling
+-fix colored speech bubbles in farm
+-add extra shine to the basic ball texture
+[14-apr.-20] s: e: t:3h17m
+-fix setPalette(Color, Color, Color, Color)
+-don't generate background colors, randomly choose pre-set colors
+-don't pixelate the floorFade shader so there is no weird double-pixelation
+-spawn Particle_OrbPickup only the one time when the flow begins
+-remove place text above ProgressBar
+-update ProgressBar's look: make ProgressBar shorter
+-put numbers in the same atlas image as the rest for a performance boost
+[15-apr.-20] s: e: t:2h29m
+-don't go past MAXVEL when bouncing balls off of circular bumpers
+[16-apr.-20] s: e: t:2h44m
+-make spike fixture size smaller
+-turn Particle_Split and Particle_BallExplosion into Effect for a performance boost
+-add new sounds: fail, pop, split
+[17-apr.-20] s: e: t:1h23m
+-add sound tap
+-remove selection ring from bad ball
+-dont make bad balls destroy each other
+-spawn bad balls like other obstacles
+-give bad balls very low friction
+-fix crash on ball shrink
+[18-apr.-20] s: e: t:2h27m
+-don't draw a clock on balls that fell into the sell hole
+-don't show ad on gameOver screen
+-don't spawn any mainBalls for 3 seconds after a mainBall has been destroyed
+-give bad balls two hit boxes: one for opponents and one for each other
+[19-apr.-20] s: e: t:2h51m
+-create BallDepot
+[20-apr.-20] s: e: t:3h17m
+-make BallDepot meter blink when no DepotBalls are left
+-add new OrbDisplay
+-remove color shader use from Meter
+-draw small numbers on the ball in the splash screen with batch.setColor() instead of shader_c
+-don't color comboBar's digits
+-add the value of the collected orb to orbsCollected instead of always one
+-fix: comboBar would continuously call endCombo() after the combo had ended
+-spawn depot balls from above the screen
+[21-apr.-20] s: e: t:2h54m
+-make count_idle in ComboBar progress with Main.dt instead of Main.dt_slowed
+-fix the score color rank conditions (for example dark green on 100 and above instead of only above 100)
+-fix function inTerminalPhase()
+[22-apr.-20] s:203h20m e: t:
+-dt scale combo bar lerp
+-transfer orbs from ComboBar to OrbDisplay when the combo is lost
+-send orbs to OrbDisplay when in terminal phase
+-hold a virtual variable orbCollected that isn't directly reflected in any number on the game screen, only as the score in the game over screen
+-don't show ballSelector triangle when it points outwards
+-add a stretch threshold to the ballSelector
+-dont show the ballSelector when the stretch threshold isn't reached
+-make BallSelector grow after it selects a ball
+-replace PowerOrbEntity with Ball_PowerOrb
+-don't pickup or make power orbs gravitate to a ball that is saturated with power orbs
+-spawn power orbs at an interval of 30 to 60 seconds after finishing the intro level(s)
+-fix: first ball doesn't get invincibility
+-remove bright green background palette because it was too similar to the green/yellow palette
+-reset OrbDisplay and BallDepot in reset()
+[24-apr.-20] s: e:209h04m t:3h08m
+-don't punch back balls when you hit a ball in flow mode
+-progress ballDepot bar with dt_slowed instead of dt
+-the rest of depot balls are spawned into the game very quickly during the terminal phase instead of immediately
+-limit fade min to 0
+-fix: orbs collected in the farm screen wouldn't fly towards the orb display
+-fix: don't spawn orbs inside the ball that was milked
+-fix: ballSelector would be messed up in the farm screen after pressing replay
+-map stretch to [MINSPEED, MAXSPEED] in BallSelector, currently with range [1, 12]
+-fix the bug that the game over cue would only partially get triggered and that the game over screen wouldn't be shown
+-don't let cannons overlap with other obstacles
+[25-apr.-20] s:209h04m e: t:
+-fix milk progress time when using extremely high fps
+-fix crash on orb spawn
+-fix RewardOrb movement and dt scaling
+-fix RewardBall dt scaling
+-fix FloatingReward dt scaling
+-fix dt scaling in shop: skin box, auto-scroll, and reward
+-fix splash screen dt scaling
+-turn all remaining wav sound files into mp3 sound files
+-play less ballHit sounds in BallDepot
+-set SOUNDCAP to 2
+-use new sound system that doesn't allow multiple sounds to play in the same frame, but divides them over multiple frames
+-fix: BallDepot alarm shouldn't go of in a breather level
+-fix gwt superDev build by not using the clone() function for arrays
 
 deadline: april 15 2020
-(set at 11 februari)
 
-march 30
-TODO: ???
-TODO: orbs disappear after some time
+TODO: draw selection rings without resetting the shader and its uniforms, instead resize the texture/sprite
+TODO: flow mode not worn off in farm screen
 
-TODO: hitboxes smaller
-TODO: fix when music should play and shouldnt
-TODO: rewards reflected in the ball meter. Will the player still be able to see the state even when he loses balls? Will there be overlapping?
+TODO: hit boxes smaller
+TODO: fix when music should play and shouldn't
 TODO: fix multiple pulse particles when combining
 TODO: ball duplication glitch
 TODO: target circle at finger?
 TODO: can I fix that balls will sometimes not bounce back from a wall when they don't have enough perpendicular velocity?
-TODO: force update
+TODO: force update?
 TODO: glow in the dark?
-TODO: only 0.1% will reach pink color
+TODO: only 0.1% will reach pink color achievement
 TODO: particle pool for optimization
 TODO: ad capsule
 TODO: virus balls
-TODO: rainbowballs changing color
+TODO: rainbow balls changing color
 TODO: progress tracker of skins (8 / 12 skins unlocked)

@@ -38,8 +38,9 @@ public class FloatingReward {
 
     public void update() {
         lerpAlpha = Math.min(.001f * (startCount - count), .1f);
-        pos.lerp(pos_target.get(), lerpAlpha);
-        sprite.setSize(sprite.getWidth() + (sprite.getRegionWidth() * scaleUp - sprite.getWidth()) * lerpAlpha, sprite.getHeight() + (sprite.getRegionHeight() * scaleUp - sprite.getHeight()) * lerpAlpha);
+        float lerp_result = 1 - (float) Math.pow(1 - lerpAlpha, Main.dt_one);
+        pos.lerp(pos_target.get(), lerp_result);
+        sprite.setSize(sprite.getWidth() + (sprite.getRegionWidth() * scaleUp - sprite.getWidth()) * lerp_result, sprite.getHeight() + (sprite.getRegionHeight() * scaleUp - sprite.getHeight()) * lerp_result);
         sprite.setPosition(pos.x - sprite.getWidth() / 2, pos.y - sprite.getHeight() / 2);
         count_shine = MathFuncs.loopOne(count_shine, Main.dt*.25f);
         radius_shine += (radiusDest_shine - radius_shine) * lerpAlpha;

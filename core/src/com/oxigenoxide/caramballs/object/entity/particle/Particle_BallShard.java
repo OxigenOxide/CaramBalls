@@ -9,26 +9,28 @@ import com.oxigenoxide.caramballs.Res;
 public class Particle_BallShard extends Particle {
     int level;
     Color[] palette;
+
     public Particle_BallShard(float x, float y, float angle, float speed, int level) {
         super(x, y);
-        this.level=level;
+        this.level = level;
         Main.particles_batch.add(this);
         vel.set(speed * (float) Math.cos(angle), speed * (float) Math.sin(angle));
-        sprite=new Sprite(Res.tex_ballShard[(int)(Math.random()*3)]);
-        resistance=.05f;
-        lifeTime=100;
-        sprite.setRotation((int)(Math.random()*4)*90);
+        sprite = new Sprite(Res.tex_ballShard[(int) (Math.random() * 3)]);
+        resistance = .05f;
+        lifeTime = 100;
+        sprite.setRotation((int) (Math.random() * 4) * 90);
         setSpritePosition();
     }
+
     public Particle_BallShard(float x, float y, float angle, float speed, Color[] palette) {
         super(x, y);
-        this.palette=palette;
+        this.palette = palette;
         Main.particles_batch.add(this);
         vel.set(speed * (float) Math.cos(angle), speed * (float) Math.sin(angle));
-        sprite=new Sprite(Res.tex_ballShard[(int)(Math.random()*3)]);
-        resistance=.05f;
-        lifeTime=100;
-        sprite.setRotation((int)(Math.random()*4)*90);
+        sprite = new Sprite(Res.tex_ballShard[(int) (Math.random() * 3)]);
+        resistance = .05f;
+        lifeTime = 100;
+        sprite.setRotation((int) (Math.random() * 4) * 90);
         setSpritePosition();
     }
 
@@ -38,12 +40,10 @@ public class Particle_BallShard extends Particle {
 
     public void render(SpriteBatch batch) {
         batch.setShader(Res.shader_palette);
-        //Res.shader_palette.setUniformf("color0", Res.palette_mainBall[level][0].r, Res.palette_mainBall[level][0].g, Res.palette_mainBall[level][0].b, 1);
-        {
-            Res.shader_palette.setUniformf("color1", palette[1].r, palette[1].g, palette[1].b, 1);
-            Res.shader_palette.setUniformf("color2", palette[2].r, palette[2].g, palette[2].b, 1);
-        }
-        //Res.shader_palette.setUniformf("color3", Res.palette_mainBall[level][3].r, Res.palette_mainBall[level][3].g, Res.palette_mainBall[level][3].b, 1);
+
+        //Main.setPalette(null, palette[1], palette[2], null);
+        Main.setPalette(palette);
+
         super.render(batch);
         batch.setShader(null);
     }

@@ -2,6 +2,7 @@ package com.oxigenoxide.caramballs.scene;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -65,7 +66,8 @@ public class Shop extends Scene {
 
     public Shop() {
 
-        buffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getHeight(), Gdx.graphics.getHeight(), true);
+        //buffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getHeight(), Gdx.graphics.getHeight(), true);
+        buffer = new FrameBuffer(Pixmap.Format.RGBA8888, (int) Main.width, (int) Main.height, true);
 
         shopSpots = new ShopSpot[AMOUNT_BALLSKINS];
 
@@ -145,9 +147,10 @@ public class Shop extends Scene {
 
     @Override
     public void update() {
+
         super.update();
 
-        scrollArea.update();
+        scrollArea.update(Main.dt);
         counter_spawnOrb.update();
 
         if (!isOpeningSkinBox) {
@@ -172,6 +175,7 @@ public class Shop extends Scene {
             alpha_overlay = Math.max(0, alpha_overlay - Main.dt * .5f);
 
         skinBox.update();
+
     }
 
     void setShopSpotPosition() {
@@ -190,6 +194,7 @@ public class Shop extends Scene {
 
     @Override
     public void render(SpriteBatch batch, ShapeRenderer sr) {
+
         // clear background
         Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -199,19 +204,24 @@ public class Shop extends Scene {
         Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-
-
         batch.begin();
 
         // background
         batch.setShader(Res.shader_palette);
-        Main.setPalette(Res.tableTopPalette[0]);
+        Main.setPalette(Res.palette_table[0]);
         batch.draw(Res.tex_tabletop[0], Main.width / 2 - Res.tex_tabletop[0].getWidth() / 2, Main.height / 2 - Res.tex_tabletop[0].getHeight() / 2);
         batch.setShader(null);
 
         // shop spots
         for (ShopSpot shopSpot : shopSpots)
             shopSpot.render(batch);
+
+        batch.setShader(Res.shader_palette);
+        Main.setPalette(Res.PALETTE_WHITEBALL);
+        for (ShopSpot shopSpot : shopSpots)
+            shopSpot.renderSkin(batch);
+        batch.setShader(null);
+
 
         // margins
         batch.draw(Res.tex_shopMarginBottom, 0, 0);
@@ -221,18 +231,14 @@ public class Shop extends Scene {
         batch.draw(Res.tex_orbCountBar, pos_orbs.x - Res.tex_orbCountBar.getRegionWidth() / 2, pos_orbs.y - 2);
         int width = Funcs.drawNumberSignColor(batch, Main.orbs_visual, pos_orbs, ID.Font.SMALL, Res.tex_orb, -1, Res.COLOR_ORBNUMBER);
 
+
         pos_orb.x = pos_orbs.x - width / 2;
 
-        /*
-        batch.draw(Res.tex_orbCountBackground, Main.width / 2 - Res.tex_orbCountBackground.getRegionWidth() / 2, 0);
-        batch.setShader(Res.shader_c);
-        Res.shader_c.setUniformf("c", 1, 1, 1, 1);
-        Main.drawNumberSign(batch, Main.gameData.orbs, new Vector2(Main.width / 2, 1), ID.Font.SMALL, Res.tex_symbolOrb, 0);
-        batch.setShader(null);
-*/
+
         // buttons
         button_return.render(batch);
         button_buy_skinBox.render(batch);
+
 
         // dark overlay
         batch.setShader(Res.shader_c);
@@ -247,7 +253,9 @@ public class Shop extends Scene {
         // skin box
         skinBox.render(batch);
 
+
         batch.end();
+
 
         // floating reward (skin)
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA); // Don't enable blending when you don't need it
@@ -274,10 +282,10 @@ public class Shop extends Scene {
         tex_buffer.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         Main.setNoCamEffects();
         batch.begin();
-        batch.setShader(Res.shader_pixelate);
-        Res.shader_pixelate.setUniformf("texDim", Main.dim_screen);
+        //batch.setShader(Res.shader_pixelate);
+        //Res.shader_pixelate.setUniformf("texDim", Main.dim_screen);
         batch.draw(tex_buffer, 0, Main.height, Main.width, -Main.height);
-        batch.setShader(null);
+        //batch.setShader(null);
         batch.end();
         Main.setCamEffects();
     }
@@ -403,14 +411,14 @@ public class Shop extends Scene {
             }, 3);
             counter_bob.start();
             cantBuy = getLockedSkins().size() == 0;
-            if(cantBuy) {
+            if (cantBuy) {
                 maxAlpha = .3f;
-                alpha=.3f;
+                alpha = .3f;
             }
         }
 
         void bob() {
-            if(!cantBuy)
+            if (!cantBuy)
                 bobbing = 1;
         }
 
@@ -425,7 +433,7 @@ public class Shop extends Scene {
             if (!isOpeningSkinBox)
                 counter_bob.update();
 
-            pos.lerp(pos_target, .1f);
+            pos.lerp(pos_target, 1 - (float) Math.pow(.9f, Main.dt_one));
             bobbing = Math.max(0, bobbing - Main.dt * 3);
             float bobFactor = (1 + bobAmp * bobbing * (float) Math.sin(bobbing * bobPeriod));
             sprite_full.setSize(sprite_full.getRegionWidth() / bobFactor, sprite_full.getRegionHeight() * bobFactor);
@@ -508,12 +516,12 @@ public class Shop extends Scene {
 
         public void update() {
             //update position
-            vel.add(0, -GRAVITY);
-            pos.add(vel);
+            vel.add(0, -GRAVITY * Main.dt_one);
+            pos.add(vel.x * Main.dt_one, vel.y * Main.dt_one);
 
             //update sprite
             sprite.setPosition(pos.x - sprite.getWidth() / 2, pos.y);
-            sprite.rotate(-vel.x);
+            sprite.rotate(-vel.x * Main.dt_one);
 
             //dispose
             if (pos.y < -200) { // just a value low enough

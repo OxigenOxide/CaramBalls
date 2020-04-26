@@ -14,9 +14,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Filter;
+import com.badlogic.gdx.utils.Array;
+import com.oxigenoxide.caramballs.object.PulseEffect;
+import com.oxigenoxide.caramballs.object.Trail;
+import com.oxigenoxide.caramballs.object.entity.CircularBumper;
 import com.oxigenoxide.caramballs.object.entity.particle.Particle_Ball;
 import com.oxigenoxide.caramballs.object.entity.particle.Particle_Cross;
 import com.oxigenoxide.caramballs.object.entity.particle.Particle_Hit;
+import com.oxigenoxide.caramballs.object.entity.particle.Particle_MegaHit;
 import com.oxigenoxide.caramballs.scene.Game;
 import com.oxigenoxide.caramballs.ID;
 import com.oxigenoxide.caramballs.Main;
@@ -24,6 +29,8 @@ import com.oxigenoxide.caramballs.Res;
 import com.oxigenoxide.caramballs.object.entity.Entity;
 import com.oxigenoxide.caramballs.object.entity.hole.Hole;
 import com.oxigenoxide.caramballs.object.entity.particle.Particle_Pulse;
+import com.oxigenoxide.caramballs.utils.ActionListener;
+import com.oxigenoxide.caramballs.utils.Counter;
 import com.oxigenoxide.caramballs.utils.MathFuncs;
 
 public class Ball extends Entity {
@@ -76,12 +83,18 @@ public class Ball extends Entity {
     float progress_ascend;
     boolean ascend;
 
+    float distanceTraveled;
+    float friction;
+
     final static float COUNTMAX_HITCOOLDOWN = 30;
     final static int FREEZECOOLDOWNMAX = 30;
     final static float WIGGLEFACTOR = .25f;
     final static float HEIGHT_PASSTHROUGH = 15;
     final static int MAXRINGRADIUS = 20;
     final static float RINGWIDTH = 3f;
+    final static float DST_TRAIL = 15;
+    final static float MAXVEL = 7;
+
     boolean doWiggle = true;
 
     ParticleEffect particleEffect;
@@ -99,7 +112,7 @@ public class Ball extends Entity {
     public Ball(float height, int size) {
         this.height = height;
         this.size = size;
-        pos = Game.getFreePosOnTable(radius + 1);
+        pos = Game.getSafePosOnTable(radius + 1, 10);
         if (pos == null) {
             doDispose = true;
             pos = new Vector2(1000, -100);
@@ -110,7 +123,7 @@ public class Ball extends Entity {
 
     public Ball(float height, float radius) {
         this.height = height;
-        pos = Game.getFreePosOnTable(radius + 1);
+        pos = Game.getSafePosOnTable(radius + 1, 10);
         if (pos == null) {
             doDispose = true;
             pos = new Vector2(1000, -100);
@@ -119,12 +132,38 @@ public class Ball extends Entity {
         construct();
     }
 
+    public Ball(int size) {
+        this.size = size;
+        this.height = 0;
+        pos = Game.getSafePosOnTable(Res.tex_ball[0][size].getRegionWidth() / 2f + 1, 10);
+        if (pos == null) {
+            doDispose = true;
+            pos = new Vector2(1000, -100);
+        }
+        createBody();
+        construct();
+        ascend = true;
+    }
+
+    public Ball(int size, int triesMax) {
+        this.size = size;
+        this.height = 0;
+        pos = Game.getSafePosOnTable(Res.tex_ball[0][size].getRegionWidth() / 2f + 1, triesMax);
+        if (pos == null) {
+            doDispose = true;
+            pos = new Vector2(1000, -100);
+        }
+        createBody();
+        construct();
+        ascend = true;
+    }
+
     private void construct() {
         pos_last = new Vector2(pos);
         sprite = new Sprite(Res.tex_ball[0][0]);
         body.setTransform(pos.x * Main.MPP, pos.y * Main.MPP, 0);
         radius = body.getFixtureList().first().getShape().getRadius() * Main.PPM;
-        radius_spawn = radius + 1;
+        radius_spawn = radius + 2;
 
         isPassthrough = true;
         if (height < 0) {
@@ -137,18 +176,28 @@ public class Ball extends Entity {
 
         if (Main.inFarm())
             construct_farm();
+
+        friction = Main.worldProperties.friction;
     }
 
     void construct_farm() {
 
     }
 
+    Vector2 pos_trail = new Vector2();
+
     public void update() {
         if (!isDisposed) {
+            float speed = 0;
+            if (body != null)
+                speed = body.getLinearVelocity().len();
             if (!frozen) {
+                // circle trail
+                update_trail();
 
+                //shrink ball to disappear
                 if (isShrinking) {
-                    sprite.setSize(sprite.getWidth() - 1, sprite.getHeight() - 1);
+                    sprite.setSize(sprite.getWidth() - Main.dt_one, sprite.getHeight() - Main.dt_one);
                     sprite.setPosition((int) ((int) pos.x - sprite.getWidth() / 2), (int) ((int) pos.y + height - sprite.getHeight() / 2));
                     if (sprite.getWidth() <= 0)
                         dispose();
@@ -173,20 +222,17 @@ public class Ball extends Entity {
                     return;
                 }
 
+                // set pos
                 pos_last.set(pos);
                 pos.set(body.getPosition());
                 pos.scl(Main.PPM);
+
                 if (size > 0 && doWiggle) // wiggle
                     sprite.setSize(sizeFactor * (float) (sprite.getRegionWidth() * (1 + wiggle * WIGGLEFACTOR * -Math.sin(wiggle * 15))), sizeFactor * (float) (sprite.getRegionHeight() * (1 + wiggle * WIGGLEFACTOR * -Math.cos(wiggle * 15))));
                 sprite.setPosition((int) (pos.x - sprite.getWidth() / 2), (int) (pos.y + height - sprite.getHeight() / 2));
 
-                if (MathFuncs.getHypothenuse(body.getLinearVelocity().x, body.getLinearVelocity().y) > maxSpeed)
-                    body.setLinearVelocity(body.getLinearVelocity().x * .75f, body.getLinearVelocity().y * .75f);
-                else if (doDrainSpeed)
-                    body.setLinearVelocity(body.getLinearVelocity().x * .95f, body.getLinearVelocity().y * .95f);
-
                 if (height == 0)
-                    body.setLinearVelocity(body.getLinearVelocity().x * (1 - Main.worldProperties.friction), body.getLinearVelocity().y * (1 - Main.worldProperties.friction));
+                    body.setLinearVelocity(body.getLinearVelocity().x * (float) Math.pow((1 - friction), Main.dt_one_slowed), body.getLinearVelocity().y * (float) Math.pow((1 - friction), Main.dt_one_slowed));
 
                 wiggle = Math.max(0, wiggle - .05f * Main.dt_one_slowed);
 
@@ -223,12 +269,11 @@ public class Ball extends Entity {
                 }
                 */
 
-                if (body.getLinearVelocity().len() < .1f)
+                if (speed < .1f)
                     body.setLinearVelocity(0, 0);
 
                 count_recentlyHit = Math.max(0, count_recentlyHit - Main.dt_one);
                 count_cantGetStuck = Math.max(0, count_cantGetStuck - Main.dt_one_slowed);
-
                 freezeCooldown = Math.max(0, freezeCooldown - Main.dt_one);
 
             } else { // if frozen
@@ -244,19 +289,21 @@ public class Ball extends Entity {
                 doActivateShield = false;
                 activateShield();
             }
-            if (Main.ballSelector.isBallSelected(this))
-                selectedIntensity += Main.dt_one * .1f;
-            else
-                selectedIntensity -= Main.dt_one * .1f;
-            selectedIntensity = MathUtils.clamp(selectedIntensity, 0, 1);
 
-            canBeHit = body.getLinearVelocity().len() < 1 && !Main.ballSelector.isBallSelected(this);
-
-            if (canBeHit) {
-                count_circle = (count_circle + Main.dt_one_slowed * .05f) % ((float) Math.PI * 2);
-            } else {
-                count_circle = -(float) Math.PI * .5f;
+            if (!isLocked) {
+                if (Main.ballSelector.isBallSelected(this))
+                    selectedIntensity += Main.dt_one * .1f;
+                else
+                    selectedIntensity -= Main.dt_one * .1f;
+                selectedIntensity = MathUtils.clamp(selectedIntensity, 0, 1);
             }
+
+            canBeHit = !isLocked && speed < 1 && !Main.ballSelector.isBallSelected(this)/* && !isPassthrough*/;
+
+            if (canBeHit)
+                count_circle = (count_circle + Main.dt_one_slowed * .05f) % ((float) Math.PI * 2);
+            else
+                count_circle = -(float) Math.PI * .5f;
 
             update_ring();
 
@@ -278,6 +325,20 @@ public class Ball extends Entity {
                 dispose();
             }
         }
+    }
+
+    void update_trail() {
+        float dst = pos_last.dst(pos);
+        float ang = MathFuncs.angleBetweenPoints(pos_last, pos);
+        while (distanceTraveled + dst > DST_TRAIL) {
+            pos_trail.set(DST_TRAIL - distanceTraveled, 0);
+            pos_trail.rotateRad(ang);
+            pos_trail.add(pos_last);
+            Main.trails.add(new Trail(pos_trail.x, pos_trail.y, getTrailRadius()));
+            dst -= DST_TRAIL - distanceTraveled;
+            distanceTraveled = 0;
+        }
+        distanceTraveled = distanceTraveled + dst;
     }
 
     void ascend() {
@@ -442,11 +503,6 @@ public class Ball extends Entity {
     }
 
     public void render(SpriteBatch batch) {
-        batch.setShader(Res.shader_a);
-        Res.shader_a.setUniformf("a", .75f);
-        if (isShielded)
-            batch.draw(Res.tex_shield, (int) (pos.x - 2 - sprite.getRegionWidth() / 2), (int) (pos.y - 2 - sprite.getHeight() / 2 + height), sprite.getRegionWidth() + 4, sprite.getHeight() + 4);
-        batch.setShader(null);
     }
 
     public void drawParticleEffect(SpriteBatch batch) {
@@ -544,26 +600,65 @@ public class Ball extends Entity {
         body.setLinearVelocity((float) Math.cos(angle) * speed, (float) Math.sin(angle) * speed);
         maxSpeed = speed;
         count_hitCooldown = COUNTMAX_HITCOOLDOWN;
-        Main.particles.add(new Particle_Hit(pos.x, pos.y, angle + (float) Math.PI, radius));
+
+        if (Main.game.inFlow()) {
+            Main.particles.add(new Particle_MegaHit(pos.x, pos.y, angle + (float) Math.PI, radius));
+            Main.addSoundRequest(ID.Sound.PUNCH);
+            //punchBack(angle);
+        } else
+            Main.particles.add(new Particle_Hit(pos.x, pos.y, angle + (float) Math.PI, radius));
+
+
         Main.addSoundRequest(ID.Sound.HIT, 0, 2f * speed, 0.82f + (float) Math.random() * 0.2f - 0.1f);
+
         time_off = 0;
     }
 
-    public void contact(Object ud, Vector2 p, float impact) {
-        wiggle();
+    void punchBack(float ang) {
+        Array<Body> bodies = new Array<Body>();
+        Main.world.getBodies(bodies);
+        float force = 5 * Main.test_float;
+        ang += Math.PI;
+        float r = 20;
+        Vector2 v_c = new Vector2(pos.x + r * (float) Math.cos(ang), pos.y + r * (float) Math.sin(ang));
+        for (Body body : bodies) {
+            if (body != this.body)
+                if (body.getPosition().scl(Main.PPM).dst(v_c) < r) {
+                    //body.applyForce(force * (float) Math.cos(ang), force * (float) Math.sin(ang), body.getPosition().x, body.getPosition().y, true);
+                    body.setLinearVelocity(body.getLinearVelocity().x + force * (float) Math.cos(ang), body.getLinearVelocity().y + force * (float) Math.sin(ang));
+                }
+        }
+    }
 
-        if (body.getLinearVelocity().len() > 5 && freezeCooldown == 0) {
+    public void contact(Object ud, Vector2 p, float impact) {
+        wiggle(impact * .15f);
+
+        if (body != null && body.getLinearVelocity().len() > 5 && freezeCooldown == 0){
             doFreeze = true;
             freezeCooldown = FREEZECOOLDOWNMAX;
         }
     }
 
-    public void onCollision(Vector2 p, float impact) {
-
+    public float getTrailRadius() {
+        switch (size) {
+            case 0:
+                return 4;
+            case 1:
+                return 6;
+            case 2:
+                return 7;
+            case 3:
+                return 7;
+        }
+        return radius - 2;
     }
 
     public void onCollision(Vector2 p, float impact, Object object_hit) {
-        onCollision(p, impact);
+        if (object_hit instanceof CircularBumper) {
+            float vel = body.getLinearVelocity().len();
+            if (vel > MAXVEL)
+                body.setLinearVelocity(body.getLinearVelocity().x / vel * MAXVEL, body.getLinearVelocity().y / vel * MAXVEL);
+        }
     }
 
     public void doCollisionEffect(Vector2 p, float impact, Object object_hit) { // when its two balls will only execute on one of both
@@ -580,18 +675,18 @@ public class Ball extends Entity {
     }
 
     static void dropPulseParticle(float x, float y, float size) {
-        Main.particles.add(new Particle_Pulse(x, y, size));
+        Main.pulseEffects.add(new PulseEffect(x, y, size * 2));
     }
 
     public void wiggle() {
-        if (!Main.noFX && Game.doWiggle && wiggle < 1) {
-            wiggle = 1;
-        }
+        if (Game.doWiggle)
+            wiggle = Math.max(1, wiggle);
     }
 
     public void wiggle(float intensity) {
-        if (!Main.noFX && Game.doWiggle && wiggle < intensity) {
-            wiggle = intensity;
+        if (Game.doWiggle) {
+            intensity = Math.min(intensity, 1.35f);
+            wiggle = Math.max(intensity, wiggle);
         }
     }
 
@@ -643,7 +738,6 @@ public class Ball extends Entity {
 
 
     public void dispose() {
-        System.out.println("destroy body: " + this); // body gets destroyed but also stays???
         Main.ballsToRemove.add(this);
         body = Main.destroyBody(body);
         isDisposed = true;
@@ -695,7 +789,7 @@ public class Ball extends Entity {
     }
 
     public static void throwParticles(float angle, float impact, Vector2 pos, Color[] palette) {
-        throwParticles(angle, impact, pos, palette, 10);
+        throwParticles(angle, impact, pos, palette, 5);
     }
 
     public static void throwParticles(float angle, float impact, Vector2 pos, Color color, int amount) {

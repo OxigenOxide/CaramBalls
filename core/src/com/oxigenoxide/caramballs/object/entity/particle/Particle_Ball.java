@@ -56,13 +56,10 @@ public class Particle_Ball extends Particle {
 
     public void render(SpriteBatch batch) {
         batch.setShader(Res.shader_palette);
-        //Res.shader_palette.setUniformf("color0", Res.palette_mainBall[level][0].r, Res.palette_mainBall[level][0].g, Res.palette_mainBall[level][0].b, 1);
-        {
-            Res.shader_palette.setUniformf("color0", palette[0].r, palette[0].g, palette[0].b, 1);
-            Res.shader_palette.setUniformf("color1", palette[1].r, palette[1].g, palette[1].b, 1);
-            Res.shader_palette.setUniformf("color2", palette[2].r, palette[2].g, palette[2].b, 1);
-        }
-        //Res.shader_palette.setUniformf("color3", Res.palette_mainBall[level][3].r, Res.palette_mainBall[level][3].g, Res.palette_mainBall[level][3].b, 1);
+
+        //Main.setPalette(palette[0], palette[1], palette[2], null);
+        Main.setPalette(palette);
+
         super.render(batch);
         batch.setShader(null);
     }

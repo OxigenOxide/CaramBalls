@@ -1,6 +1,7 @@
 package com.oxigenoxide.caramballs.scene;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -79,7 +80,8 @@ public class Splash extends Scene {
             if (Main.signedIn) { // done loading and everything
                 Main.initializeResources();
                 Main.onLoaded();
-                Main.setSceneGame();
+                //Main.setSceneGame();
+                Main.setSceneMenu();
             }
         }
         if (!Main.signedIn && !Main.fbm.isSignedIn()) {
@@ -92,12 +94,12 @@ public class Splash extends Scene {
             timeNoInternet++;
         }
         if (!goDown)
-            alpha = Math.min(1, alpha + .02f);
+            alpha = Math.min(1, alpha + .05f * Main.dt_one);
         else {
-            alpha = Math.max(0, alpha - .02f);
+            alpha = Math.max(0, alpha - .02f * Main.dt_one);
         }
         if (alpha == 1) {
-            count++;
+            count += Main.dt_one;
             if (count > 60)
                 goDown = true;
         }
@@ -307,10 +309,9 @@ public class Splash extends Scene {
             if (visible) {
                 batch.draw(tex, (int) pos.x - RADIUS, (int) pos.y - RADIUS);
                 batch.draw(tex_filling, (int) pos.x - radius_filling, (int) pos.y - radius_filling, radius_filling * 2, radius_filling * 2);
-                batch.setShader(Res.shader_c);
-                Res.shader_c.setUniformf("c", Res.COLOR_SPLASH_BLUE);
+                batch.setColor(Res.COLOR_SPLASH_BLUE);
                 Funcs.drawNumberSignAfter(batch, (int) (loadingProgress * 100), pos_number, ID.Font.SMALL, Res.tex_number_small_percent, 0);
-                batch.setShader(null);
+                batch.setColor(Color.WHITE);
             }
 
         }

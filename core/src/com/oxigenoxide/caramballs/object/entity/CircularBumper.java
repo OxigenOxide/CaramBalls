@@ -9,6 +9,7 @@ import com.oxigenoxide.caramballs.scene.Game;
 import com.oxigenoxide.caramballs.ID;
 import com.oxigenoxide.caramballs.Main;
 import com.oxigenoxide.caramballs.Res;
+import com.oxigenoxide.caramballs.utils.Funcs;
 
 public class CircularBumper extends Entity {
     Sprite sprite;
@@ -18,6 +19,7 @@ public class CircularBumper extends Entity {
     float size;
     boolean disappear;
     float count;
+    final static float LIFETIME = 5;
 
     public CircularBumper() {
         sprite = new Sprite(Res.tex_circularBumper);
@@ -48,12 +50,12 @@ public class CircularBumper extends Entity {
     }
 
     public void update() {
-        count+=Main.dt_one_slowed;
-        if(count>200)
+        count+=Main.dt_slowed;
+        if(count>LIFETIME)
             disappear=true;
         wiggle = Math.max(0, wiggle - Main.dt_one_slowed * .02f);
         sprite.setSize((sprite.getRegionWidth() + wiggle * (float) Math.sin(wiggle * 20)) * size, (sprite.getRegionHeight() + wiggle * (float) Math.sin(wiggle * 20)) * size);
-        sprite.setPosition(pos.x - sprite.getWidth() / 2, pos.y - sprite.getHeight() / 2);
+        sprite.setPosition(pos.x - sprite.getWidth() / 2, pos.y - sprite.getWidth() / 2);
         if (disappear)
             size = Math.max(0, size - Main.dt_one_slowed * .1f);
         else
@@ -63,6 +65,7 @@ public class CircularBumper extends Entity {
     }
 
     public void render(SpriteBatch batch) {
+        Funcs.setShaderNull(batch);
         sprite.draw(batch);
     }
 

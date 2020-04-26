@@ -34,6 +34,10 @@ public class MathFuncs {
         return (float) Math.sqrt(Math.pow(v0.x - v1.x, 2) + Math.pow(v0.y - v1.y, 2));
     }
 
+    public static float distanceBetweenPoints(Vector2 v0, float x1, float y1) {
+        return (float) Math.sqrt(Math.pow(v0.x - x1, 2) + Math.pow(v0.y - y1, 2));
+    }
+
     public static float getSum(float[] floats) {
         float sum = 0;
         for (float f : floats) {

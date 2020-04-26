@@ -46,4 +46,8 @@ public class Counter {
     public float getProgress() {
         return (time - count) / time;
     }
+
+    public void setProgress(float progress) {
+        count = (1 - progress) * time;
+    }
 }

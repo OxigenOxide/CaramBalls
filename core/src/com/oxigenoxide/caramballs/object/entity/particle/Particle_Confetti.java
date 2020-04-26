@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.oxigenoxide.caramballs.Main;
 import com.oxigenoxide.caramballs.Res;
+import com.oxigenoxide.caramballs.utils.Funcs;
 
 public class Particle_Confetti extends Particle {
     float count_nextRotation;
@@ -11,7 +12,7 @@ public class Particle_Confetti extends Particle {
     public Particle_Confetti(float x, float y, float vx, float vy) {
         super(x, y);
         velY = (float) (Math.random() * 3 + 2);
-        resistance = .2f;
+        resistance = .02f;
         fallResistance = .6f;
         sprite = new Sprite(Res.tex_confetti[(int) (Math.random() * 3)]);
         vel.set(vx, vy);
@@ -33,6 +34,7 @@ public class Particle_Confetti extends Particle {
 
     @Override
     public void render(SpriteBatch batch) {
+        Funcs.setShaderNull(batch);
         super.render(batch);
     }
 

@@ -26,6 +26,8 @@ public class RewardBall {
     float count_inFarm;
     float count_shine;
 
+    static final float LERP = .999f;
+
     public RewardBall(float x, float y, int level) {
         this.level = level;
         palette = Ball_Main.getBallPalette(level);
@@ -35,12 +37,13 @@ public class RewardBall {
     }
 
     public void update() {
-        pos.lerp(pos_target, .1f);
-        if(MathFuncs.distanceBetweenPoints(pos,pos_target)<.1f){
+        pos.lerp(pos_target, 1 - (float) Math.pow(1 - LERP, Main.dt));
+
+        if (MathFuncs.distanceBetweenPoints(pos, pos_target) < .1f) {
             pos.set(pos_target);
         }
         sprite.setPosition((int) (pos.x - sprite.getWidth() / 2), (int) (pos.y - sprite.getHeight() / 2));
-        count_shine = MathFuncs.loopOne(count_shine, Main.dt*.1f);
+        count_shine = MathFuncs.loopOne(count_shine, Main.dt * .1f);
         if (Main.isInScene(Farm.class)) {
             count_inFarm += Main.dt;
             if (count_inFarm > 1) {

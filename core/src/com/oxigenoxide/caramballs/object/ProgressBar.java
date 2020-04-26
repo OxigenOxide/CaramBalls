@@ -20,7 +20,7 @@ public class ProgressBar {
     Dot[] dots;
 
     public ProgressBar() {
-        pos = new Vector2(14, 6);
+        pos = new Vector2(22, 6);
         pos_text = new Vector2(Main.width / 2, pos.y + 12);
         dots = new Dot[]{new Dot(0), new Dot(1), new Dot(2), new Dot(3), new Dot(4), new Dot(5), new Dot(6), new Dot(7), new Dot(8)};
         eventManager = new EventManager(new EventListener() {
@@ -57,7 +57,7 @@ public class ProgressBar {
 
     public void show() {
         show = true;
-        index_nextDot = Game.level % 9;
+        index_nextDot = (Game.level-1) % 9;
         dots[index_nextDot].scheduleShow();
         if (index_nextDot == 0) {
             for (Dot dot : dots)
@@ -67,7 +67,6 @@ public class ProgressBar {
     }
 
     void hide() {
-        System.out.println("hide2");
         show = false;
     }
 
@@ -80,12 +79,16 @@ public class ProgressBar {
             batch.setShader(Res.shader_a);
             Res.shader_a.setUniformf("a", a);
             batch.draw(Res.tex_progressBar, pos.x, pos.y);
+
             for (Dot dot : dots)
                 dot.render(batch);
+
+            /*
             batch.setShader(Res.shader_a);
             Res.shader_a.setUniformf("a", a);
             batch.draw(Res.tex_text_level[0], pos_text.x - Res.tex_text_level[0].getRegionWidth() / 2, pos_text.y);
             batch.setShader(null);
+            */
         }
     }
 
@@ -138,9 +141,9 @@ public class ProgressBar {
         public void render(SpriteBatch batch) {
             if (show) {
                 batch.setShader(Res.shader_palette);
-                Res.shader_palette.setUniformf("color1", Res.palette_mainBall[level][1].r, Res.palette_mainBall[level][1].g, Res.palette_mainBall[level][1].b, a_dot);
-                Res.shader_palette.setUniformf("color2", Res.palette_mainBall[level][2].r, Res.palette_mainBall[level][2].g, Res.palette_mainBall[level][2].b, a_dot);
-                batch.draw(Res.tex_progressBar_ball, pos.x + 1 + level * 9 - dis, pos.y + 3 - dis, width, width);
+                //Main.setPalette(null,Res.palette_mainBall[level][1],Res.palette_mainBall[level][2],null);
+                Main.setPalette(Res.palette_mainBall[level]);
+                batch.draw(Res.tex_progressBar_ball, pos.x + 1 + level * 7 - dis, pos.y + 3 - dis, width, width);
             }
         }
     }

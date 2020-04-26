@@ -21,24 +21,25 @@ public class Particle extends Entity {
     float velY;
     float minVelY;
     float fallResistance;
-    float absVel;
+    Vector2 absVel;
     boolean hasMinVelY;
     boolean doLinearResistance = true;
 
     Particle(float x, float y) {
         pos = new Vector2(x, y);
         vel = new Vector2();
+        absVel = new Vector2();
     }
 
     public void update() {
-        pos.add(vel);
-
         if (doLinearResistance) {
-            absVel = Math.abs(vel.len());
-            vel.sub(MathUtils.clamp(resistance * (float) Math.cos(vel.angleRad()), -absVel, absVel), MathUtils.clamp(resistance * (float) Math.sin(vel.angleRad()), -absVel, absVel));
-        } else vel.scl((1 - resistance) * Main.dt_one);
+            absVel.set(Math.abs(vel.x), Math.abs(vel.y));
+            vel.sub(MathUtils.clamp(resistance * (float) Math.cos(vel.angleRad()) * Main.dt_one, -absVel.x, absVel.x), MathUtils.clamp(resistance * (float) Math.sin(vel.angleRad()) * Main.dt_one, -absVel.y, absVel.y));
+        } else vel.scl((float) Math.pow((1 - resistance), Main.dt_one));
 
-        height += velY;
+        pos.add(vel.x * Main.dt_one, vel.y * Main.dt_one);
+
+        height += velY * Main.dt_one;
         height = Math.max(0, height);
 
         if (height == 0) {
@@ -47,7 +48,7 @@ public class Particle extends Entity {
                 if (velY < .5f)
                     velY = 0;
             }
-        } else velY += Game.GRAVITY_PIXELS * .2f * (1 - fallResistance);
+        } else velY += Game.GRAVITY_PIXELS * .2f * (1 - fallResistance) * Main.dt_one;
 
         if (hasMinVelY) velY = Math.max(velY, minVelY);
 
@@ -63,10 +64,11 @@ public class Particle extends Entity {
         if (isVisible) sprite.draw(batch);
     }
 
-    public void render(ShapeRenderer sr) { }
+    public void render(ShapeRenderer sr) {
+    }
 
     @Override
-    public void render(SpriteBatch batch, ShapeRenderer sr){ // only called when in particles_batch
+    public void render(SpriteBatch batch, ShapeRenderer sr) { // only called when in particles_batch
         render(batch);
     }
 

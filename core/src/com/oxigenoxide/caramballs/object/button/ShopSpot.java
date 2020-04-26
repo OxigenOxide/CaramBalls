@@ -71,22 +71,22 @@ public class ShopSpot extends Button {
     public void render(SpriteBatch batch) {
         if (isSelected) {
             batch.draw(Res.tex_shopSpotPressed[rarity], pos.x, pos.y);
-            pos_num.set(pos.x + 14, pos.y + 6 - touchOffset);
-            batch.setShader(Res.shader_palette);
-            Main.setPalette(Res.PALETTE_WHITEBALL);
-            batch.draw(Res.tex_ball[type][1], pos.x + 14 - Res.tex_ball[type][1].getRegionWidth() / 2, pos.y + 20 - Res.tex_ball[type][1].getRegionHeight() / 2);
-            batch.setShader(null);
             return;
         }
         if (isUnlocked) {
             super.render(batch);
-            pos_num.set(pos.x + 14, pos.y + 6 - touchOffset);
-            batch.setShader(Res.shader_palette);
-            Main.setPalette(Res.PALETTE_WHITEBALL);
-            batch.draw(Res.tex_ball[type][1], pos.x + 14 - Res.tex_ball[type][1].getRegionWidth() / 2, pos.y + 22 - Res.tex_ball[type][1].getRegionHeight() / 2 - touchOffset);
-            batch.setShader(null);
             return;
         }
         batch.draw(Res.tex_shopSpotEmpty[rarity], pos.x, pos.y);
+    }
+
+    public void renderSkin(SpriteBatch batch){
+        if (isSelected) {
+            batch.draw(Res.tex_ball[type][1], pos.x + 14 - Res.tex_ball[type][1].getRegionWidth() / 2, pos.y + 20 - Res.tex_ball[type][1].getRegionHeight() / 2);
+            return;
+        }
+        if (isUnlocked) {
+            batch.draw(Res.tex_ball[type][1], pos.x + 14 - Res.tex_ball[type][1].getRegionWidth() / 2, pos.y + 22 - Res.tex_ball[type][1].getRegionHeight() / 2 - touchOffset);
+        }
     }
 }

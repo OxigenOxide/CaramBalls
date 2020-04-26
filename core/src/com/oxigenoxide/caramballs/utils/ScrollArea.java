@@ -22,7 +22,7 @@ public class ScrollArea {
         this.scrollMax = Math.max(0, scrollMax); // sometimes the computed scroll area is too small to be scrollable
     }
 
-    public void update() {
+    public void update(float dt) {
         if(!locked) {
             inArea = MathFuncs.pointInRectangle(Main.tap_begin[0].x, Main.tap_begin[0].y, x, y, width, height);
             if (inArea && !Gdx.input.justTouched() && Gdx.input.isTouched())
@@ -31,7 +31,7 @@ public class ScrollArea {
 
         if(approachTarget) {
             float dst = scrolledTarget - scrolled;
-            scrolled = scrolled + dst * .1f;
+            scrolled = scrolled + dst * (1 - (float) Math.pow(.001f, dt));
             if(Math.abs(dst) < 1) {
                 scrolled = scrolledTarget;
                 approachTarget = false;

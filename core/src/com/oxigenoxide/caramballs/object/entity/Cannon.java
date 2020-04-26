@@ -8,6 +8,7 @@ import com.oxigenoxide.caramballs.scene.Game;
 import com.oxigenoxide.caramballs.Main;
 import com.oxigenoxide.caramballs.Res;
 import com.oxigenoxide.caramballs.object.entity.ball.Ball_Main;
+import com.oxigenoxide.caramballs.utils.Funcs;
 import com.oxigenoxide.caramballs.utils.MathFuncs;
 
 public class Cannon extends Entity {
@@ -20,6 +21,10 @@ public class Cannon extends Entity {
     float size = 0;
     Body body;
     boolean disappear;
+    float count;
+    float lifetime = 30;
+
+    public static final int DETECTDISTANCE = 50;
 
     public Cannon(float x, float y) {
         x = (int) x;
@@ -32,10 +37,11 @@ public class Cannon extends Entity {
         createBody();
         body.setTransform(pos.x * Main.MPP, (pos.y + 4.5f) * Main.MPP, 0);
         radius_spawn = 10; // not perfect
+        radius_spawn_danger = DETECTDISTANCE + 10;
     }
 
     public Cannon() {
-        pos = Game.getRandomPosOnTable(9, 9);
+        pos = Game.getFreePosOnTable(9, 9);
         pos_center = new Vector2(pos.x, pos.y + 10.5f);
         gun = new Sprite(Res.tex_cannon_gun);
         gun.setOrigin(6.5f, 6.5f);
@@ -43,6 +49,7 @@ public class Cannon extends Entity {
         createBody();
         body.setTransform(pos.x * Main.MPP, (pos.y + 4.5f) * Main.MPP, 0);
         radius_spawn = 10; // not perfect
+        radius_spawn_danger = DETECTDISTANCE + 10;
     }
 
     public void createBody() {
@@ -66,7 +73,7 @@ public class Cannon extends Entity {
         }
 
         boolean isBallInRange = false;
-        float closestDistance = 50;
+        float closestDistance = DETECTDISTANCE;
         for (Ball_Main ball : Main.mainBalls) {
             float distance = MathFuncs.distanceBetweenPoints(ball.pos, pos_center);
             if (distance < closestDistance) {
@@ -85,9 +92,13 @@ public class Cannon extends Entity {
                 Main.bullets.add(new Bullet(pos.x + 15.5f * (float) Math.cos(ang), pos.y + 10.5f + 15.5f * (float) Math.sin(ang), ang));
             }
         }
+        count += Main.dt;
+        if (count >= lifetime && !disappear)
+            disappear();
     }
 
     public void render(SpriteBatch batch) {
+        Funcs.setShaderNull(batch);
         batch.draw(Res.tex_cannon_base, pos.x - Res.tex_cannon_base.getRegionWidth() / 2 * size, pos.y, size * Res.tex_cannon_base.getRegionWidth(), size * Res.tex_cannon_base.getRegionWidth());
         gun.draw(batch);
         batch.draw(Res.tex_cannon_shine, pos.x - Res.tex_cannon_shine.getRegionWidth() / 2 * size, pos.y + 11 * size, size * Res.tex_cannon_shine.getRegionWidth(), size * Res.tex_cannon_shine.getRegionWidth());
@@ -99,5 +110,6 @@ public class Cannon extends Entity {
 
     public void dispose() {
         Main.cannonsToRemove.add(this);
+        body = Main.destroyBody(body);
     }
 }

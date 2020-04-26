@@ -25,6 +25,7 @@ public class HtmlLauncher extends GwtApplication {
 
     // Notes
     // - had to use Math.floor once instead of (int) to make something work the same way on HTML as on desktop and android
+    // - don't save files local
 
     private static final int PADDING = 0;
     private GwtApplicationConfiguration cfg;

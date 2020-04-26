@@ -7,6 +7,7 @@ import com.oxigenoxide.caramballs.Main;
 import com.oxigenoxide.caramballs.Res;
 import com.oxigenoxide.caramballs.object.SoundRequest;
 import com.oxigenoxide.caramballs.utils.Counter;
+import com.oxigenoxide.caramballs.utils.Funcs;
 
 public class Tire extends Draggable {
     Sprite sprite_base;
@@ -59,6 +60,7 @@ public class Tire extends Draggable {
 
     @Override
     public void render(SpriteBatch batch) {
+        Funcs.setShaderNull(batch);
         sprite_base.draw(batch);
         super.render(batch);
     }

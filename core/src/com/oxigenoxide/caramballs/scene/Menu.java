@@ -55,15 +55,18 @@ public class Menu extends Scene {
 
     @Override
     public void show() {
+
         optionsMenuOpen = false;
         Main.setAdVisibility(true);
         button_options = new Button_Options(new Vector2(Main.width - 2 - Res.tex_button_options.getRegionWidth(), 2));
         button_tutorial = new Button_Tutorial(new Vector2(12, 10));
         button_tutorial.setVisibility(false);
+
     }
 
     @Override
     public void update() {
+
         title.update();
         ttpText.update();
         buttonTouched = false;
@@ -84,6 +87,7 @@ public class Menu extends Scene {
 
         //if (soundButtonOut)
         //    button_tutorial.pos.
+
     }
 
     @Override
@@ -91,8 +95,9 @@ public class Menu extends Scene {
         Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
+
         batch.setShader(Res.shader_palette);
-        Main.setPalette(Res.tableTopPalette[0]);
+        Main.setPalette(Res.palette_table[0]);
         batch.draw(Res.tex_tabletop[0], Main.width / 2 - Res.tex_tabletop[0].getWidth() / 2, Main.height / 2 - Res.tex_tabletop[0].getHeight() / 2);
         batch.setShader(null);
         button_options.render(batch);
@@ -100,6 +105,7 @@ public class Menu extends Scene {
         title.render(batch);
         button_tutorial.render(batch);
         batch.end();
+
     }
 
     public void onOptionsPressed() {
