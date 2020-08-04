@@ -26,8 +26,8 @@ public class DesktopLauncher {
         //config.foregroundFPS = 120;
         config.backgroundFPS = 0;
         config.foregroundFPS = 0;
-        config.backgroundFPS = 60;
-        config.foregroundFPS = 60;
+        //config.backgroundFPS = 60;
+        //config.foregroundFPS = 60;
 
         // Default
         config.width = 108 * 5;

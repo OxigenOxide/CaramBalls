@@ -2,7 +2,6 @@ package com.oxigenoxide.caramballs.scene;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -229,7 +228,7 @@ public class Shop extends Scene {
 
         // orb counter
         batch.draw(Res.tex_orbCountBar, pos_orbs.x - Res.tex_orbCountBar.getRegionWidth() / 2, pos_orbs.y - 2);
-        int width = Funcs.drawNumberSignColor(batch, Main.orbs_visual, pos_orbs, ID.Font.SMALL, Res.tex_orb, -1, Res.COLOR_ORBNUMBER);
+        int width = Funcs.drawNumberSignColor(batch, (int)Main.orbs_visual, pos_orbs, ID.Font.SMALL, Res.tex_orb, -1, Res.COLOR_ORBNUMBER);
 
 
         pos_orb.x = pos_orbs.x - width / 2;
@@ -355,18 +354,18 @@ public class Shop extends Scene {
 
     public void select(int type) {
         Shop.deselect();
-        Game.ballType = type;
+        Game.selectedSkin = type;
         selectedBall = type;
         Main.gameData.selectedBall = type;
     }
 
     @Override
     public void dispose() {
-        saveData();
         super.dispose();
     }
 
     public void saveData() {
+
         System.out.println("saveData SHOP");
         if (shopSpots != null) {
             boolean[] unlocks = new boolean[AMOUNT_BALLSKINS];

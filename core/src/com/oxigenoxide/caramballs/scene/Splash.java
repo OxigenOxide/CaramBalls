@@ -80,7 +80,10 @@ public class Splash extends Scene {
             if (Main.signedIn) { // done loading and everything
                 Main.initializeResources();
                 Main.onLoaded();
+
+                // Set the next scene
                 //Main.setSceneGame();
+                //Main.setSceneFarm();
                 Main.setSceneMenu();
             }
         }
@@ -95,9 +98,9 @@ public class Splash extends Scene {
         }
         if (!goDown)
             alpha = Math.min(1, alpha + .05f * Main.dt_one);
-        else {
+        else
             alpha = Math.max(0, alpha - .02f * Main.dt_one);
-        }
+
         if (alpha == 1) {
             count += Main.dt_one;
             if (count > 60)

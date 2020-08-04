@@ -155,7 +155,7 @@ public class Ball_Bad extends Ball {
     public void explode(float angle, float impact) {
         super.explode(angle, impact);
         impact = Math.min(impact, 4);
-        throwParticles(angle, impact, pos, Res.ballBadPalette);
+        throwParticles(impact, pos, Res.ballBadPalette);
     }
 
     @Override
@@ -169,6 +169,7 @@ public class Ball_Bad extends Ball {
         body.createFixture(Res.fixtureDef_badBall_opponents);
         body.createFixture(Res.fixtureDef_badBall_normal);
         body.setUserData(this);
+        body.setFixedRotation(true);
     }
 
     @Override

@@ -16,14 +16,14 @@ public class OC_Fruit extends OrbContainer {
     public OC_Fruit(float x, float y, float height) {
         super(x, y, height);
         tex = Res.getRandomFruitTex();
-        sprite=new Sprite(tex);
+        sprite = new Sprite(tex);
     }
 
     public OC_Fruit(float x, float y) {
         super(x, y);
         tex = Res.tex_fruit[Game.nextFruit];
         Game.nextFruit = (int) (Math.random() * 3);
-        sprite=new Sprite(tex);
+        sprite = new Sprite(tex);
     }
 
     public void createBody() {

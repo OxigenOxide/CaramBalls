@@ -11,6 +11,7 @@ import com.oxigenoxide.caramballs.object.PlusMessage;
 import com.oxigenoxide.caramballs.object.RewardOrb;
 import com.oxigenoxide.caramballs.scene.Game;
 import com.oxigenoxide.caramballs.utils.ActionListener;
+import com.oxigenoxide.caramballs.utils.Animation;
 import com.oxigenoxide.caramballs.utils.Counter;
 import com.oxigenoxide.caramballs.utils.Funcs;
 import com.oxigenoxide.caramballs.utils.MathFuncs;
@@ -18,6 +19,7 @@ import com.oxigenoxide.caramballs.utils.MathFuncs;
 public class Ball_PowerOrb extends Ball {
 
     private static final float RADIUS = 3f;
+    private static final float GRAVITATION = 10;
 
     static final float SPAWNHEIGHT = 30;
 
@@ -31,6 +33,8 @@ public class Ball_PowerOrb extends Ball {
     float count_life;
     float count_colorWeight;
 
+    Animation animation;
+
     Color[] palette = new Color[]{new Color(), new Color(), new Color(), new Color()};
 
     public Ball_PowerOrb() {
@@ -42,10 +46,11 @@ public class Ball_PowerOrb extends Ball {
         radius = RADIUS;
         radius_spawn = radius + 1;
         body.getFixtureList().first().getShape().setRadius(radius * Main.MPP);
-        setSpriteTexture(Res.tex_powerOrb[0]);
+        setSpriteTexture(Res.tex_powerOrbBall[0]);
         sizeFactor = 0;
         doWiggle = false;
         lock();
+        animation = new Animation(.5f, Res.tex_powerOrbBall, true);
         counter_blink = new Counter(new ActionListener() {
             @Override
             public void action() {
@@ -61,6 +66,10 @@ public class Ball_PowerOrb extends Ball {
     @Override
     public void update() {
         super.update();
+
+        animation.update(Main.dt_slowed);
+
+        sprite.setRegion(animation.getTexture());
 
         count_colorWeight = MathFuncs.loopRadians(count_colorWeight, Main.dt * 3);
 
@@ -82,12 +91,13 @@ public class Ball_PowerOrb extends Ball {
             for (Ball_Main ball : Main.mainBalls) {
                 if (MathFuncs.distanceBetweenPoints(ball.pos, pos) < 15 && !ball.arePowerOrbsSaturated()) {
                     float ang = MathFuncs.angleBetweenPoints(pos, ball.pos);
-                    body.setLinearVelocity(body.getLinearVelocity().x + (float) Math.cos(ang) * 2, body.getLinearVelocity().y + (float) Math.sin(ang) * 2);
+                    body.setLinearVelocity(body.getLinearVelocity().x + (float) Math.cos(ang) * GRAVITATION * Main.dt_slowed, body.getLinearVelocity().y + (float) Math.sin(ang) * GRAVITATION * Main.dt_slowed);
                 }
             }
 
         if (ascend) ascend();
     }
+
 
     @Override
     void update_trail() {
@@ -133,7 +143,12 @@ public class Ball_PowerOrb extends Ball {
 
     @Override
     public void renderShadow(ShapeRenderer sr) {
-        if (visible) super.renderShadow(sr);
+        if (visible) super.renderShadow(sr, 2.5f);
+    }
+
+    @Override
+    public void renderShadow(SpriteBatch batch) {
+        if (visible) super.renderShadow(batch, 2.5f);
     }
 
     @Override

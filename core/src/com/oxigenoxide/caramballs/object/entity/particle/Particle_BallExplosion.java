@@ -22,7 +22,7 @@ public class Particle_BallExplosion extends Particle {
         sprite = new Sprite(Res.tex_ballExplosion[0]);
         sprite.setPosition(x - sprite.getWidth() / 2, y - sprite.getHeight() / 2);
 
-        animation = new Animation((int)(20 * Main.test_float), Res.tex_ballExplosion, new float[]{1, 1, 1, 1, 1, 1}, false);
+        animation = new Animation((int)(20), Res.tex_ballExplosion, new float[]{1, 1, 1, 1, 1, 1}, false);
     }
 
     public void update() {

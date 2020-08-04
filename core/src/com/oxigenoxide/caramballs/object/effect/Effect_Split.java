@@ -20,9 +20,11 @@ public class Effect_Split extends Effect {
         if (size == 1) {
             sprite = new Sprite(Res.tex_mediumSplit[0]);
             animation = new Animation(15, Res.tex_mediumSplit, new float[]{1, 1, 1, 1, 1, 1, 1}, false);
+            animation.loop();
         } else if (size == 2) {
             sprite = new Sprite(Res.tex_largeSplit[0]);
             animation = new Animation(15, Res.tex_largeSplit, new float[]{1, 1, 1, 1, 1, 1, 1, 1}, false);
+            animation.loop();
         }
 
         sprite.setPosition(x - sprite.getWidth() / 2, y - sprite.getHeight() / 2);

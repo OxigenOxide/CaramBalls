@@ -40,7 +40,7 @@ public class Eye extends Entity {
         tier = (int) (Math.random() * 3);
         type = (int) (Math.random() * 4);
         radius_spawn = 15;
-        pos = Game.getFreePosOnTable(radius_spawn);
+        pos = Game.getFreePos(radius_spawn);
         if (pos == null) {
             pos = new Vector2(-100, 0);
             Main.eyesToRemove.add(this);

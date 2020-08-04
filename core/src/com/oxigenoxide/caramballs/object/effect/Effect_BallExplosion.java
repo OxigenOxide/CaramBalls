@@ -14,7 +14,6 @@ public class Effect_BallExplosion extends Effect {
     Sprite sprite;
 
     public Effect_BallExplosion(float x, float y) {
-
         super(x, y);
 
         Main.effects_front.add(this);
@@ -22,7 +21,8 @@ public class Effect_BallExplosion extends Effect {
         sprite = new Sprite(Res.tex_ballExplosion[0]);
         sprite.setPosition(x - sprite.getWidth() / 2, y - sprite.getHeight() / 2);
 
-        animation = new Animation((int)(20 * Main.test_float), Res.tex_ballExplosion, new float[]{1, 1, 1, 1, 1, 1}, false);
+        animation = new Animation(20, Res.tex_ballExplosion, new float[]{1, 1, 1, 1, 1, 1}, false);
+        animation.loop();
 
         Main.addSoundRequest(ID.Sound.FAIL,0,1, MathUtils.random(.8f,1.2f));
     }

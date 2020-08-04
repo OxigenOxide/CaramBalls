@@ -29,10 +29,25 @@ public class Funcs {
         return object.getClass();
     }
 
+    public static void printStackTrace(){
+        System.out.println("Printing stack trace:");
+        StackTraceElement[] elements = Thread.currentThread().getStackTrace();
+        for (int i = 1; i < elements.length; i++) {
+            StackTraceElement s = elements[i];
+            System.out.println("\tat " + s.getClassName() + "." + s.getMethodName()
+                    + "(" + s.getFileName() + ":" + s.getLineNumber() + ")");
+        }
+    }
     public static void combinePalettes(Color[] palette, Color[] palette0, Color[] palette1, float weight) {
         for (int i = 0; i < 4; i++)
             palette[i].set(palette0[i].r * weight + palette1[i].r * (1 - weight), palette0[i].g * weight + palette1[i].g * (1 - weight), palette0[i].b * weight + palette1[i].b * (1 - weight), 1);
     }
+
+    public static void copyPalette(Color[] palette0, Color[] palette1) {
+        for (int i = 0; i < 4; i++)
+            palette0[i].set(palette1[i].r,palette1[i].g,palette1[i].b,palette1[i].a);
+    }
+
 
     public static void combineColors(Color color, Color color0, Color color1, float weight) {
         color.set(color0.r * weight + color1.r * (1 - weight), color0.g * weight + color1.g * (1 - weight), color0.b * weight + color1.b * (1 - weight), 1);
@@ -47,11 +62,12 @@ public class Funcs {
     }
 
     //static final Color COLOR_SHINE = new Color(1, 1, 200 / 255f, 210 / 255f);
-    static final Color COLOR_SHINE = new Color(1, 1, .8f, .75f);
+    //static final Color COLOR_SHINE = new Color(1, 1, .8f, .75f);
+    static final Color COLOR_SHINE = new Color(1, 1, 1, .75f);
 
     public static void drawShine(ShapeRenderer sr, Vector2 pos, float radius, float progress) {
         float angle = progress * 360;
-        float offset = 2.5f * (float) Math.cos(progress * 2 * Math.PI);
+        float offset = 4 * (float) Math.cos(progress * 4 * Math.PI);
         sr.setColor(COLOR_SHINE);
         for (int i = 0; i < 6; i++)
             sr.arc(pos.x, pos.y, radius + offset, angle + 60 * i, 30, 5);

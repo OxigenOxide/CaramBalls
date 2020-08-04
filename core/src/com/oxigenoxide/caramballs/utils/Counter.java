@@ -35,6 +35,10 @@ public class Counter {
         }
     }
 
+    public void action(){
+        listener.action();
+    }
+
     public void setTime(float time) {
         this.time = time;
     }

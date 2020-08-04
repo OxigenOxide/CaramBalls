@@ -32,9 +32,19 @@ public class ID {
         public static final int FAIL = 15;
         public static final int TAP = 16;
         public static final int ALARM = 17;
+        public static final int SHIELD = 18;
+        public static final int SLIME_DEATH = 19;
+        public static final int BALLBREAK = 20;
+        public static final int WHOOSH_0 = 21;
+        public static final int WHOOSH_1 = 22;
+        public static final int EGGCRACK = 23;
+        public static final int SHOT = 24;
+        public static final int HIT_SOFT = 25;
     }
 
     public static class Entity {
+        public static final int ALL = -1;
+
         public static final int BALL = 0;
         public static final int COLLECTABLE = 1;
         public static final int HOLE = 2;
@@ -53,7 +63,19 @@ public class ID {
         public static final int DRAGGABLE = 15;
         public static final int SCOOPER = 16;
         public static final int POWERORBENTITY = 17;
-        public static final int AMOUNT = 18; // change this when adding IDs
+        public static final int GATE = 18;
+        public static final int POLE = 19;
+        public static final int WALL = 20;
+        public static final int JELLY = 21;
+        public static final int AMOUNT = 22; // change this when adding IDs
+
+        // subtypes
+
+        public static final int BALL_BAD = 1001;
+        public static final int BALL_POWERORB = 1002;
+        public static final int GATE_NORMAL = 1003;
+        public static final int BALL_MAIN = 1004;
+        public static final int HOLE_FALL = 1004;
     }
 
     public static class Font {
@@ -84,7 +106,6 @@ public class ID {
         public static final int INSANE = 4;
     }
 
-
     public static class Level {
         public static final int SPIKES_INTRO = 0;
         public static final int CIRCULARBUMPERS = 1;
@@ -111,5 +132,17 @@ public class ID {
         public static final int SPIKECLUSTERS = 22;
         public static final int CANNONS = 23;
         public static final int SPIKES_INSANE = 24;
+        public static final int SMALLSCOOPERS = 25;
+        public static final int HOLE_IN_THE_WALL = 26;
+        public static final int SPIKETRAIL = 27;
+        public static final int GATE_BALLS = 28;
+        public static final int REINS_LEVEL = 29;
     }
+
+    public static class Video {
+        public static final int HIT = 1;
+
+        public static final int TEST = 100;
+    }
+
 }

@@ -71,6 +71,11 @@ public class MathFuncs {
         return (float) (from + (shortest_angle * amount) % (Math.PI * 2));
     }
 
+    public static float getShortestAngle(float from, float to) {
+        return (float) (((((to - from) % (Math.PI * 2)) + (Math.PI * 1.5f)) % (Math.PI * 2)) - (Math.PI));
+    }
+
+
     public static float loopRadians(float f, float add) {
         return (f + add) % ((float) Math.PI * 2);
     }
@@ -78,6 +83,11 @@ public class MathFuncs {
     public static float loopOne(float f, float add) {
         return (f + add) % 1;
     }
+
+    public static float loop(float f, float add, float amount) {
+        return (f + add) % amount;
+    }
+
 
     public static void translateVertices(float[] verts, float x, float y) {
         for (int i = 0; i < verts.length / 2; i++) {

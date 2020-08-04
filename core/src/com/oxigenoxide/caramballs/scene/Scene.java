@@ -2,6 +2,9 @@ package com.oxigenoxide.caramballs.scene;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.oxigenoxide.caramballs.object.entity.Entity;
+
+import java.util.ArrayList;
 
 public class Scene {
     public int timesShown;
@@ -15,6 +18,10 @@ public class Scene {
 
     }
 
+    public void renderOnTop(SpriteBatch batch, ShapeRenderer sr) {
+
+    }
+
     public void dispose() {
 
     }
@@ -22,6 +29,18 @@ public class Scene {
     public void show() {
         timesShown++;
         isShown = true;
+    }
+
+    public void onKeyDown(int keycode) {
+
+    }
+
+    public void saveData() {
+
+    }
+
+
+    public void addEntities(ArrayList<Entity> entities) { // function for adding scene specific entities
     }
 
     public void hide() {

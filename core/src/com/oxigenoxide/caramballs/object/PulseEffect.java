@@ -28,6 +28,7 @@ public class PulseEffect {
         id = number;
         tex = Res.tex_pulse[0];
         animation = new Animation((int) countMax, Res.tex_pulse, new float[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, false);
+        animation.loop();
     }
 
     public void update() {

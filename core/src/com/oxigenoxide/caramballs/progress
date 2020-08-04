@@ -453,7 +453,7 @@ manager
 -map stretch to [MINSPEED, MAXSPEED] in BallSelector, currently with range [1, 12]
 -fix the bug that the game over cue would only partially get triggered and that the game over screen wouldn't be shown
 -don't let cannons overlap with other obstacles
-[25-apr.-20] s:209h04m e: t:
+[25-apr.-20] s: e: t:
 -fix milk progress time when using extremely high fps
 -fix crash on orb spawn
 -fix RewardOrb movement and dt scaling
@@ -466,12 +466,96 @@ manager
 -set SOUNDCAP to 2
 -use new sound system that doesn't allow multiple sounds to play in the same frame, but divides them over multiple frames
 -fix: BallDepot alarm shouldn't go of in a breather level
--fix gwt superDev build by not using the clone() function for arrays
+-fix gwt superDev build by creating a custom array clone() function
+[20-may-20] s:218h0m e: t:
+-dt scale main and orb ball gravitation movement
+[21-may-20] s:219h50m e: t:
+-the corners of of the 'peer' in the farm screen are now made of circles.
+-create DownGrader scene
+[22-may-20] s: e: t:
+-render and sort the farm spike like all other entities
+-set fixedRotation for all balls to true
+-create Ball_Egg
+[28-may-20] s: e: t:
+-draw effects in farm screen
+-add new orb texture for in the farm shops
+[29-may-20] s:230h10m e: t:
+-fix 7 too many balls in ball depot when starting out with a higher level ball
+-add blue variant of depot ball for bought lives
+-rename sell button to 'split' (only graphically)
+-fix both button sizes in farm
+[29-may-20] s:234h00m e: t:
+[5-june-20] s:235h38m e: t:
+[6-june-20] s: e: t:
+-give spike a new bigger look
+-give spike a bigger hitbox
+-deactivate effect ballExplosion
+-create Ball_Fruit to replace OC_Fruit
+[7-june-20] s: e: t:
+-make impact in B2DContactListener depend on the velocity of both bodies
+-increase wiggle factor of Ball_Fruit
+[10-june-20] s: e: t:
+-change the mechanics of the ballSelector graphics, adjusts to the size of the selected ball
+[11-june-20] s: e: t:
+-make ball shadows circles so the selected look adapts better
+-make main ball glow red when failed to select instead of drop a cross particle
+[12-june-20] s: e: t:
+-spawn rewardBall at the right height of the lost ball
+[13-june-20] s: e: t:
+-make progressbar dots go transparent
+-end flow and combo when going back to farm
+[15-june-20] s: e: t:
+-new continue text for videos
+-continue text fades away
+-balls in farm can always be hit
+[16-june-20] s: e: t:
+-split direction determined by the body velocity direction
+[19-june-20] s:259h40m e: t:
+-splitting large balls works
+-add new spawning systems that prevents writing a lot of boilerplate code
+[28-june-20] s: e: t: 5h20m
+-fix crash on gameover call by setting boolean doDispose instead of calling dispose() on the last ball
+-remove auto-release for hitting balls
+-stop ballDepot from progressing the bar while spawning main balls is disabled
+-add new texture for the ballDepot frame for its blocked state
+-add green jelly animation and movement
+-draw selection shadow directly behind the ball, not under it
+-fix pulse effect when going through a gate
+-jelly shield animation
+-jelly shield repulsion effect
+[1-july-20] s: e: t:
+-add new getFreePos system with class SpawnCondition, which helps control keeping different distances from different entities
+-jellies take distance from all entities and more distance from main balls
+-add jelly particle effect
+-add jelly death sound
+-add jelly disappear and appear growing/shrinking animation
+[2-july-20] s: e: t:
+-add jelly particles
+-polish ball particles similarly to the jelly particles
+[3-july-20] s: e: t:
+-adjust ball particle impacts
+-add new ball break sound
+-don't make the screen shake on every ball collision
+-make screen shake on jelly kill
+-add fade sound effects
+[6-july-20] s: e: t:
+-shadow size is customizable per ball type
+-make shadow disposition adaptable to shadow width
+-polish orb and powerOrb shadows
+[25-july-20] s: e: t:
+-new sound for two balls colliding
+[27-july-20] s: e: t:
+-milk balls have the same bar as the eggs instead of the clocks
+-add support that helps to push balls into the farm peer hole
+
+TODO juli 6:
+ - power orb collect sound
 
 deadline: april 15 2020
 
 TODO: draw selection rings without resetting the shader and its uniforms, instead resize the texture/sprite
 TODO: flow mode not worn off in farm screen
+TODO: spawn more balls in flow mode
 
 TODO: hit boxes smaller
 TODO: fix when music should play and shouldn't

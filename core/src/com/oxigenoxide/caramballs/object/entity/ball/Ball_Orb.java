@@ -126,7 +126,7 @@ public class Ball_Orb extends Ball {
             for (Ball ball : Main.mainBalls) {
                 if (MathFuncs.distanceBetweenPoints(ball.pos, pos) < 15) {
                     float ang = MathFuncs.angleBetweenPoints(pos, ball.pos);
-                    body.setLinearVelocity(body.getLinearVelocity().x + (float) Math.cos(ang) * 2, body.getLinearVelocity().y + (float) Math.sin(ang) * 2);
+                    body.setLinearVelocity(body.getLinearVelocity().x + (float) Math.cos(ang) * 2 * Main.dt, body.getLinearVelocity().y + (float) Math.sin(ang) * 2 * Main.dt);
                 }
             }
 
@@ -136,6 +136,13 @@ public class Ball_Orb extends Ball {
     @Override
     void update_trail() {
         // no trail
+    }
+
+    @Override
+    void update_farm() {
+        super.update_farm();
+        if (pos.y - radius < Main.farm.pos_field.y - DISPOSEBUFFER || pos.y + radius > Main.farm.pos_field.y + Main.farm.FIELDWIDTH + 4 + DISPOSEBUFFER)
+            dispose();
     }
 
     public void render(SpriteBatch batch) {
@@ -189,8 +196,14 @@ public class Ball_Orb extends Ball {
 
     @Override
     public void renderShadow(ShapeRenderer sr) {
-        if (visible) super.renderShadow(sr);
+        if (visible) super.renderShadow(sr, radius-1);
     }
+
+    @Override
+    public void renderShadow(SpriteBatch batch) {
+        if (visible) super.renderShadow(batch, radius-1);
+    }
+
 
     @Override
     public void doCollisionEffect(Vector2 p, float impact, Object object_hit) {
@@ -220,5 +233,4 @@ public class Ball_Orb extends Ball {
         }
         return 3;
     }
-
 }

@@ -17,18 +17,18 @@ public class Button_Sell extends Button {
     @Override
     public void action() {
         doSell = !doSell;
-        if(doSell)
+        if (doSell)
             Main.farm.startSelling();
         else
             Main.farm.endSelling();
     }
 
-    public void set(boolean doSell){
-        this.doSell=doSell;
+    public void set(boolean doSell) {
+        this.doSell = doSell;
     }
 
     public void render(SpriteBatch batch) {
-        if(doSell || isTouched)
+        if (doSell || isTouched)
             batch.draw(tex_pressed, pos.x, pos.y);
         else
             batch.draw(tex, pos.x, pos.y);

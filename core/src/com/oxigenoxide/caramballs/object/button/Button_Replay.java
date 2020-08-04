@@ -15,6 +15,8 @@ public class Button_Replay extends Button {
     @Override
     public void action() {
         super.action();
-        Main.setScenePrevious(); // farm
+        //Main.setScenePrevious(); // farm
+        Main.popScene();
+        Main.setSceneDownGrading();
     }
 }

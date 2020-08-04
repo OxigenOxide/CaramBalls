@@ -6,41 +6,45 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Entity {
 
-    public float radius_spawn = 0; // the radius no other spawn radius should touch
-    public float radius_spawn_danger = 0; // the radius no main ball radius should touch
-    public Vector2 pos;
+	public float radius_spawn = 0; // the radius no other spawn radius should touch
+	public float radius_spawn_danger = 0; // the radius no main ball radius should touch
+	public Vector2 pos;
 
 
-    // When creating a new entity:
-    //   - add its ID to the class ID
-    //   - add its list to Main.getEntityArray()
-    //   - add its list to updates
+	// When creating a new entity:
+	//   - add its ID to the class ID
+	//   - add its list to Main.getEntityArray()
+	//   - add its list to updates
 
-    // Notes:
-    //   - never re-declare the pos variable
+	// Notes:
+	//   - never re-declare the pos variable
 
-    public Entity() {
+	public Entity() {
 
-    }
+	}
 
-    public void update() {
+	public void update() {
 
-    }
+	}
 
-    public void render(SpriteBatch batch) {
+	public void render(SpriteBatch batch) {
 
-    }
+	}
 
-    public void render(ShapeRenderer sr) {
+	public void render(ShapeRenderer sr) {
 
-    }
+	}
 
-    public void render(SpriteBatch batch, ShapeRenderer sr) {
-        render(sr);
-        render(batch);
-    }
+	public void render(SpriteBatch batch, ShapeRenderer sr) {
+		render(sr);
+		render(batch);
+	}
 
-    public void dispose() {
+	public void contact(Entity entity) { // a suggestion to make the contact handling cheaper // maybe pass the contact as parameter
 
-    }
+	}
+
+	public void dispose() {
+
+	}
 }

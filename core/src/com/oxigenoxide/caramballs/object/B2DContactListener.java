@@ -12,6 +12,7 @@ import com.oxigenoxide.caramballs.object.entity.BallCapsule;
 import com.oxigenoxide.caramballs.object.entity.Bullet;
 import com.oxigenoxide.caramballs.object.entity.CircularBumper;
 import com.oxigenoxide.caramballs.object.entity.Eye;
+import com.oxigenoxide.caramballs.object.entity.FarmSpike;
 import com.oxigenoxide.caramballs.object.entity.JumpingPad;
 import com.oxigenoxide.caramballs.object.entity.PowerOrbEntity;
 import com.oxigenoxide.caramballs.object.entity.Spike;
@@ -21,177 +22,197 @@ import com.oxigenoxide.caramballs.object.entity.ball.Ball_Main;
 import com.oxigenoxide.caramballs.object.entity.ball.Ball_PowerOrb;
 import com.oxigenoxide.caramballs.object.entity.collectable.Collectable;
 import com.oxigenoxide.caramballs.object.entity.draggable.Draggable;
+import com.oxigenoxide.caramballs.object.entity.gate.Gate;
+import com.oxigenoxide.caramballs.object.entity.jelly.Jelly;
+import com.oxigenoxide.caramballs.object.entity.jelly.Jelly_Red;
 import com.oxigenoxide.caramballs.object.entity.orbContainer.OrbContainer;
 import com.oxigenoxide.caramballs.object.entity.scooper.Scooper;
 import com.oxigenoxide.caramballs.scene.Game;
 import com.oxigenoxide.caramballs.utils.MathFuncs;
 
 public class B2DContactListener implements ContactListener {
-    @Override
-    public void beginContact(Contact contact) {
-        java.lang.Object udA = contact.getFixtureA().getBody().getUserData();
-        java.lang.Object udB = contact.getFixtureB().getBody().getUserData();
+	@Override
+	public void beginContact(Contact contact) {
+		java.lang.Object udA = contact.getFixtureA().getBody().getUserData();
+		java.lang.Object udB = contact.getFixtureB().getBody().getUserData();
 
-        Fixture fixA = contact.getFixtureA();
-        Fixture fixB = contact.getFixtureB();
+		//contact.getWorldManifold().
+		Fixture fixA = contact.getFixtureA();
+		Fixture fixB = contact.getFixtureB();
 
-        Class classA = getClass(udA);
-        Class classB = getClass(udB);
+		Class classA = getClass(udA);
+		Class classB = getClass(udB);
 
-        Vector2 contactPoint = new Vector2(contact.getWorldManifold().getPoints()[0]);
-        contactPoint.scl(Main.PPM);
+		Vector2 contactPoint = new Vector2(contact.getWorldManifold().getPoints()[0]);
+		contactPoint.scl(Main.PPM);
 
-        if (classA == Ball_Main.class && classB == Ball_Main.class) {
-            Ball ballA = (Ball) udA;
-            Ball ballB = (Ball) udB;
+		if (classA == Ball_Main.class && classB == Ball_Main.class) {
+			Ball ballA = (Ball) udA;
+			Ball ballB = (Ball) udB;
 
-            Game.onBallCollide_delayed();
-        }
+			Game.onBallCollide_delayed();
+		}
 
-        if (classA == Ball_Bad.class && classB == Ball_Bad.class) {
-            Ball_Bad ball_badA = (Ball_Bad) udB;
-            Ball_Bad ball_badB = (Ball_Bad) udA;
-            ball_badB.contactBallBad(ball_badA);
-            ball_badA.contactBallBad(ball_badB);
-        }
+		if (classA == Ball_Bad.class && classB == Ball_Bad.class) {
+			Ball_Bad ball_badA = (Ball_Bad) udB;
+			Ball_Bad ball_badB = (Ball_Bad) udA;
+			ball_badB.contactBallBad(ball_badA);
+			ball_badA.contactBallBad(ball_badB);
+		}
 
-        if (udB instanceof Ball && udA instanceof Ball) { // collision only called on one ball
-            Ball ball0 = (Ball) udA;
-            Ball ball1 = (Ball) udB;
-            float impact = MathFuncs.getHypothenuse(ball0.body.getLinearVelocity().x, ball0.body.getLinearVelocity().y)
-                    + MathFuncs.getHypothenuse(ball1.body.getLinearVelocity().x, ball1.body.getLinearVelocity().y);
-            ball0.doCollisionEffect(contactPoint, impact, udB);
-            ball0.contactBall(ball1);
-            ball1.contactBall(ball0);
-        }
+		if (udB instanceof Ball && udA instanceof Ball) { // collision only called on one ball
+			Ball ball0 = (Ball) udA;
+			Ball ball1 = (Ball) udB;
+			float impact = MathFuncs.getHypothenuse(ball0.body.getLinearVelocity().x, ball0.body.getLinearVelocity().y)
+					+ MathFuncs.getHypothenuse(ball1.body.getLinearVelocity().x, ball1.body.getLinearVelocity().y);
 
-        for (int i = 0; i < 2; i++) {
-            if (udA instanceof Ball) {
-                Ball ball = (Ball) udA;
-                float impact = MathFuncs.getHypothenuse(ball.body.getLinearVelocity().x, ball.body.getLinearVelocity().y);
+			ball0.doCollisionEffect(contactPoint, impact, udB);
+			ball0.contactBall(ball1);
+			ball1.contactBall(ball0);
+		}
 
-                ball.onCollision(contactPoint, impact, udB);
+		for (int i = 0; i < 2; i++) {
+			if (udA instanceof Ball) {
+				Ball ball = (Ball) udA;
+				//float impact = ball.body.getLinearVelocity().len();
+				float impact = fixA.getBody().getLinearVelocity().add(fixB.getBody().getLinearVelocity()).len();
 
-                if (udB instanceof Draggable) {
-                    ((Draggable) udB).onCollision();
-                } else if (classB == JumpingPad.class) {
-                    JumpingPad jp = (JumpingPad) udB;
-                    jp.collide(ball);
-                }
-                if (classA == Ball_Main.class) {
-                    if (classB == Pin.class) {
-                        Pin pin = (Pin) udB;
-                        pin.destroy(ball);
-                    } else if (classB == Bullet.class) {
-                        Bullet bullet = (Bullet) udB;
-                        bullet.hit(ball);
-                    } else if (classB == CircularBumper.class) {
-                        CircularBumper c = (CircularBumper) udB;
-                        c.collide(impact);
-                    } else if (classB == BallCapsule.class) {
-                        BallCapsule bc = (BallCapsule) udB;
-                        bc.shatter();
-                    } else if (classB == Eye.class) {
-                        Eye eye = (Eye) udB;
-                        eye.collision((Ball_Main) ball);
-                    } else if (udB instanceof Scooper) {
-                        if (fixB.getUserData() != null)
-                            ball.destroy(0, 1, ((Scooper) udB).pos);
-                    } else if (udB instanceof Collectable) {
-                        Collectable c = (Collectable) udB;
-                        c.pickUp((Ball) udA);
-                        return; // So Ball.contact isn't called and no hit sound is played
-                    }
-                }
+				ball.onCollision(contactPoint, impact, udB);
 
-                ball.contact(udB, contactPoint, impact);
+				if (udB instanceof Draggable) {
+					((Draggable) udB).onCollision();
+				} else if (classB == JumpingPad.class) {
+					JumpingPad jp = (JumpingPad) udB;
+					jp.collide(ball);
+				}
+				if (classA == Ball_Main.class) {
+					if (classB == Pin.class) {
+						Pin pin = (Pin) udB;
+						pin.destroy(ball);
+					} else if (classB == Bullet.class) {
+						Bullet bullet = (Bullet) udB;
+						bullet.hit(ball);
+					} else if (classB == CircularBumper.class) {
+						CircularBumper c = (CircularBumper) udB;
+						c.collide(impact);
+					} else if (classB == BallCapsule.class) {
+						BallCapsule bc = (BallCapsule) udB;
+						bc.shatter();
+					} else if (classB == Eye.class) {
+						Eye eye = (Eye) udB;
+						eye.collision((Ball_Main) ball);
+					} else if (classB == FarmSpike.class) {
+						FarmSpike farmSpike = (FarmSpike) udB;
+						farmSpike.hitBall((Ball) udA);
+					} else if (udB instanceof Scooper) {
+						if (fixB.getUserData() != null) // checking if the ball touched the spike of a scooper
+							ball.destroy(0, 1, ((Scooper) udB).pos);
+					} else if (udB instanceof Gate) {
+						((Gate) udB).onCollision(ball);
+					} else if (udB instanceof Jelly) {
+						if (classB == Jelly_Red.class && fixB.getUserData() != null)
+							((Jelly_Red) udB).onCollisionMainBall_shield((Ball_Main) ball);
+						else
+							((Jelly) udB).onCollisionMainBall((Ball_Main) ball);
+					} else if (udB instanceof Collectable) {
+						Collectable c = (Collectable) udB;
+						c.pickUp((Ball) udA);
+						break; // So Ball.doCollisionEffect isn't called and no hit sound is played
+					}
+				}
 
-                if (!(udB instanceof Ball) && classB != Spike.class)
-                    ball.doCollisionEffect(contactPoint, impact, udB);
-            }
+				ball.contact(udB, contactPoint, impact);
 
-            if (classA == Spike.class && (classB == Ball_Main.class || classB == Ball_Bad.class)) {
-                Spike spike = (Spike) udA;
-                spike.hitBall((Ball) udB);
-            }
+				if (!(udB instanceof Ball) && classB != Spike.class && !fixB.isSensor())
+					ball.doCollisionEffect(contactPoint, impact, udB);
+			}
 
-            if (classA == Bullet.class) {
-                Bullet bullet = (Bullet) udA;
-                bullet.doDispose = true;
-            }
+			if (classA == Spike.class && (classB == Ball_Main.class || classB == Ball_Bad.class)) {
+				Spike spike = (Spike) udA;
+				spike.hitBall((Ball) udB);
+			}
 
-            udA = contact.getFixtureB().getBody().getUserData();
-            udB = contact.getFixtureA().getBody().getUserData();
-            classA = getClass(udA);
-            classB = getClass(udB);
-            fixA = contact.getFixtureB();
-            fixB = contact.getFixtureA();
-        }
-    }
+			if (classA == Bullet.class) {
+				Bullet bullet = (Bullet) udA;
+				bullet.doDispose = true;
+			}
 
-    @Override
-    public void endContact(Contact contact) {
+			udA = contact.getFixtureB().getBody().getUserData();
+			udB = contact.getFixtureA().getBody().getUserData();
+			classA = getClass(udA);
+			classB = getClass(udB);
+			fixA = contact.getFixtureB();
+			fixB = contact.getFixtureA();
+		}
+	}
 
-    }
+	@Override
+	public void endContact(Contact contact) {
 
-    @Override
-    public void preSolve(Contact contact, Manifold oldManifold) {
-        java.lang.Object udA = contact.getFixtureA().getBody().getUserData();
-        java.lang.Object udB = contact.getFixtureB().getBody().getUserData();
+	}
 
-        Class classA = getClass(udA);
-        Class classB = getClass(udB);
+	@Override
+	public void preSolve(Contact contact, Manifold oldManifold) {
+		java.lang.Object udA = contact.getFixtureA().getBody().getUserData();
+		java.lang.Object udB = contact.getFixtureB().getBody().getUserData();
 
-        Vector2 contactPoint = new Vector2(contact.getWorldManifold().getPoints()[0]);
-        contactPoint.scl(Main.PPM);
+		Class classA = getClass(udA);
+		Class classB = getClass(udB);
 
-        if (udB instanceof Ball && udA instanceof Ball) { // collision only called on one ball
-            Ball ball0 = (Ball) udA;
-            Ball ball1 = (Ball) udB;
-            ball0.contactBall_pre(ball1);
-            ball1.contactBall_pre(ball0);
-        }
+		Vector2 contactPoint = new Vector2(contact.getWorldManifold().getPoints()[0]);
+		contactPoint.scl(Main.PPM);
 
-        for (int i = 0; i < 2; i++) {
-            if (udA instanceof Ball) {
-                Ball ball = (Ball) udA;
-                Main.shake(MathUtils.clamp(.2f * MathFuncs.getHypothenuse(ball.body.getLinearVelocity().y, ball.body.getLinearVelocity().x), 0, 4));
-                Main.setShakeAng(ball.body.getLinearVelocity().angleRad());
+		if (udB instanceof Ball && udA instanceof Ball) { // collision only called on one ball
+			Ball ball0 = (Ball) udA;
+			Ball ball1 = (Ball) udB;
+			ball0.contactBall_pre(ball1);
+			ball1.contactBall_pre(ball0);
+		}
 
-                if (classA == Ball_Main.class) {
-                    if (udB instanceof OrbContainer) {
-                        OrbContainer oc = (OrbContainer) udB;
-                        oc.destroy(ball);
-                    } else if (udB instanceof Ball_PowerOrb) {
-                        ((Ball_Main) ball).collectPowerOrb((Ball_PowerOrb) udB);
-                    }
-                }
-            }
+		for (int i = 0; i < 2; i++) {
+			if (udA instanceof Ball) {
+				Ball ball = (Ball) udA;
 
-            udA = contact.getFixtureB().getBody().getUserData();
-            udB = contact.getFixtureA().getBody().getUserData();
+				Main.setShakeAng(ball.body.getLinearVelocity().angleRad());
 
-            classA = getClass(udA);
-            classB = getClass(udB);
-        }
-    }
+				if (classB == SpikeWall.class) {
+					ball.destroy_delayed();
+				}
 
-    @Override
-    public void postSolve(Contact contact, ContactImpulse impulse) {
+				if (classA == Ball_Main.class) {
+					if (udB instanceof OrbContainer) {
+						OrbContainer oc = (OrbContainer) udB;
+						oc.destroy(ball);
+					} else if (udB instanceof Ball_PowerOrb) {
+						((Ball_Main) ball).collectPowerOrb((Ball_PowerOrb) udB);
+					}
+				}
+			}
 
-    }
+			udA = contact.getFixtureB().getBody().getUserData();
+			udB = contact.getFixtureA().getBody().getUserData();
 
-    Class getClass(java.lang.Object ud) {
-        if (ud != null)
-            return ud.getClass();
-        else
-            return null;
-    }
+			classA = getClass(udA);
+			classB = getClass(udB);
+		}
+	}
 
-    Class getSuperClass(Class c) {
-        if (c != null)
-            return c.getSuperclass();
-        else
-            return null;
-    }
+	@Override
+	public void postSolve(Contact contact, ContactImpulse impulse) {
+
+	}
+
+	Class getClass(java.lang.Object ud) {
+		if (ud != null)
+			return ud.getClass();
+		else
+			return null;
+	}
+
+	Class getSuperClass(Class c) {
+		if (c != null)
+			return c.getSuperclass();
+		else
+			return null;
+	}
 }

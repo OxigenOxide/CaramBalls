@@ -4,11 +4,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.oxigenoxide.caramballs.Main;
 import com.oxigenoxide.caramballs.Res;
 import com.oxigenoxide.caramballs.object.entity.ball.Ball_Main;
+import com.oxigenoxide.caramballs.scene.DownGrading;
 import com.oxigenoxide.caramballs.scene.Farm;
 import com.oxigenoxide.caramballs.scene.Game;
 import com.oxigenoxide.caramballs.scene.GameOver;
@@ -21,6 +21,7 @@ public class RewardBall {
     Color[] palette;
     Vector2 pos;
     Vector2 pos_target;
+    boolean hasReachedTarget;
     static final float HEIGHT = 30;
     int level;
     float count_inFarm;
@@ -33,22 +34,26 @@ public class RewardBall {
         palette = Ball_Main.getBallPalette(level);
         pos = new Vector2(x, y);
         pos_target = new Vector2(pos);
-        sprite = new Sprite(Res.tex_ball[Game.ballType][0]);
+        sprite = new Sprite(Res.tex_ball[Game.selectedSkin][0]);
     }
 
     public void update() {
-        pos.lerp(pos_target, 1 - (float) Math.pow(1 - LERP, Main.dt));
+        if (!hasReachedTarget) {
+            pos.lerp(pos_target, 1 - (float) Math.pow(1 - LERP, Main.dt));
 
-        if (MathFuncs.distanceBetweenPoints(pos, pos_target) < .1f) {
-            pos.set(pos_target);
+            if (pos.dst(pos_target) < .25f) {
+                pos.set(pos_target);
+                hasReachedTarget = true;
+                onReachTarget();
+            }
+
+            sprite.setPosition((int) (pos.x - sprite.getWidth() / 2), (int) (pos.y - sprite.getHeight() / 2));
         }
-        sprite.setPosition((int) (pos.x - sprite.getWidth() / 2), (int) (pos.y - sprite.getHeight() / 2));
-        count_shine = MathFuncs.loopOne(count_shine, Main.dt * .1f);
+        count_shine = MathFuncs.loop(count_shine, Main.dt * .2f, 4);
         if (Main.isInScene(Farm.class)) {
             count_inFarm += Main.dt;
-            if (count_inFarm > 1) {
+            if (count_inFarm > 1)
                 drop();
-            }
         }
     }
 
@@ -70,11 +75,29 @@ public class RewardBall {
         batch.setShader(null);
     }
 
+    public void setTarget(float x, float y) {
+        pos_target = new Vector2(x, y);
+        hasReachedTarget = false;
+    }
+
+    public void setTarget(Vector2 v) {
+        setTarget(v.x, v.y);
+    }
+
+    void onReachTarget(){
+        if (Main.isInScene(DownGrading.class) && !Main.downGrading.wheel.finished)
+            Main.rewardBall=null;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
     public void onSetScene(Scene scene) {
         if (Funcs.getClass(scene) == GameOver.class)
-            pos_target = Main.gameOver.getBallPos();
+            setTarget(Main.gameOver.getBallPos());
 
         if (Funcs.getClass(scene) == Farm.class)
-            pos_target = new Vector2(Main.width / 2, Main.farm.pos_field.y + Farm.FIELDWIDTH / 2 + HEIGHT);
+            setTarget(new Vector2(Main.width / 2, Main.farm.pos_field.y + Farm.FIELDWIDTH / 2 + HEIGHT));
     }
 }

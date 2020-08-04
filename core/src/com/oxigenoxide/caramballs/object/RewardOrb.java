@@ -41,7 +41,7 @@ public class RewardOrb {
         else
             pos_target = Main.farm.pos_orb;
 
-        Main.addSoundRequest(ID.Sound.COLLECT, 1, 1, MathUtils.random(.8f, 1.2f));
+        Main.addSoundRequest(ID.Sound.COLLECT, 1, .5f, MathUtils.random(.8f, 1.2f));
 
         isReward = true;
     }
@@ -145,5 +145,4 @@ public class RewardOrb {
     public void dispose() {
         Main.rewardOrbsToRemove.add(this);
     }
-
 }

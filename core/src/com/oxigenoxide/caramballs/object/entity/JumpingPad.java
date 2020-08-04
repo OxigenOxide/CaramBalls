@@ -20,7 +20,7 @@ public class JumpingPad extends Entity {
 
     public JumpingPad() {
         radius_spawn = 10;
-        pos = Game.getFreePosOnTable(radius_spawn);
+        pos = Game.getFreePos(radius_spawn);
         if(pos==null) {
             pos = new Vector2(-100, 100);
             doDispose=true;

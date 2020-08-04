@@ -19,7 +19,7 @@ public class Particle_OrbPickup extends Particle {
         sprite = new Sprite(Res.tex_orbPickup[0]);
         sprite.setPosition(x - sprite.getWidth() / 2, y - 3);
 
-        animation = new Animation((int) (50 * Main.test_float), Res.tex_orbPickup, new float[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, false);
+        animation = new Animation((int) (50), Res.tex_orbPickup, new float[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, false);
     }
 
     public void update() {

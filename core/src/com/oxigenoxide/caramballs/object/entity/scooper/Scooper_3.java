@@ -19,6 +19,7 @@ public class Scooper_3 extends Scooper {
         tex_shine = Res.tex_scooperShine_0;
         pos = new Vector2(Main.width / 2, Main.height / 2);
         anchor = new Vector2(0, 0);
+        radius_spawn_danger = 45; // I don't want balls to spawn in its spikes
         construct();
     }
 

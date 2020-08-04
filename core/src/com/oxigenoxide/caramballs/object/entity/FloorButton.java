@@ -1,6 +1,5 @@
 package com.oxigenoxide.caramballs.object.entity;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -33,7 +32,7 @@ public class FloorButton extends Entity {
 
     public FloorButton() {
         radius_spawn = 12;
-        pos = Game.getFreePosOnTable(radius_spawn);
+        pos = Game.getFreePos(radius_spawn);
         texture = Res.tex_floorButton_danger;
         sprite = new Sprite(texture);
         sprite.setPosition(pos.x - width / 2, pos.y - height / 2);

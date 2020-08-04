@@ -155,7 +155,7 @@ public class OrbContainer extends Entity {
     }
 
     public void drawShadow(ShapeRenderer sr) {
-        Main.drawShadow(sr, pos.x, pos.y - Main.test_float, sprite.getWidth());
+        Main.drawShadow(sr, pos.x, pos.y, sprite.getWidth());
     }
 
 

@@ -34,6 +34,8 @@ public class Scooper extends Entity {
     boolean shrink;
 
     boolean isDisposed;
+
+    int shineHeight = 3;
     /*
     Idea for avoiding clipping:
         While the texture is glowing make the body a sensor and make in push the objects away that are inside it.
@@ -41,7 +43,7 @@ public class Scooper extends Entity {
 
     public Scooper() {
         super();
-        radius_spawn = 45;
+        radius_spawn = 10;
     }
 
     void construct() {
@@ -100,7 +102,7 @@ public class Scooper extends Entity {
         sprite.setSize(progress_grow * sprite.getRegionWidth(), progress_grow * sprite.getRegionHeight());
         sprite_shine.setSize(progress_grow * sprite_shine.getRegionWidth(), progress_grow * sprite_shine.getRegionHeight());
         sprite.setPosition(body.getPosition().x * Main.PPM - sprite.getWidth() / 2, body.getPosition().y * Main.PPM - sprite.getHeight() / 2);
-        sprite_shine.setPosition(body.getPosition().x * Main.PPM - sprite_shine.getWidth() / 2, body.getPosition().y * Main.PPM - sprite_shine.getHeight() / 2 + 3 * progress_grow);
+        sprite_shine.setPosition(body.getPosition().x * Main.PPM - sprite_shine.getWidth() / 2, body.getPosition().y * Main.PPM - sprite_shine.getHeight() / 2 + shineHeight * progress_grow);
 
         if (shrink)
             progress_grow = Math.max(0, progress_grow - Main.dt * 2);

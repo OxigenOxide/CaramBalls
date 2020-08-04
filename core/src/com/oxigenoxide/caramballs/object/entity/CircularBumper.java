@@ -12,65 +12,65 @@ import com.oxigenoxide.caramballs.Res;
 import com.oxigenoxide.caramballs.utils.Funcs;
 
 public class CircularBumper extends Entity {
-    Sprite sprite;
-    Body body;
-    float radius = 8.5f;
-    float wiggle;
-    float size;
-    boolean disappear;
-    float count;
-    final static float LIFETIME = 5;
+	Sprite sprite;
+	Body body;
+	float radius = 8.5f;
+	float wiggle;
+	float size;
+	boolean disappear;
+	float count;
+	final static float LIFETIME = 5;
 
-    public CircularBumper() {
-        sprite = new Sprite(Res.tex_circularBumper);
-        radius_spawn = sprite.getRegionWidth() / 2 + 1; // not perfect
-        pos = Game.getFreePosOnTable(radius_spawn);
-        if(pos==null) {
-            pos = new Vector2(-100, -200);
-            disappear=true;
-        }
-        pos.add(.5f, .5f);
-        sprite.setPosition(pos.x - (int) sprite.getRegionWidth() / 2, pos.y - (int) sprite.getRegionWidth() / 2); // Correct, twice sprite.getRegionWidth()
-        createBody();
-        body.setTransform(pos.x * Main.MPP, pos.y * Main.MPP, 0);
-    }
+	public CircularBumper() {
+		sprite = new Sprite(Res.tex_circularBumper);
+		radius_spawn = sprite.getRegionWidth() / 2 + 1; // not perfect
+		pos = Game.getFreePos(radius_spawn);
+		if (pos == null) {
+			pos = new Vector2(-100, -200);
+			disappear = true;
+		}
+		pos.add(.5f, .5f);
+		sprite.setPosition(pos.x - (int) sprite.getRegionWidth() / 2, pos.y - (int) sprite.getRegionWidth() / 2); // Correct, twice sprite.getRegionWidth()
+		createBody();
+		body.setTransform(pos.x * Main.MPP, pos.y * Main.MPP, 0);
+	}
 
-    public void createBody() {
-        body = Main.world.createBody(Res.bodyDef_static);
-        Res.fixtureDef_circle.shape.setRadius(radius * Main.MPP);
-        Res.fixtureDef_circle.restitution = 2;
-        body.createFixture(Res.fixtureDef_circle);
-        Res.fixtureDef_circle.restitution = 1; //reset
-        body.setUserData(this);
-    }
+	public void createBody() {
+		body = Main.world.createBody(Res.bodyDef_static);
+		Res.fixtureDef_circle.shape.setRadius(radius * Main.MPP);
+		Res.fixtureDef_circle.restitution = 2;
+		body.createFixture(Res.fixtureDef_circle);
+		Res.fixtureDef_circle.restitution = 1; //reset
+		body.setUserData(this);
+	}
 
-    public void collide(float impact) {
-        wiggle = Math.min(5, impact * .25f);
-        Main.soundRequests.add(new SoundRequest(ID.Sound.BOUNCE,1));
-    }
+	public void collide(float impact) {
+		wiggle = Math.min(5, impact * .25f);
+		Main.soundRequests.add(new SoundRequest(ID.Sound.BOUNCE, 1));
+	}
 
-    public void update() {
-        count+=Main.dt_slowed;
-        if(count>LIFETIME)
-            disappear=true;
-        wiggle = Math.max(0, wiggle - Main.dt_one_slowed * .02f);
-        sprite.setSize((sprite.getRegionWidth() + wiggle * (float) Math.sin(wiggle * 20)) * size, (sprite.getRegionHeight() + wiggle * (float) Math.sin(wiggle * 20)) * size);
-        sprite.setPosition(pos.x - sprite.getWidth() / 2, pos.y - sprite.getWidth() / 2);
-        if (disappear)
-            size = Math.max(0, size - Main.dt_one_slowed * .1f);
-        else
-            size = Math.min(1, size + Main.dt_one_slowed * .1f);
-        if(size==0)
-            dispose();
-    }
+	public void update() {
+		count += Main.dt_slowed;
+		if (count > LIFETIME)
+			disappear = true;
+		wiggle = Math.max(0, wiggle - Main.dt_one_slowed * .02f);
+		sprite.setSize((sprite.getRegionWidth() + wiggle * (float) Math.sin(wiggle * 20)) * size, (sprite.getRegionHeight() + wiggle * (float) Math.sin(wiggle * 20)) * size);
+		sprite.setPosition(pos.x - sprite.getWidth() / 2, pos.y - sprite.getWidth() / 2);
+		if (disappear)
+			size = Math.max(0, size - Main.dt_one_slowed * .1f);
+		else
+			size = Math.min(1, size + Main.dt_one_slowed * .1f);
+		if (size == 0)
+			dispose();
+	}
 
-    public void render(SpriteBatch batch) {
-        Funcs.setShaderNull(batch);
-        sprite.draw(batch);
-    }
+	public void render(SpriteBatch batch) {
+		Funcs.setShaderNull(batch);
+		sprite.draw(batch);
+	}
 
-    public void dispose() {
-        body = Main.destroyBody(body);
-        Main.circularBumpersToRemove.add(this);
-    }
+	public void dispose() {
+		body = Main.destroyBody(body);
+		Main.circularBumpersToRemove.add(this);
+	}
 }

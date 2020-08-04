@@ -6,8 +6,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.oxigenoxide.caramballs.scene.Game;
 import com.oxigenoxide.caramballs.Main;
 import com.oxigenoxide.caramballs.object.entity.Entity;
-import com.oxigenoxide.caramballs.utils.EventListener;
-import com.oxigenoxide.caramballs.utils.EventManager;
 
 
 public class Hole extends Entity {
@@ -46,7 +44,7 @@ public class Hole extends Entity {
     }
 
     public void setPosition() {
-        Vector2 pos_rnd = Game.getFreePosOnTable(radius_spawn, 10);
+        Vector2 pos_rnd = Game.getFreePos(radius_spawn, 10);
         if (pos_rnd == null) {
             dispose();
             pos.set(-100, -100);

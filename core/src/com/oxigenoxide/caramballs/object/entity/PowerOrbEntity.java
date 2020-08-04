@@ -5,10 +5,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.oxigenoxide.caramballs.ID;
 import com.oxigenoxide.caramballs.Main;
 import com.oxigenoxide.caramballs.Res;
-import com.oxigenoxide.caramballs.object.SoundRequest;
 import com.oxigenoxide.caramballs.scene.Game;
 import com.oxigenoxide.caramballs.utils.Funcs;
 import com.oxigenoxide.caramballs.utils.MathFuncs;
@@ -26,7 +24,7 @@ public class PowerOrbEntity extends Entity {
     public PowerOrbEntity() {
         sprite = new Sprite(Res.tex_powerOrb[0]);
         radius_spawn = sprite.getRegionWidth() / 2 + 1; // not perfect
-        pos = Game.getFreePosOnTable(radius_spawn);
+        pos = Game.getFreePos(radius_spawn);
         if (pos == null) {
             pos = new Vector2(-100, -200);
             disappear = true;

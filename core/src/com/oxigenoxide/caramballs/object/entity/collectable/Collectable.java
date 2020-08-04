@@ -23,7 +23,7 @@ public class Collectable extends Entity {
 
     Collectable(TextureRegion texture) {
         sprite = new Sprite(texture);
-        pos = Game.getFreePosOnTable(5);
+        pos = Game.getFreePos(5);
         body = Main.world.createBody(Res.bodyDef_static);
         body.createFixture(Res.fixtureDef_collectable);
         body.setUserData(this);

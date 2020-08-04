@@ -25,7 +25,7 @@ public class BallCapsule extends Entity {
     int level;
 
     public BallCapsule() {
-        pos = Game.getFreePosOnTable(6.5f);
+        pos = Game.getFreePos(6.5f);
         if (pos == null)
             pos = new Vector2(-100, -500);
         tex = Res.tex_ballCapsule;

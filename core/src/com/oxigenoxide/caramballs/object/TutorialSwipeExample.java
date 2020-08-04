@@ -63,7 +63,7 @@ public class TutorialSwipeExample {
         }
         if (loop > .75) {
             hand_index = 0;
-            //pos_virtualTap.set(pos.x, pos.y + stretch * 50);
+            //pos_virtualTap.set(pos_shop.x, pos_shop.y + stretch * 50);
             alpha_hand =Math.max(0,alpha_hand-.05f);
             sprite_hand.setAlpha(alpha_hand);
             pos_hand.set(pos.x, pos.y + stretch * 50);

@@ -21,7 +21,7 @@ public class Draggable extends Entity {
 
     public Draggable(int radius_spawn) {
         this.radius_spawn = radius_spawn;
-        pos = Game.getFreePosOnTable(radius_spawn);
+        pos = Game.getFreePos(radius_spawn);
         pos_pivot = new Vector2();
         pos_pivot_visual = new Vector2();
         if (pos == null) {

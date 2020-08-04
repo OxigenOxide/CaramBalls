@@ -80,7 +80,7 @@ public class Ball_Break extends Ball {
                     phase++;
                     setSpriteTexture(Res.tex_ball[21 + phase][size]);
                     counter_crackCooldown.start();
-                    throwParticles(angle, impact, pos, palette, 3);
+                    throwParticles(impact, pos, palette, 3);
                 } else explode(angle, impact);
             }
     }
@@ -95,7 +95,7 @@ public class Ball_Break extends Ball {
     public void explode(float angle, float impact) {
         if (!hasExeploded) {
             hasExeploded = true;
-            throwParticles(angle, impact, pos, palette, 10);
+            throwParticles(impact, pos, palette, 10);
             super.explode(angle, impact);
         }
     }

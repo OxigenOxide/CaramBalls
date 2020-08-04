@@ -41,7 +41,7 @@ public class Cannon extends Entity {
     }
 
     public Cannon() {
-        pos = Game.getFreePosOnTable(9, 9);
+        pos = Game.getFreePos(9, 9);
         pos_center = new Vector2(pos.x, pos.y + 10.5f);
         gun = new Sprite(Res.tex_cannon_gun);
         gun.setOrigin(6.5f, 6.5f);

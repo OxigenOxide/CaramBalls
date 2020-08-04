@@ -36,7 +36,7 @@ public class HtmlLauncher extends GwtApplication {
         int h = Window.getClientHeight() - PADDING;
 
         if (2 * w > h) w = h / 2;
-        else h *= w * 2;
+        else h = w * 2;
 
         cfg = new GwtApplicationConfiguration(w, h);
         Window.enableScrolling(false);
@@ -53,7 +53,7 @@ public class HtmlLauncher extends GwtApplication {
             int h = Window.getClientHeight() - PADDING;
 
             if (2 * w > h) w = h / 2;
-            else h *= w * 2;
+            else h = w * 2;
 //            int width = event.getWidth() - PADDING;
 //            int height = event.getHeight() - PADDING;
             getRootPanel().setWidth("" + w + "px");
